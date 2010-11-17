@@ -1,6 +1,5 @@
-ScorchedCanvas - slick Scorched Earth clone!
-============================================
+ScorchedCanvas - documentation branch
+=====================================
 
-w00t!
 
 
