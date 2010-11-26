@@ -23,6 +23,7 @@ var renderer = {
 		renderer.drawBullets(renderer.tick);
 		renderer.drawExplosions(renderer.tick);
 		renderer.drawUI(renderer.tick);
+		renderer.drawCountdown(renderer.tick);
 		
 		setTimeout(renderer.render, 50);
 	},
@@ -129,5 +130,35 @@ var renderer = {
 	  ctx.beginPath();    
     ctx.arc(centerx,0, world.guiPower , 0, -Math.PI);
     ctx.fill();
+	},
+	
+	drawCountdown: function(tick) {
+	  var centerx = config.screenSize.width/2;
+  	var centery = config.screenSize.height/2;
+
+  	var text;
+
+    var count = world.nextRound - new Date();
+    count /= 1000;
+    text = ~~count;
+    
+	  var ctx = this.ctx;
+	  ctx.save();
+	  
+	  renderer.ctx.translate(0, +config.screenSize.height);
+	  ctx.scale(1,-1);
+	  
+	  // credits
+	  var ratio = (count % 1);
+	  var fontSize = 180 / ratio;
+	  document.title = ~~fontSize;
+  	ctx.font = ~~fontSize + "px sans-serif";
+  	ctx.lineWidth = 10;
+    ctx.fillStyle = rgba(255,0,0, ratio);
+    
+    // 560 px wide
+  	ctx.fillText(text, centerx - ctx.measureText(text).width/2, centery + fontSize/3);
+  	
+  	ctx.restore();
 	}
 };
