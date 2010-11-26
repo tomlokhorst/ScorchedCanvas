@@ -7,7 +7,7 @@
 	<body>
 		<canvas id="canvas"></canvas>
 		
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
 		<script type="text/javascript">
 			var config = {
 				socketUrl: 'http://tom.q42.local:85/gameupdates',
@@ -28,7 +28,6 @@
 		<script type="text/javascript" src="utils.js"></script>
 		<script type="text/javascript" src="world.js"></script>
 		<script type="text/javascript" src="nepsocket.js"></script>		
-		<script type="text/javascript" src="socketimpl.js"></script>
 		<script type="text/javascript" src="render.js"></script>
 		<script type="text/javascript" src="userinput.js"></script>
 		<script type="text/javascript">
@@ -37,5 +36,6 @@
 			renderer.init(c);
 			renderer.render();
 		</script>
+		<script type="text/javascript" src="socketimpl.js"></script>		
 	</body>
 </html>
