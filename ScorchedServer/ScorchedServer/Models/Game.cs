@@ -41,17 +41,27 @@ namespace ScorchedServer.Models
         }
       });
 
-      Observable.Timer(new TimeSpan(TimeSpan.TicksPerSecond)).Subscribe(l =>
+      Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond)).Subscribe(l =>
       {
         var ps = new List<Player>();
+        var keys = new List<String>();
 
-        foreach (var c in allConnections.Values)
+        foreach (var kv in allConnections)
+        {
+          var c = kv.Value;
           if ((DateTime.Now - c.LastCheckin) > new TimeSpan(TimeSpan.TicksPerSecond))
+          {
             ps.Add(c.Player);
+            keys.Add(kv.Key);
+          }
+        }
 
         foreach (var c in allConnections.Values)
           foreach (var p in ps)
             c.SendMessage(new { type = "quitPlayer", playerId = p.id });
+
+        foreach (var k in keys)
+          allConnections.Remove(k);
       });
     }
 
@@ -59,9 +69,18 @@ namespace ScorchedServer.Models
     {
       while (true)
       {
-        Thread.Sleep(10000);
+        int roundTime = 10000;
+        int nextRound = 5000;
+
+        Thread.Sleep(nextRound + roundTime);
         foreach (var conn in allConnections.Values)
-          conn.SendMessage(new { type = "gameUpdate", state = new object[]{ }, nextRound = 5000 });
+          conn.SendMessage(new
+          {
+            type = "gameUpdate",
+            state = new object[]{ },
+            nextRound = nextRound,
+            roundTime = roundTime
+          });
       }
     }
 
