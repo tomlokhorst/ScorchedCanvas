@@ -37,11 +37,11 @@ NepSocket.prototype = {
 		  data: { queue: JSON.stringify(this.queue) },
 		  dataType: "jsonp",
 			// cache: false,
-			success : function(data) {
+			success : function(datas) {
 				// console.log("request complete");
-				if (data) {
+				$.each(datas, function(i, data) {
 					socket.onmessage(data);
-				}
+				});
 			},
 			error : function(xhr, text, err) {
 				console.log("error: " + err);

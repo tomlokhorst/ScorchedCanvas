@@ -24,9 +24,9 @@ namespace ScorchedServer.Controllers
         var msgs = queue.Select(m => m.ToMessage());
 
         var game = HttpContext.Application["game"] as Game;
-        var str = game.HandleMessages(msgs);
+        var objs = game.HandleMessages(session, msgs);
 
-        if (str == null)
+        if (objs.Count() == 0)
         {
           return new JavaScriptResult();
         }
@@ -34,7 +34,7 @@ namespace ScorchedServer.Controllers
         {
           return new JavaScriptResult
           {
-            Script = callback + "(" + str + ");"
+            Script = callback + "(" + jss.Serialize(objs) + ");"
           };
         }
       }
