@@ -5,21 +5,33 @@
 		<link href="style.css" rel="stylesheet" type="text/css"/>
 	</head>
 	<body>
-		<div class="debugbuttons">
-			<button id="gameRequest">Game Request</button>
-			<button id="fireRequest">Fire Request</button>
-		</div>
 		<canvas id="canvas"></canvas>
 		
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 		<script type="text/javascript">
-			var config = {};
-			config.socketUrl = 'http://tom.q42.local:85/gameupdates';
+			var config = {
+				socketUrl: 'http://tom.q42.local:85/gameupdates',
+				screenSize: {
+					width: 800,
+					height: 600
+				},
+				debug: false,
+				tankWidth: 32,
+				tankHeight: 16,
+				healthIndicatorBottomMargin: 5,
+				barrelLength: 40,
+				barrelThickness: 3
+			};
 		</script>
 		<script type="text/javascript" src="utils.js"></script>
+		<script type="text/javascript" src="world.js"></script>
 		<script type="text/javascript" src="nepsocket.js"></script>		
 		<script type="text/javascript" src="socketimpl.js"></script>
 		<script type="text/javascript" src="render.js"></script>
 		<script type="text/javascript" src="gui.js"></script>
+		<script type="text/javascript">
+			renderer.init();
+			renderer.render();
+		</script>
 	</body>
 </html>
