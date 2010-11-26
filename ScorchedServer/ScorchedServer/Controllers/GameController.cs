@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -26,7 +25,7 @@ namespace ScorchedServer.Controllers
         var game = HttpContext.Application["game"] as Game;
         var objs = game.HandleMessages(session, msgs);
 
-        if (objs.Count() == 0)
+        if (!objs.Any())
         {
           return new JavaScriptResult();
         }
