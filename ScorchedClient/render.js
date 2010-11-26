@@ -22,6 +22,10 @@ var renderer = {
 		renderer.drawBullets(renderer.tick);
 		renderer.drawExplosions(renderer.tick);
 		renderer.drawUI(renderer.tick);
+
+		// var v = Vector.fromPolar(Math.PI / 3, 4);
+		// var a = Vector.fromCart(0, -0.01);
+		// renderer.drawTrace(Vector.origin, v, a, 1);
 		
 		setTimeout(renderer.render, 50);
 	},
@@ -133,5 +137,50 @@ var renderer = {
 	  ctx.beginPath();    
     ctx.arc(centerx,0, world.guiPower , 0, -Math.PI);
     ctx.fill();
+	},
+
+	drawTrace: function (p, v, a, m) { // position, velocity, accelleration, mass
+	    var ctx = renderer.ctx;
+	    ctx.beginPath();
+	    ctx.moveTo(p.x, p.y);
+
+	    var dt = 10;
+
+	    for (var i = 0; i < 1000; i++) {
+	        var dv = a.scale(dt / m);
+	        p = p.add(v, dt);
+	        p = p.add(dv, dt / 2);
+	        v = v.add(dv);
+	        ctx.lineTo(p.x, p.y);
+	    }
+
+	    ctx.stroke();
 	}
+
 };
+
+function Vector(x, y) {
+    this.x = x;
+    this.y = y;
+
+    this.add = function (that, factor) {
+        if (factor === undefined) {
+            factor = 1;
+        }
+        return new Vector(this.x + that.x * factor, this.y + that.y * factor);
+    }
+
+    this.scale = function (factor) {
+        return new Vector(x * factor, y * factor);
+    }
+}
+
+Vector.fromPolar = function (th, r) {
+    return Vector.fromCart(Math.cos(th) * r, Math.sin(th) * r);
+};
+
+Vector.fromCart = function (x, y) {
+    return new Vector(x, y);
+};
+
+Vector.origin = Vector.fromCart(0, 0);
