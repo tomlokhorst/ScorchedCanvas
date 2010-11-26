@@ -35,7 +35,10 @@ namespace ScorchedServer.Models
       if (lastShot == null)
         return null;
       else
+      {
+        lastShot = null;
         return new { type = "fire", playerId = id, arc = lastShot.Select(v => new { x = v.X, y = v.Y }) };
+      }
     }
   }
 }
