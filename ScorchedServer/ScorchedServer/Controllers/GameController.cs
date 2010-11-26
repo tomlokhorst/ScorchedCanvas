@@ -20,11 +20,13 @@ namespace ScorchedServer.Controllers
       var data = Request.Form["queue"];
       if (data != null)
       {
-        List<GenericMessage> x = jss.Deserialize<List<GenericMessage>>(data);
+        List<GenericMessage> queue = jss.Deserialize<List<GenericMessage>>(data);
 
-        if (x.Count > 0)
+        var msgs = queue.Select(m => m.ToMessage());
+
+        if (msgs.Count() > 0)
         {
-          int i = 0;
+          int x = 0;
         }
       }
 
