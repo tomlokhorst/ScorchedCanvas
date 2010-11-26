@@ -9,6 +9,7 @@ namespace ScorchedServer.Models
   {
     public Subject<Message> Messages { get; private set; }
     public Player Player { get; private set; }
+    public DateTime LastCheckin { get; private set; }
 
     private List<object> outputMsgs;
 
@@ -25,6 +26,8 @@ namespace ScorchedServer.Models
         pos = r.Next(800),
         health = r.Next(100)
       };
+
+      LastCheckin = DateTime.Now;
 
       outputMsgs = new List<object>();
     }
