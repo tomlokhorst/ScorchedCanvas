@@ -2,6 +2,7 @@ var renderer = {
 	canvas : null,
 	ctx : null,
 	tick : 0,
+	lastTimeDrawn: new Date().valueOf(),
 
 	init : function(canvas) {
 		renderer.canvas = canvas;
@@ -123,12 +124,14 @@ var renderer = {
 			{
 				var lastCoord = bullet.arc[bullet.arc.length - 1];
 				world.explosions.push({
-					x: 100,
-					y: 100,
+					x: lastCoord.x,
+					y: lastCoord.y,
 					duration: 0
 				});
 			}
 		});
+		
+		world.bullets = $.grep(world.bullets, function(bullet) { return bullet.step < bullet.arc.length; });
 	},
 
 	drawExplosions: function(updateDelta) {
@@ -136,8 +139,7 @@ var renderer = {
 			exp.duration += updateDelta;
 			var alpha = exp.duration / 3000;
 			var ctx = renderer.ctx;
-			var style = rgba(255, 0, 0, 1 - alpha)
-			ctx.fillStyle = style;
+			ctx.fillStyle = rgba(255, 0, 0, 1 - alpha);
 			ctx.fillRect(100, 100, 100, 100);
 		});
 		
