@@ -85,8 +85,8 @@ var socket = new NepSocket("http://localhost:86/gameupdates");
   {
     socket.send({
       type: 'fireRequest',
-      angle: 30,
-      power: 100,
+      angle: 30.5,
+      power: 100.01,
       weaponType: 'cannon'
     });
   });

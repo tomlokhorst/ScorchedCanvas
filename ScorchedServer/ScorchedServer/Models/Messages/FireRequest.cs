@@ -7,7 +7,8 @@ namespace ScorchedServer.Models
 {
   public class FireRequest : Message
   {
-    public int angle;
-    public int power;
+    public double angle;
+    public double power;
+    public string weapon;
   }
 }
