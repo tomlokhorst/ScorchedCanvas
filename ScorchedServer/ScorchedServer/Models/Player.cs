@@ -17,15 +17,25 @@ namespace ScorchedServer.Models
     public int score { get; set; }
     public int angle { get; set; }
 
+    private IEnumerable<Vector> lastShot;
+
     public Player()
     {
       angle = Convert.ToInt32(Math.PI / 2);
     }
 
-    public IEnumerable<Vector> shoot(FireRequest fr)
+    public void shoot(FireRequest fr)
     {
-      return Shot.Trace(position, Vector.FromPolar(fr.angle, fr.power), Vector.FromCart(0, -0.01))
+      lastShot = Shot.Trace(position, Vector.FromPolar(fr.angle, fr.power), Vector.FromCart(0, -0.01))
         .TakeWhile(v => v.Y > 30);
+    }
+
+    internal object getLastShot()
+    {
+      if (lastShot == null)
+        return null;
+      else
+        return new { type = "fire", playerId = id, arc = lastShot.Select(v => new { x = v.X, y = v.Y }) };
     }
   }
 }

@@ -23,11 +23,11 @@ namespace ScorchedServer.Models
       var frs = from c in connectionJoins
                 from m in c.Messages
                 where m is FireRequest
-                select new { p = c.Player, fr = m as FireRequest };
+                select new { c = c, fr = m as FireRequest };
 
-      frs.Subscribe(pfr => 
+      frs.Subscribe(cfr => 
       {
-        pfr.p.shoot(pfr.fr);
+        cfr.c.Player.shoot(cfr.fr);
       });
     }
 
@@ -88,15 +88,24 @@ namespace ScorchedServer.Models
 
       Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond * 15)).Subscribe(l =>
       {
+        var state = new List<object>();
 
+        foreach (var p in allConnections.Values.Select(c => c.Player))
+        {
+          var o = p.getLastShot();
+          if (o != null)
+            state.Add(o);
+        }
         foreach (var conn in allConnections.Values)
+        {
           conn.SendMessage(new
           {
             type = "gameUpdate",
-            state = new object[] { },
+            state = state,
             nextRound = nextRound,
             roundLength = roundLength
           });
+        }
       });
     }
 
