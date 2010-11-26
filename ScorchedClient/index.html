@@ -21,7 +21,8 @@
 				tankHeight: 16,
 				healthIndicatorBottomMargin: 5,
 				barrelLength: 40,
-				barrelThickness: 3
+				barrelThickness: 3,
+				roundTime: 15000
 			};
 		</script>
 		<script type="text/javascript" src="utils.js"></script>
@@ -29,12 +30,12 @@
 		<script type="text/javascript" src="nepsocket.js"></script>		
 		<script type="text/javascript" src="render.js"></script>
 		<script type="text/javascript" src="userinput.js"></script>
+		<script type="text/javascript" src="socketimpl.js"></script>
 		<script type="text/javascript">
-		  var c = $("#canvas")[0];
-			UI.init(c);
+			var c = $("#canvas")[0];
+			UI.init(c, socket);
 			renderer.init(c);
 			renderer.render();
-		</script>
-		<script type="text/javascript" src="socketimpl.js"></script>		
+		</script>		
 	</body>
 </html>

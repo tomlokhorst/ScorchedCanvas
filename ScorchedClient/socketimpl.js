@@ -1,5 +1,7 @@
+var socket;
+
 (function() {
-	var socket = new NepSocket(config.socketUrl);
+	socket = new NepSocket(config.socketUrl);
 	socket.onopen = function(e) { /* Not implemented */ };
 	socket.onclose = function(e) { /* Not implemented */ };
 	socket.onmessage = function(msg) {
@@ -37,6 +39,8 @@
 			world.players = $.grep(world.players, function(player) { return player.id != msg.playerId; });
 		}
 		else if (msg.type == "gameUpdate") {
+		  world.nextRound = +new Date + config.roundTime;
+		  
 			var updateItem = function(i, update) {
 				if (update.type == "updatePlayer") {
 					
@@ -63,28 +67,13 @@
 			/*
 			 HOTFIX voor server (stuurt geen array als er maar 1 element in de array staat, Tom kijkt of ie het kan fixen)
 			*/
-			if (msg.state.length)
-				$.each(msg.state, updateItem);
-			else
-				updateItem(0, msg.state);
-			
+			if(msg.state) {
+				if (msg.state.length)
+					$.each(msg.state, updateItem);
+				else
+					updateItem(0, msg.state);
+			}
 		}
 	};
 	socket.onerror = function(e) { /* Not implemented */ };
-/*
-	$('#gameRequest').bind('click', function() {
-		socket.send({
-			type : 'gameRequest'
-		});
-	});
-
-	$('#fireRequest').bind('click', function() {
-		socket.send({
-			type : 'fireRequest',
-			angle : 30,
-			power : 100,
-			weaponType : 'cannon'
-		});
-	});	
-*/
 })();
