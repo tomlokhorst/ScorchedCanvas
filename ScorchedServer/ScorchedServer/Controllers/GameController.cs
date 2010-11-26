@@ -34,7 +34,7 @@ namespace ScorchedServer.Controllers
         {
           return new JavaScriptResult
           {
-            Script = callback + "({" + str + ");"
+            Script = callback + "(" + str + ");"
           };
         }
       }
