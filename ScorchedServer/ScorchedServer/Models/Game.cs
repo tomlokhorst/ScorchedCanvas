@@ -65,7 +65,7 @@ namespace ScorchedServer.Models
         foreach (var kv in allConnections)
         {
           var c = kv.Value;
-          if ((DateTime.Now - c.LastCheckin) > new TimeSpan(TimeSpan.TicksPerSecond))
+          if ((DateTime.Now - c.LastCheckin) > new TimeSpan(TimeSpan.TicksPerSecond * 5))
           {
             ps.Add(c.Player);
             keys.Add(kv.Key);
@@ -86,8 +86,9 @@ namespace ScorchedServer.Models
       int roundLength = 10000;
       int nextRound = 5000;
 
-      Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond * (roundLength + nextRound))).Subscribe(l =>
+      Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond * 15)).Subscribe(l =>
       {
+
         foreach (var conn in allConnections.Values)
           conn.SendMessage(new
           {
@@ -115,10 +116,12 @@ namespace ScorchedServer.Models
         {
           conn = new Connection(allConnections.Keys.Count);
 
+          allConnections.Add(session, conn);
+
           // First notify other connections...
           connectionJoins.OnNext(conn);
           // ...then add to allConnections (so newPlayer isn't send to own connection)
-          allConnections.Add(session, conn);
+          //allConnections.Add(session, conn);
         }
 
         foreach (var msg in msgs)
