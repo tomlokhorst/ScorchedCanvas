@@ -7,7 +7,7 @@
 		console.log(msg);
 	};
 	socket.onerror = function(e) { /* Not implemented */ };
-
+/*
 	$('#gameRequest').bind('click', function() {
 		socket.send({
 			type : 'gameRequest'
@@ -22,4 +22,5 @@
 			weaponType : 'cannon'
 		});
 	});	
+*/
 })();
