@@ -32,12 +32,10 @@ NepSocket.prototype = {
 		var socket = this;
 
 		$.ajax({
-			type : "POST",
-			url : this._url + "?callback=?",
-			data : this.queue.length ? {
-				"d" : this.queue
-			} : null,
-			dataType : "jsonp",
+		  type: "POST",
+		  url: this._url + "?callback=?",
+		  data: { queue: JSON.stringify(this.queue) },
+		  dataType: "jsonp",
 			// cache: false,
 			success : function(data) {
 				// console.log("request complete");
