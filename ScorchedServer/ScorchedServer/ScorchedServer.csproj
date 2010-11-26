@@ -69,6 +69,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Messages\Message.cs" />
+    <Compile Include="Models\Messages\FireRequest.cs" />
+    <Compile Include="Models\Messages\GenericMessage.cs" />
+    <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\Shot.cs" />
+    <Compile Include="Models\Messages\UnknownMessage.cs" />
+    <Compile Include="Models\Weapon.cs" />
+    <Compile Include="Models\World.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -98,7 +106,6 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -122,7 +129,7 @@
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>http://tom:85/</CustomServerUrl>
+          <CustomServerUrl>http://localhost:86/</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
