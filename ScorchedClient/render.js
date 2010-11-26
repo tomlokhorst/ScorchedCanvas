@@ -92,10 +92,15 @@ var renderer = {
 		}
 	},
 	
+	//drawBulletsEachMs: 100,
+	//lastDrawBullets: new Date().valueOf(),
 	drawBullets: function(tick) {
-		$.each(world.bullets, function(i, bullet) {
-		//"funky_bomb", // "cannon" / "nuke" / "mirv"	
-		});		
+		//if (new Date().valueOf() - renderer.lastDrawBullets < renderer.drawBulletsEachMs)
+		//	return;
+		//this.lastDrawBullets = new Date().valueOf();
+		//$.each(world.bullets, function(i, bullet) {
+			
+		//});		
 	},
 
 	drawExplosions: function(tick) {
