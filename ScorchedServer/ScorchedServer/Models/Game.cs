@@ -11,6 +11,7 @@ namespace ScorchedServer.Models
 {
   public class Game
   {
+    private int lastId = 0;
     private Dictionary<string, Connection> allConnections = new Dictionary<string, Connection>();
     private Subject<Connection> connectionJoins = new Subject<Connection>();
 
@@ -96,6 +97,7 @@ namespace ScorchedServer.Models
           if (o != null)
             state.Add(o);
         }
+
         foreach (var conn in allConnections.Values)
         {
           conn.SendMessage(new
@@ -123,7 +125,7 @@ namespace ScorchedServer.Models
         }
         else
         {
-          conn = new Connection(allConnections.Keys.Count);
+          conn = new Connection(lastId++);
 
           allConnections.Add(session, conn);
 

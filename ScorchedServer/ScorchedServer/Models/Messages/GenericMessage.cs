@@ -15,7 +15,7 @@ namespace ScorchedServer.Models
     public Message ToMessage()
     {
       if (type == "fireRequest")
-        return new FireRequest { angle = 0.0, power = 0.0 };
+        return new FireRequest { angle = angle, power = power };
       else
         return new UnknownMessage();
     }

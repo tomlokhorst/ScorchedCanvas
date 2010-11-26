@@ -22,6 +22,11 @@ namespace ScorchedServer.Controllers
 
         var msgs = queue.Select(m => m.ToMessage());
 
+        if (msgs.Any())
+        {
+          var x = msgs;
+        }
+
         var game = HttpContext.Application["game"] as Game;
         var objs = game.HandleMessages(session, msgs);
 
