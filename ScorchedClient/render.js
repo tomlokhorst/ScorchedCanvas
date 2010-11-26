@@ -34,7 +34,7 @@ var renderer = {
 
 	drawLandscape : function(tick) {
 		var ctx = renderer.ctx;
-		ctx.fillStyle = rgba(155  ,255,155);
+		ctx.fillStyle = rgba(155,255,155);
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
 		for ( var x = 0; x < world.landscape.length; x++) {
@@ -147,29 +147,8 @@ var renderer = {
 		ctx.fill();
 	},
 	
-	_drawAimArc: function(alpha)  {
-  	var centerx = config.screenSize.width/2;
-  	var centery = config.screenSize.height/2;
-
-	  var x= world.guiPoint.x;
-    var y= world.guiPoint.y;
-
-  	var ctx = renderer.ctx;
-  	ctx.beginPath();
-    ctx.moveTo(centerx, 0);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-
-    var radgrad = ctx.createRadialGradient(centerx,0,0,centerx,0, world.guiPower);
-    radgrad.addColorStop(0, rgba(255, 255, 255 , alpha * 0.1));
-    radgrad.addColorStop(1, rgba(0, 0, 255, alpha * 0.5));
-    ctx.fillStyle = radgrad;
-	  ctx.beginPath();    
-    ctx.arc(centerx,0, world.guiPower , 0, -Math.PI);
-    ctx.fill();
-	},
-	
 	drawCountdown: function(tick) {
+    
     if(world.waiting)
       return;
 
@@ -177,10 +156,10 @@ var renderer = {
     
     document.title  = "nog " + countdown + "sec"; 
 
-    if (countdown <= 3)
+    if (countdown <= 3000)
       renderer._drawFinalSeconds(countdown);
     
-    if (countdown <= 10)
+    if (countdown <= 10000)
       renderer._drawRoundProgress(countdown);
 	},
 	
@@ -206,9 +185,7 @@ var renderer = {
   },
   
   _drawRoundProgress: function(countdown) {
-    
-    if(world.waiting)
-      return;
+    if(countdown < 0) return;
     var x = config.screenSize.width * 0.95;
     var y = config.screenSize.height * 0.05;
     
@@ -219,7 +196,7 @@ var renderer = {
     var count = countdown/10000; //countdown between 0..1
     
     ctx.fillStyle = rgba(255,0,0);
-    ctx.fillRect(x,y,width,height*countdown);
+    ctx.fillRect(x,y,width,height*count);
   },
 
 	drawTrace : function(p, v, a, m) { // position, velocity, accelleration, mass

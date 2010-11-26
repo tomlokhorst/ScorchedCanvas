@@ -85,6 +85,7 @@
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Shot.cs" />
     <Compile Include="Models\Messages\UnknownMessage.cs" />
+    <Compile Include="Models\Vector.cs" />
     <Compile Include="Models\Weapon.cs" />
     <Compile Include="Models\World.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

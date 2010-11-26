@@ -36,7 +36,7 @@ var socket;
 			});
 		}
 		else if (msg.type == "quitPlayer") {
-			world.players = $.grep(world.players, function(player) { return player.id != msg.id; });
+			world.players = $.grep(world.players, function(player) { return player.id != msg.playerId; });
 		}
 		else if (msg.type == "gameUpdate") {
 		  world.waiting = false;
@@ -58,7 +58,7 @@ var socket;
 					player.pos = update.player.pos || player.pos;
 				}
 				else if (update.type == "fire") {
-					world.bullets.push({ id: update.playerId, weaponType: world.weaponType, arc: world.arc });
+					world.bullets.push({ id: update.playerId, type: world.weaponType, arc: world.arc });
 				}
 				else {
 					console.log("UNIMPLEMENTED: " + update.type);
