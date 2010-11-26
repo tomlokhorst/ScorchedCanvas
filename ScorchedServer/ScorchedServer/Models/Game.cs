@@ -28,10 +28,7 @@ namespace ScorchedServer.Models
           co.SendMessage(new
                 {
                   type = "newPlayer",
-                  id = c.Id,
-                  color = c.Color,
-                  pos = c.Pos,
-                  health = 50
+                  player = c.Player
                 });
         }
       });
@@ -54,9 +51,9 @@ namespace ScorchedServer.Models
           conn = new Connection(allConnections.Keys.Count);
           allConnections.Add(session, conn);
 
-          var players = allConnections.Values.Select(c => new { id = c.Id, color = c.Color, pos = c.Pos });
+          var players = allConnections.Values.Select(c => c.Player);
 
-          var gameInitObj = new { type = "gameInit", id = conn.Id, landscape = Landscape.fakeLandscape.Take(800).ToArray(), players = players };
+          var gameInitObj = new { type = "gameInit", playerId = conn.Player.id, landscape = Landscape.fakeLandscape.Take(800).ToArray(), players = players };
 
           conn.SendMessage(gameInitObj);
 
