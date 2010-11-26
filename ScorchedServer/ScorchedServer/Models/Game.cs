@@ -27,16 +27,19 @@ namespace ScorchedServer.Models
       {
         foreach (var co in connectionDictionary.Values)
         {
-          co.SendMessage(new{
-        type = "gameUpdate",
-        state = new
+          co.SendMessage(new
           {
-            type = "newPlayer",
-            id = c.Id,
-            color = c.Color,
-            pos = c.Pos
-          }
-      });
+            type = "gameUpdate",
+            state = new object[]
+              {new
+                {
+                  type = "newPlayer",
+                  id = c.Id,
+                  color = c.Color,
+                  pos = c.Pos
+                }
+              }
+          });
         }
       });
     }

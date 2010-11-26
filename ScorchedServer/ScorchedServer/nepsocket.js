@@ -40,15 +40,16 @@ NepSocket.prototype = {
       data: { queue: JSON.stringify(this.queue) },
       dataType: "jsonp",
       //cache: false,
-      success: function (data)
+      success: function (datas)
       {
         //console.log("request complete");
-        if (data)
+        if (datas)
         {
           //var messages = data["d"];
           //if (messages && messages.length)
           //for (var m = 0; m < messages.length; m++)
-          socket.onmessage(data);
+          for (var i = 0; i < datas.length; i++)
+            socket.onmessage(datas[i]);
         }
       },
       error: function (xhr, text, err)
