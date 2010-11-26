@@ -5,18 +5,21 @@
 		<link href="style.css" rel="stylesheet" type="text/css"/>
 	</head>
 	<body>
+		<div class="debugbuttons">
+			<button id="gameRequest">Game Request</button>
+			<button id="fireRequest">Fire Request</button>
+		</div>
 		<canvas id="canvas"></canvas>
-		<p>Log:</p>
-		<div id="log"></div>
-		<hr />
-		<p>
-		<button id='gameRequest'>Game Request</button>
-		-
-		<button id='fireRequest'>Fire Request</button>
-		</p>
+		
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript">
+			var config = {};
+			config.socketUrl = 'http://tom.q42.local:85/gameupdates';
+		</script>
 		<script type="text/javascript" src="utils.js"></script>
-		<script type="text/javascript" src="nepsocket.js"></script>
+		<script type="text/javascript" src="nepsocket.js"></script>		
+		<script type="text/javascript" src="socketimpl.js"></script>
 		<script type="text/javascript" src="render.js"></script>
+		<script type="text/javascript" src="gui.js"></script>
 	</body>
 </html>

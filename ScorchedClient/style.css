@@ -3,5 +3,9 @@ body {
 	overflow:hidden;
 }
 canvas {
-	border:solid 1px red;
+	/* border:solid 1px red; */
+}
+.debugbuttons {
+	float: left;
+	z-index: 100;
 }

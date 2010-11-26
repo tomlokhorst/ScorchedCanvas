@@ -16,13 +16,25 @@ namespace ScorchedServer.Controllers
       //var data = Request.Form[0];
 
 
-      var obj = new { type = "gameInit", landscape = landscape };
-
       var r = new Random();
+
+      JavaScriptSerializer jss = new JavaScriptSerializer();
+      if (r.Next(16) == 0)
+      {
+
+        var obj = new { type = "gameInit", landscape = landscape.Take(800).ToArray() };
+
+        return new JavaScriptResult
+        {
+          Script = callback + "(" + jss.Serialize(obj) + ");"
+        };
+      }
 
       if (r.Next(6) == 0)
       {
-        JavaScriptSerializer jss = new JavaScriptSerializer();
+
+        var obj = new { type = "gameUpdate", state = new object[]{ new {type = "fire", id = 1}, new { type = "updatePlayer", id = 2, health = 90 }} };
+
         return new JavaScriptResult
         {
           Script = callback + "(" + jss.Serialize(obj) + ");"
