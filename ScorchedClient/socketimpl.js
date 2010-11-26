@@ -39,6 +39,8 @@ var socket;
 			world.players = $.grep(world.players, function(player) { return player.id != msg.id; });
 		}
 		else if (msg.type == "gameUpdate") {
+		  world.nextRound = +new Date + config.roundTime;
+		  
 			var updateItem = function(i, update) {
 				if (update.type == "updatePlayer") {
 					

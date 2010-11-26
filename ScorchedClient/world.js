@@ -8,7 +8,7 @@ var world = {
 	guiAngle: 45,
 	guiPower: 10,
 	guiPoint: { x:0, y:0 },
-	nextRound: +new Date() + 10000 // 10 seconds in the future
+	nextRound: null
 };
 /*
 var gameInit = {
