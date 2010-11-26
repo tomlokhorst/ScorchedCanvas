@@ -7,10 +7,10 @@ var renderer = {
 		renderer.canvas = $("#canvas")[0];
 		renderer.canvas.width = config.screenSize.width;
 		renderer.canvas.height = config.screenSize.height;
-		
 		renderer.ctx = renderer.canvas.getContext("2d");
 		renderer.ctx.scale(1, -1);
 		renderer.ctx.translate(0, -config.screenSize.height);
+		renderer.render();
 	},
 	
 	render: function() {
@@ -22,17 +22,16 @@ var renderer = {
 		renderer.drawExplosions(renderer.tick);
 		renderer.drawUI(renderer.tick);
 		
-		setTimeout(renderer.render, 50);
+		setTimeout(renderer.render, 1000);
 	},
 	
 	drawLandscape: function(tick) {
 		var ctx = renderer.ctx;
-		var xStep = config.screenSize.width / world.landscape.length;
 		ctx.fillStyle = "black";
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
-		for (var x = 0, i = 0; i < world.landscape.length; x += xStep, i++) {
-			var y = world.landscape[i];
+		for (var x = 0; x < world.landscape.length; x++) {
+			var y = world.landscape[x];
 			ctx.lineTo(x, y);
 		}
 		ctx.lineTo(x, 0);
@@ -45,19 +44,21 @@ var renderer = {
 			var player = world.players[i];
 			
 			var tank      = {};
-			tank.top      = player.pos.x + config.tankHeight,
-			tank.left     = player.pos.x - (config.tankWidth / 2);
+			tank.top      = player.pos + config.tankHeight,
+			tank.left     = player.pos - (config.tankWidth / 2);
 			tank.right    = tank.left + config.tankWidth;
-			tank.bottom   = player.pos.y;
+			tank.bottom   = world.landscape[player.pos];
 			tank.center   = {};
-			tank.center.x = player.pos.x;
-			tank.center.y = player.pos.y + (config.tankHeight / 2);
+			tank.center.x = player.pos;			
+			tank.center.y = tank.bottom + (config.tankHeight / 2);
 			tank.health   = {};
 			tank.health.x = tank.left;
 			tank.barrel   = {};
 			tank.health.y = tank.bottom + config.tankHeight + config.healthIndicatorBottomMargin;
 			tank.barrel.x = Math.cos(player.angle) * config.barrelLength;
 			tank.barrel.y = Math.sin(player.angle) * config.barrelLength;
+			
+			
 			
 			// debug
 			if (config.debug) {
@@ -66,7 +67,7 @@ var renderer = {
 			}
 			
 			// tank
-			ctx.fillStyle = "hotpink";
+			ctx.fillStyle = player.color;
 			ctx.fillRect(tank.left, tank.bottom, config.tankWidth, config.tankHeight);
 			
 			// health
@@ -77,7 +78,7 @@ var renderer = {
 			ctx.stroke();
 			
 			// barrel
-			ctx.strokeStyle = "hotpink";
+			ctx.strokeStyle = "darkgrey";
 			ctx.lineWidth = config.barrelThickness;
 			ctx.beginPath();
 			ctx.moveTo(tank.center.x, tank.center.y);
@@ -95,25 +96,3 @@ var renderer = {
 	drawUI: function(tick) {
 	}
 };
-
-
-
-
-/*
-function Player(){}
-Player.prototype = {
-	aap: {
-	}
-};
-
-function Landscape(){}
-Landscape.prototype = {
-	aap: {
-	}
-};
-
-function Round(){}
-Round.prototype = {
-	aap: {
-	}
-};*/
