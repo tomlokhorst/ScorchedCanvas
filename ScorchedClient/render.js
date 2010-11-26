@@ -118,7 +118,8 @@ $(document).ready(function() {
 
 function draw(tick) {
   drawLandscape([10, 20, 30, 20, 30, 30, 10, 0, 10, 20, 30]);
-  drawPlayers([{ id: 2, name: "aad", health: 90, score: 1000, angle: 24 }]);
+  drawPlayers([{ id: 1, name: "aap", health: 40, score: 2000, angle: Math.PI / 2, color: "#FF0000", pos: { x: 100, y: 15 } },
+			   { id: 2, name: "aad", health: 90, score: 1000, angle: 0.1, color: "#0000FF", pos: { x: 400, y: 26 } }]);
   drawBullets(tick);
   drawExplosions(tick);
   drawUI(tick);
@@ -136,8 +137,58 @@ function drawLandscape(landscape) {
 	ctx.fill();
 }
 
-function drawPlayers() {
-	
+var debug = false;
+var tankWidth = 32, tankHeight = 16;
+var healthIndicatorBottomMargin = 5;
+var barrelLength = 40;
+var barrelTickness = 3;
+
+function drawPlayers(players) {
+	for (var i = 0; i < players.length; i++) {
+		var player = players[i];
+		
+		var tank      = {};
+		tank.top      = player.pos.x + tankHeight,
+		tank.left     = player.pos.x - (tankWidth / 2);
+		tank.right    = tank.left + tankWidth;
+		tank.bottom   = player.pos.y;
+		tank.center   = {};
+		tank.center.x = player.pos.x;
+		tank.center.y = player.pos.y + (tankHeight / 2);
+		tank.width    = tankWidth;
+		tank.height   = tankHeight;
+		tank.health   = {};
+		tank.health.x = tank.left;
+		tank.barrel   = {};
+		tank.health.y = tank.bottom + tank.height + healthIndicatorBottomMargin;
+		tank.barrel.x = Math.cos(player.angle) * barrelLength;
+		tank.barrel.y = Math.sin(player.angle) * barrelLength;
+		
+		// debug
+		if (debug) {
+			ctx.fillStyle = "red";
+			ctx.fillRect(player.pos.x, player.pos.y, tank.width, tank.height);
+		}
+		
+		// tank
+		ctx.fillStyle = "hotpink";
+		ctx.fillRect(tank.left, tank.bottom, tank.width, tank.height);
+		
+		// health
+		ctx.strokeStyle = "darkgreen";
+		ctx.beginPath();
+		ctx.moveTo(tank.health.x, tank.health.y);
+		ctx.lineTo(tank.health.x + tank.width, tank.health.y);
+		ctx.stroke();
+		
+		// barrel
+		ctx.strokeStyle = "hotpink";
+		ctx.lineWidth = barrelTickness;
+		ctx.beginPath();
+		ctx.moveTo(tank.center.x, tank.center.y);
+		ctx.lineTo(tank.center.x + tank.barrel.x, tank.center.y + tank.barrel.y);
+		ctx.stroke();
+	}
 }
 
 function drawBullets(tick) {
