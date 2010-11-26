@@ -58,8 +58,6 @@ var renderer = {
 			tank.barrel.x = Math.cos(player.angle) * config.barrelLength;
 			tank.barrel.y = Math.sin(player.angle) * config.barrelLength;
 			
-			
-			
 			// debug
 			if (config.debug) {
 				ctx.fillStyle = "red";
@@ -88,6 +86,10 @@ var renderer = {
 	},
 	
 	drawBullets: function(tick) {
+		//$.each(world.bullets, fnuction(i, bullet) {
+			
+		//});
+		//"funky_bomb", // "cannon" / "nuke" / "mirv"
 	},
 
 	drawExplosions: function(tick) {
