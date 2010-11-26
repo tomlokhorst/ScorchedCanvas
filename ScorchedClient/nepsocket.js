@@ -19,8 +19,8 @@ NepSocket.prototype = {
 	},
 
 	send : function(msg) {
-		//console.log('sending: ');
-		//console.log(msg);
+		console.log('sending: ');
+		console.log(msg);
 		this.queue.push(msg);
 	},
 

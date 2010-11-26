@@ -65,11 +65,12 @@ var socket;
 			/*
 			 HOTFIX voor server (stuurt geen array als er maar 1 element in de array staat, Tom kijkt of ie het kan fixen)
 			*/
-			if (msg.state.length)
-				$.each(msg.state, updateItem);
-			else
-				updateItem(0, msg.state);
-			
+			if(msg.state) {
+				if (msg.state.length)
+					$.each(msg.state, updateItem);
+				else
+					updateItem(0, msg.state);
+			}
 		}
 	};
 	socket.onerror = function(e) { /* Not implemented */ };
