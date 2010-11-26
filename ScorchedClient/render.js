@@ -118,7 +118,8 @@ $(document).ready(function() {
 
 function draw(tick) {
   drawLandscape([10, 20, 30, 20, 30, 30, 10, 0, 10, 20, 30]);
-  drawPlayers([{ id: 2, name: "aad", health: 90, score: 1000, angle: 24 }]);
+  drawPlayers([{ id: 1, name: "aap", health: 40, score: 2000, angle: 224, color: "#FF0000", pos: { x: 100, y: 15 } },
+			   { id: 2, name: "aad", health: 90, score: 1000, angle: 24, color: "#0000FF", pos: { x: 400, y: 26 } }]);
   drawBullets(tick);
   drawExplosions(tick);
   drawUI(tick);
@@ -136,8 +137,24 @@ function drawLandscape(landscape) {
 	ctx.fill();
 }
 
-function drawPlayers() {
-	
+var tankWidth = 32, tankHeight = 16;
+var healthIndicatorBottomMargin = 5;
+
+function drawPlayers(players) {
+	for (var i = 0; i < players.length; i++) {
+		var player = players[i];
+		var posX = player.pos.x - (tankWidth / 2);
+		//tank
+		ctx.fillStyle = "hotpink";
+		ctx.fillRect(posX, player.pos.y, tankWidth, tankHeight);
+		// health
+		ctx.strokeStyle = "darkgreen";
+		var healthY = player.pos.y + tankHeight + healthIndicatorBottomMargin;
+		ctx.beginPath();
+		ctx.moveTo(posX, healthY);
+		ctx.lineTo(posX + tankWidth, healthY);
+		ctx.stroke();
+	}
 }
 
 function drawBullets(tick) {
