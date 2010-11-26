@@ -11,6 +11,8 @@ namespace ScorchedServer.Models
     public Player Player { get; private set; }
     public DateTime LastCheckin { get; set; }
 
+    public List<object> State = new List<object>();
+
     private List<object> outputMsgs;
 
     public Connection(int id)
