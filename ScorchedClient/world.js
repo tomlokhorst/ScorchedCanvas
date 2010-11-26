@@ -8,7 +8,8 @@ var world = {
 	guiAngle: 45,
 	guiPower: 10,
 	guiPoint: { x:0, y:0 },
-	nextRound: null
+	nextRound: null,
+	waiting: true
 };
 /*
 var gameInit = {

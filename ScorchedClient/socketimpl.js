@@ -39,9 +39,10 @@ var socket;
 			world.players = $.grep(world.players, function(player) { return player.id != msg.id; });
 		}
 		else if (msg.type == "gameUpdate") {
+		  world.waiting = false;
 		  world.nextRound = +new Date + config.roundTime;
 		  
-			var updateItem = function(i, update) {
+		  $.each(msg.state,  function(i, update) {
 				if (update.type == "updatePlayer") {
 					
 					var filtered = $.grep(world.players, function(player) { return player.id == update.player.id; });
@@ -62,17 +63,7 @@ var socket;
 				else {
 					console.log("UNIMPLEMENTED: " + update.type);
 				}
-			};
-			
-			/*
-			 HOTFIX voor server (stuurt geen array als er maar 1 element in de array staat, Tom kijkt of ie het kan fixen)
-			*/
-			if(msg.state) {
-				if (msg.state.length)
-					$.each(msg.state, updateItem);
-				else
-					updateItem(0, msg.state);
-			}
+			});
 		}
 	};
 	socket.onerror = function(e) { /* Not implemented */ };
