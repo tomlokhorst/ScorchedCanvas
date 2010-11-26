@@ -30,7 +30,8 @@ namespace ScorchedServer.Models
                   type = "newPlayer",
                   id = c.Id,
                   color = c.Color,
-                  pos = c.Pos
+                  pos = c.Pos,
+                  health = 50
                 });
         }
       });
