@@ -10,13 +10,13 @@
 		
 		if (msg.type == "gameInit") {			
 			world.landscape = msg.landscape;
-			
+			world.playerId = msg.playerId;
 			$.each(msg.players, function(i, player) {
 				world.players.push({
 					id: player.id,
-					health: 100,
-					score: 0,
-					angle: Math.PI / 2,
+					health: player.health,
+					score: player.score,
+					angle: player.angle,
 					color: player.color, 
 					pos: player.pos
 				});
@@ -24,13 +24,13 @@
 		}
 		else if (msg.type == "newPlayer") {
 			world.players.push({ 
-				id: msg.id,
-				name: msg.name,
-				health: 100,
-				score: 0,
-				angle: Math.PI / 2,
-				color: msg.color,
-				pos: msg.pos
+				id: msg.player.id,
+				name: msg.player.name,
+				health: msg.player.health,
+				score: msg.player.score,
+				angle: msg.player.angle,
+				color: msg.player.color,
+				pos: msg.player.pos
 			});
 		}
 		else if (msg.type == "quitPlayer") {
@@ -40,20 +40,20 @@
 			var updateItem = function(i, update) {
 				if (update.type == "updatePlayer") {
 					
-					var filtered = $.grep(world.players, function(player) { return player.id == update.id; });
+					var filtered = $.grep(world.players, function(player) { return player.id == update.player.id; });
 					
-					assert(filtered.length == 0, "Kan player " + update.id + " niet vinden");
+					assert(filtered.length == 0, "Kan player " + update.player.id + " niet vinden");
 					
 					var player = filtered[0];
-					player.name = update.name || player.name;
-					player.health = update.health || player.health;
-					player.score = update.score || player.score;
-					player.angle = update.angle || player.angle;
-					player.color = update.color || player.color;
-					player.pos = update.pos || player.pos;
+					player.name = update.player.name || player.name;
+					player.health = update.player.health || player.health;
+					player.score = update.player.score || player.score;
+					player.angle = update.player.angle || player.angle;
+					player.color = update.player.color || player.color;
+					player.pos = update.player.pos || player.pos;
 				}
 				else if (update.type == "fire") {
-					world.bullets.push({ id: update.id, weaponType: world.weaponType, arc: world.arc });
+					world.bullets.push({ id: update.playerId, weaponType: world.weaponType, arc: world.arc });
 				}
 				else {
 					console.log("UNIMPLEMENTED: " + update.type);

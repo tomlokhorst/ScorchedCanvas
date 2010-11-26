@@ -14,7 +14,6 @@ var renderer = {
 	},
 	
 	render: function() {
-	  //console.log("rendering");
 		renderer.tick++;
 		
 		renderer.ctx.clearRect(0,0,config.screenSize.width,config.screenSize.height);
@@ -57,6 +56,7 @@ var renderer = {
 			tank.health.x = tank.left;
 			tank.barrel   = {};
 			tank.health.y = tank.bottom + config.tankHeight + config.healthIndicatorBottomMargin;
+			tank.health.l = Math.floor(config.tankWidth * (player.health / 100));
 			tank.barrel.x = Math.cos(player.angle) * config.barrelLength;
 			tank.barrel.y = Math.sin(player.angle) * config.barrelLength;
 			
@@ -74,7 +74,12 @@ var renderer = {
 			ctx.strokeStyle = "darkgreen";
 			ctx.beginPath();
 			ctx.moveTo(tank.health.x, tank.health.y);
-			ctx.lineTo(tank.health.x + config.tankWidth, tank.health.y);
+			ctx.lineTo(tank.health.x + tank.health.l, tank.health.y);
+			ctx.stroke();
+			ctx.strokeStyle = "red";
+			ctx.beginPath();
+			ctx.moveTo(tank.health.x  + tank.health.l, tank.health.y);
+			ctx.lineTo(tank.right, tank.health.y);
 			ctx.stroke();
 			
 			// barrel
