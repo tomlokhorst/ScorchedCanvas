@@ -16,25 +16,39 @@ var renderer = {
 	render : function() {
 		renderer.tick++;
 
-		renderer.ctx.clearRect(0, 0, config.screenSize.width,
-				config.screenSize.height);
+		//renderer.ctx.clearRect(0, 0, config.screenSize.width, config.screenSize.height);
+		renderer.drawBackground(renderer.tick);
 		renderer.drawLandscape(renderer.tick);
 		renderer.drawPlayers(renderer.tick);
 		renderer.drawBullets(renderer.tick);
 		renderer.drawExplosions(renderer.tick);
 		renderer.drawUI(renderer.tick);
 		renderer.drawCountdown(renderer.tick);
-
+    
 		// var v = Vector.fromPolar(Math.PI / 3, 4);
 		// var a = Vector.fromCart(0, -0.01);
 		// renderer.drawTrace(Vector.origin, v, a, 1);
 
 		setTimeout(renderer.render, 50);
 	},
+	
+	// 256 color background 
+	drawBackground: function(tick) {
+	  var ctx = this.ctx;
+	  var steps = 32;
+	  var stepSize = config.screenSize.height/steps;
+	  
+	  for( var step=steps ; step>=0 ; step--)
+	  {
+	    var color = step/steps * 255;
+	    ctx.fillStyle = rgba(color, 64 + color/2, 64 + color/2);
+	    ctx.fillRect(0, step * stepSize, config.screenSize.width, (step+1) * stepSize);
+	  }
+  },
 
 	drawLandscape : function(tick) {
 		var ctx = renderer.ctx;
-		ctx.fillStyle = rgba(155,255,155);
+		ctx.fillStyle = rgba(64,255,64);
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
 		for ( var x = 0; x < world.landscape.length; x++) {
@@ -61,8 +75,7 @@ var renderer = {
 			tank.health = {};
 			tank.health.x = tank.left;
 			tank.barrel = {};
-			tank.health.y = tank.bottom + config.tankHeight
-					+ config.healthIndicatorBottomMargin;
+			tank.health.y = tank.bottom - config.healthIndicatorBottomMargin;
 			tank.health.l = Math
 					.floor(config.tankWidth * (player.health / 100));
 			tank.barrel.x = Math.cos(player.angle) * config.barrelLength;
@@ -75,6 +88,16 @@ var renderer = {
 						tank.height);
 			}
 
+
+			// barrel
+			ctx.strokeStyle = "darkgrey";
+			ctx.lineWidth = config.barrelThickness;
+			ctx.beginPath();
+			ctx.moveTo(tank.center.x, tank.center.y);
+			ctx.lineTo(tank.center.x + tank.barrel.x, tank.center.y
+					+ tank.barrel.y);
+			ctx.stroke();
+			
 			// tank
 			ctx.fillStyle = player.color;
 			ctx.fillRect(tank.left, tank.bottom, config.tankWidth,
@@ -92,14 +115,6 @@ var renderer = {
 			ctx.lineTo(tank.right, tank.health.y);
 			ctx.stroke();
 
-			// barrel
-			ctx.strokeStyle = "darkgrey";
-			ctx.lineWidth = config.barrelThickness;
-			ctx.beginPath();
-			ctx.moveTo(tank.center.x, tank.center.y);
-			ctx.lineTo(tank.center.x + tank.barrel.x, tank.center.y
-					+ tank.barrel.y);
-			ctx.stroke();
 		}
 	},
 
