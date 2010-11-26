@@ -20,8 +20,8 @@ var renderer = {
 		renderer.ctx.clearRect(0, 0, config.screenSize.width, config.screenSize.height);
 		renderer.drawLandscape(updateDelta);
 		renderer.drawPlayers(updateDelta);
-		renderer.drawBullets(updateDelta);
 		renderer.drawExplosions(updateDelta);
+		renderer.drawBullets(updateDelta);		
 		renderer.drawUI(updateDelta);
 		renderer.drawCountdown(updateDelta);
 
@@ -106,6 +106,7 @@ var renderer = {
 				bullet.step = 0;
 				// mock
 				bullet.arc = renderer.drawTrace(Vector.origin, Vector.fromPolar(Math.PI / 3, 1), Vector.fromCart(0, -0.001), 1);
+				bullet.collision = true;
 			}
 
 			bullet.step += updateDelta / 15;
@@ -114,7 +115,18 @@ var renderer = {
 				var bulletCoord = bullet.arc[Math.floor(bullet.step)];
 				var ctx = renderer.ctx;
 				ctx.fillStyle = "red";
-				ctx.fillRect(bulletCoord.x, bulletCoord.y, 10, 10);
+				ctx.beginPath();
+				ctx.arc(bulletCoord.x, bulletCoord.y, 3, 0, 2 * Math.PI, false);
+				ctx.fill();
+			}
+			else if (bullet.collision)
+			{
+				var lastCoord = bullet.arc[bullet.arc.length - 1];
+				world.explosions.push({
+					x: 100,
+					y: 100,
+					duration: 0
+				});
 			}
 		});
 		
@@ -122,6 +134,16 @@ var renderer = {
 	},
 
 	drawExplosions: function(updateDelta) {
+		$.each(world.explosions, function(i, exp) {
+			exp.duration += updateDelta;
+			var alpha = exp.duration / 3000;
+			var ctx = renderer.ctx;
+			var style = rgba(255, 0, 0, 1 - alpha)
+			ctx.fillStyle = style;
+			ctx.fillRect(100, 100, 100, 100);
+		});
+		
+		world.explosions = $.grep(world.explosions, function(exp) { return exp.duration < 3000; });
 	},
 
 	drawUI : function(tick) {
