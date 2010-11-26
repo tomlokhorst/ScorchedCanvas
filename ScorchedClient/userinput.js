@@ -43,7 +43,7 @@ var UI = {
     var centerx = config.screenSize.width/2;
     var dx = x - centerx;
     world.guiAngle = Math.atan2(y, dx );
-    world.guiPower = Math.sqrt( dx*dx + y*y );
+    world.guiPower = Math.sqrt( dx*dx + y*y ) / 100;
   },
   
   // calculate angle / power from current aim
@@ -53,7 +53,7 @@ var UI = {
     UI.socket.send({
 		type : 'fireRequest',
 		angle : world.guiAngle,
-		power : world.guiPower / 100,
+		power : world.guiPower,
 		weaponType : 'cannon'
 	});
   },

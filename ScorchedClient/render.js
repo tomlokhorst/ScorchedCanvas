@@ -175,19 +175,19 @@ var renderer = {
 
 	drawUI : function(tick) {
 		if (world.guiAim) {
-			renderer._drawAimArc(1);
+			//renderer._drawAimArc(1);
 			renderer._lastAim = +new Date;
 
       // position, velocity, acceleration, mass
       var pos = new Vector(world.me.pos, world.me.posy);
       var vel = Vector.fromPolar(world.guiAngle, world.guiPower);
-      var acc = new Vector(0,-100);
-			renderer.drawTrace(pos,vel, acc, 3);
+      var acc = new Vector(0,-1);
+			renderer.drawTrace(pos,vel, acc, 100);
 			
 		} else {
 			var fade = new Date - renderer._lastAim;
 			if (fade < 200) {
-				renderer._drawAimArc((200 - fade) / 200);
+				//renderer._drawAimArc((200 - fade) / 200);
 			}
 		}
 	},
