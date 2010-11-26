@@ -147,42 +147,44 @@ var renderer = {
 		ctx.fill();
 	},
 	
-	drawCountdown: function(tick) {
-    
-    if(world.waiting)
-      return;
+	drawCountdown : function(tick) {
+		if (world.waiting)
+			return;
 
-    var countdown = world.nextRound - new Date();
-    
-    document.title  = "nog " + countdown + "sec"; 
+		var countdown = world.nextRound - new Date();
 
-    if (countdown <= 3000)
-      renderer._drawFinalSeconds(countdown);
-    
-    if (countdown <= 10000)
-      renderer._drawRoundProgress(countdown);
+		document.title = "nog " + countdown + "sec";
+
+		if (countdown <= 3000)
+			renderer._drawFinalSeconds(countdown);
+
+		if (countdown <= 10000)
+			renderer._drawRoundProgress(countdown);
 	},
-	
-	_drawFinalSeconds: function(countdown) {
-	  var count = countdown/1000; // countdown between 0..10
-	  var text = Math.ceil(count);    
-	  var ctx = this.ctx;
 
-	  ctx.save();	  
-	  renderer.ctx.translate(0, +config.screenSize.height);
-	  ctx.scale(1,-1);
+	_drawFinalSeconds : function(countdown) {
+		var count = countdown / 1000; // countdown between 0..10
+		var text = Math.ceil(count);
+		var ctx = this.ctx;
 
-	  var ratio = (count % 1);
-	  var fontSize = 180 / ratio;
-  	ctx.font = ~~fontSize + "px sans-serif";
-    ctx.fillStyle = rgba(255,0,0, ratio);
+		var ratio = (count % 1);
+		if(ratio == 0) return;
 
-  	var centerx = config.screenSize.width/2;
-    var centery = config.screenSize.height/2;    
-  	ctx.fillText(text, centerx - ctx.measureText(text).width/2, centery + fontSize/3);
-  	
-  	ctx.restore();
-  },
+		ctx.save();
+		renderer.ctx.translate(0, +config.screenSize.height);
+		ctx.scale(1, -1);
+
+		var fontSize = 180 / ratio;
+		ctx.font = ~~fontSize + "px sans-serif";
+		ctx.fillStyle = rgba(255, 0, 0, ratio);
+
+		var centerx = config.screenSize.width / 2;
+		var centery = config.screenSize.height / 2;
+		ctx.fillText(text, centerx - ctx.measureText(text).width / 2, centery
+				+ fontSize / 3);
+
+		ctx.restore();
+	},
   
   _drawRoundProgress: function(countdown) {
     if(countdown < 0) return;
