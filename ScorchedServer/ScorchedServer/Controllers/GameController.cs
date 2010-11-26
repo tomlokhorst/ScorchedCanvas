@@ -14,11 +14,11 @@ namespace ScorchedServer.Controllers
     {
       this.HttpContext.Response.AddHeader("Access-Control-Allow-Origin", "*");
 
-      var data = Request.Form["queue"];
-      if (data != null)
+      string data = Request.Form["queue"];
+      if (data != null )
       {
-
         JavaScriptSerializer jss = new JavaScriptSerializer();
+
         List<GenericMessage> queue = jss.Deserialize<List<GenericMessage>>(data);
 
         var msgs = queue.Select(m => m.ToMessage());

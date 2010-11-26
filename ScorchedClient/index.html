@@ -9,6 +9,7 @@
 		
 		<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
 		<script type="text/javascript">
+		        if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function () { } };
 			var config = {
 				socketUrl: 'http://tom.q42.local:85/gameupdates',
 				screenSize: {
@@ -28,12 +29,12 @@
 		<script type="text/javascript" src="nepsocket.js"></script>		
 		<script type="text/javascript" src="render.js"></script>
 		<script type="text/javascript" src="userinput.js"></script>
+		<script type="text/javascript" src="socketimpl.js"></script>
 		<script type="text/javascript">
-		  var c = $("#canvas")[0];
-			UI.init(c);
+			var c = $("#canvas")[0];
+			UI.init(c, socket);
 			renderer.init(c);
 			renderer.render();
-		</script>
-		<script type="text/javascript" src="socketimpl.js"></script>		
+		</script>		
 	</body>
 </html>

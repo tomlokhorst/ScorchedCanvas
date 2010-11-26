@@ -11,10 +11,8 @@ namespace ScorchedServer.Models
 {
   public class Game
   {
-    private Dictionary<string, Connection> connectionDictionary = new Dictionary<string, Connection>();
+    private Dictionary<string, Connection> allConnections = new Dictionary<string, Connection>();
     private Subject<Connection> connections = new Subject<Connection>();
-    private List<object> output = new List<object>();
-    private int x;
 
     public Game()
     {
@@ -25,21 +23,25 @@ namespace ScorchedServer.Models
 
       connections.Subscribe(c =>
       {
-        foreach (var co in connectionDictionary.Values)
+        var players = allConnections.Values.Select(co => co.Player);
+
+        var gameInitObj = new
+        {
+          type = "gameInit",
+          playerId = c.Player.id,
+          landscape = Landscape.fakeLandscape.Take(800).ToArray(),
+          players = players
+        };
+
+        c.SendMessage(gameInitObj);
+
+        foreach (var co in allConnections.Values)
         {
           co.SendMessage(new
-          {
-            type = "gameUpdate",
-            state = new object[]
-              {new
                 {
                   type = "newPlayer",
-                  id = c.Id,
-                  color = c.Color,
-                  pos = c.Pos
-                }
-              }
-          });
+                  player = c.Player
+                });
         }
       });
     }
@@ -52,29 +54,22 @@ namespace ScorchedServer.Models
       {
         Connection conn;
 
-        if (connectionDictionary.ContainsKey(session))
+        if (allConnections.ContainsKey(session))
         {
-          conn = connectionDictionary[session];
+          conn = allConnections[session];
         }
         else
         {
-          conn = new Connection(connectionDictionary.Keys.Count);
-          connectionDictionary.Add(session, conn);
-
-          var players = connectionDictionary.Values.Select(c => new { id = c.Id, color = c.Color, pos = c.Pos });
-
-          var gameInitObj = new { type = "gameInit", id = conn.Id, landscape = Landscape.fakeLandscape.Take(800).ToArray(), players = players };
-
-          conn.SendMessage(gameInitObj);
+          conn = new Connection(allConnections.Keys.Count);
+          allConnections.Add(session, conn);
 
           connections.OnNext(conn);
+
           foreach (var msg in msgs)
             conn.Messages.OnNext(msg);
         }
 
         return conn.GetOutput();
-
-        //return handleMessages(msgs);
       }
     }
 
@@ -82,8 +77,9 @@ namespace ScorchedServer.Models
     {
       while (true)
       {
-        x++;
-        Thread.Sleep(2000);
+        Thread.Sleep(10000);
+        foreach (var conn in allConnections.Values)
+          conn.SendMessage(new { type = "gameUpdate", nextRound = 5000 });
       }
     }
   }

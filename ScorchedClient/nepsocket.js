@@ -19,8 +19,8 @@ NepSocket.prototype = {
 	},
 
 	send : function(msg) {
-		//console.log('sending: ');
-		//console.log(msg);
+		console.log('sending: ');
+		console.log(msg);
 		this.queue.push(msg);
 	},
 
@@ -44,7 +44,7 @@ NepSocket.prototype = {
 				});
 			},
 			error : function(xhr, text, err) {
-				console.log("error: " + err);
+				console.log("error: " + text);
 				socket.onerror(err);
 			}
 		});

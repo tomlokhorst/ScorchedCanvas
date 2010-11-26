@@ -8,11 +8,17 @@ namespace ScorchedServer.Models
 {
     public class Player
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int X { get; set; }
-        public Color Color { get; set; }
-        public int Health { get; set; }
-        public int Score { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public int pos { get; set; } // x position
+        public string color { get; set; }
+        public int health { get; set; }
+        public int score { get; set; }
+        public int angle { get; set; }
+
+        public Player()
+        {
+          angle = Convert.ToInt32(Math.PI / 2);
+        }
     }
 }
