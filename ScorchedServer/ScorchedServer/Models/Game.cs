@@ -16,11 +16,7 @@ namespace ScorchedServer.Models
 
     public Game()
     {
-      var t = new Thread(new ThreadStart(startThread));
-      t.Start();
-
       var r = new Random();
-
       connections.Subscribe(conn =>
       {
         var players = allConnections.Values.Select(co => co.Player);
@@ -56,32 +52,29 @@ namespace ScorchedServer.Models
           }
         }
 
-        foreach (var c in allConnections.Values)
-          foreach (var p in ps)
+        foreach (var p in ps)
+          foreach (var c in allConnections.Values)
             c.SendMessage(new { type = "quitPlayer", playerId = p.id });
 
         foreach (var k in keys)
           allConnections.Remove(k);
       });
-    }
 
-    private void startThread()
-    {
-      while (true)
+      
+      int roundLength = 10000;
+      int nextRound = 5000;
+
+      Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond * (roundLength + nextRound))).Subscribe(l =>
       {
-        int roundTime = 10000;
-        int nextRound = 5000;
-
-        Thread.Sleep(nextRound + roundTime);
         foreach (var conn in allConnections.Values)
           conn.SendMessage(new
           {
             type = "gameUpdate",
             state = new object[]{ },
             nextRound = nextRound,
-            roundTime = roundTime
+            roundLength = roundLength
           });
-      }
+      });
     }
 
     private object obj = new object();
