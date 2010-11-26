@@ -7,8 +7,8 @@ var socket;
 	socket.onmessage = function(msg) {
 
 	
-		//console.log('onmessage:' + msg.type);
-		//console.log(msg);
+		console.log('onmessage:' + msg.type);
+		console.log(msg);
 		
 		if (msg.type == "gameInit") {			
 			world.landscape = msg.landscape;
@@ -64,7 +64,7 @@ var socket;
 					player.pos = update.player.pos || player.pos;
 				}
 				else if (update.type == "fire") {
-					world.bullets.push({ id: update.playerId, type: world.weaponType, arc: world.arc });
+					world.bullets.push({ id: update.playerId, arc: update.arc });
 				}
 				else {
 					console.log("UNIMPLEMENTED: " + update.type);

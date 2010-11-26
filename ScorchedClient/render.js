@@ -130,14 +130,15 @@ var renderer = {
 	
 	drawBullets: function(updateDelta) {
 		$.each(world.bullets, function(i, bullet) {
+			
 			if (bullet.step === undefined) {
 				bullet.step = 0;
 				// mock
-				bullet.arc = renderer.drawTrace(Vector.origin, Vector.fromPolar(Math.PI / 3, 1), Vector.fromCart(0, -0.001), 1);
+				//bullet.arc = renderer.drawTrace(Vector.origin, Vector.fromPolar(Math.PI / 3, 1), Vector.fromCart(0, -0.001), 1);
 				bullet.collision = true;
 			}
 
-			bullet.step += updateDelta / 15;
+			bullet.step += updateDelta / 40;
 			
 			if (bullet.step < bullet.arc.length) {
 				var bulletCoord = bullet.arc[Math.floor(bullet.step)];
@@ -147,8 +148,7 @@ var renderer = {
 				ctx.arc(bulletCoord.x, bulletCoord.y, 3, 0, 2 * Math.PI, false);
 				ctx.fill();
 			}
-			else if (bullet.collision)
-			{
+			else if (bullet.collision) {
 				var lastCoord = bullet.arc[bullet.arc.length - 1];
 				world.explosions.push({
 					x: lastCoord.x,
@@ -167,7 +167,7 @@ var renderer = {
 			var alpha = exp.duration / 3000;
 			var ctx = renderer.ctx;
 			ctx.fillStyle = rgba(255, 0, 0, 1 - alpha);
-			ctx.fillRect(100, 100, 100, 100);
+			ctx.fillRect(exp.x, exp.y, 100, 100);
 		});
 		
 		world.explosions = $.grep(world.explosions, function(exp) { return exp.duration < 3000; });
@@ -221,7 +221,7 @@ var renderer = {
 
 		var countdown = world.nextRound - new Date();
 
-		document.title = "nog " + countdown + "sec";
+		//document.title = "nog " + countdown + "sec";
 
 		if (countdown <= 3000)
 			renderer._drawFinalSeconds(countdown);
