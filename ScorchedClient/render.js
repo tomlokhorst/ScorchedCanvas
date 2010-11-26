@@ -1,7 +1,7 @@
 var renderer = {	
 	canvas: null,
 	ctx: null,
-	tick: 0,
+	lastTimeDrawn: new Date().valueOf(),
 	
 	init: function(canvas) {
 		renderer.canvas = canvas;
@@ -14,23 +14,25 @@ var renderer = {
 	},
 	
 	render: function() {
-		renderer.tick++;
-		
-		renderer.ctx.clearRect(0,0,config.screenSize.width,config.screenSize.height);
-		renderer.drawLandscape(renderer.tick);
-		renderer.drawPlayers(renderer.tick);
-		renderer.drawBullets(renderer.tick);
-		renderer.drawExplosions(renderer.tick);
-		renderer.drawUI(renderer.tick);
+		var now = new Date().valueOf();
+		var updateDelta = now - renderer.lastTimeDrawn;
+	
+		renderer.ctx.clearRect(0, 0, config.screenSize.width, config.screenSize.height);
+		renderer.drawLandscape(updateDelta);
+		renderer.drawPlayers(updateDelta);
+		renderer.drawBullets(updateDelta);
+		renderer.drawExplosions(updateDelta);
+		renderer.drawUI(updateDelta);
 
 		// var v = Vector.fromPolar(Math.PI / 3, 4);
 		// var a = Vector.fromCart(0, -0.01);
 		// renderer.drawTrace(Vector.origin, v, a, 1);
 		
-		setTimeout(renderer.render, 50);
+		renderer.lastTimeDrawn = now;
+		setTimeout(renderer.render, 16);
 	},
 	
-	drawLandscape: function(tick) {
+	drawLandscape: function(updateDelta) {
 		var ctx = renderer.ctx;
 		ctx.fillStyle = "black";
 		ctx.beginPath();
@@ -43,7 +45,7 @@ var renderer = {
 		ctx.fill();
 	},
 	
-	drawPlayers: function(tick) {
+	drawPlayers: function(updateDelta) {
 		var ctx = renderer.ctx;
 		for (var i = 0; i < world.players.length; i++) {
 			var player = world.players[i];
@@ -96,21 +98,31 @@ var renderer = {
 		}
 	},
 	
-	//drawBulletsEachMs: 100,
-	//lastDrawBullets: new Date().valueOf(),
-	drawBullets: function(tick) {
-		//if (new Date().valueOf() - renderer.lastDrawBullets < renderer.drawBulletsEachMs)
-		//	return;
-		//this.lastDrawBullets = new Date().valueOf();
-		//$.each(world.bullets, function(i, bullet) {
+	drawBullets: function(updateDelta) {
+		$.each(world.bullets, function(i, bullet) {
+			if (bullet.step === undefined) {
+				bullet.step = 0;
+				// mock
+				bullet.arc = renderer.drawTrace(Vector.origin, Vector.fromPolar(Math.PI / 3, 1), Vector.fromCart(0, -0.001), 1);
+			}
+
+			bullet.step += updateDelta / 15;
 			
-		//});		
+			if (bullet.step < bullet.arc.length) {
+				var bulletCoord = bullet.arc[Math.floor(bullet.step)];
+				var ctx = renderer.ctx;
+				ctx.fillStyle = "red";
+				ctx.fillRect(bulletCoord.x, bulletCoord.y, 10, 10);
+			}
+		});
+		
+		world.bullets = $.grep(world.bullets, function(bullet) { return bullet.step < bullet.arc.length; });
 	},
 
-	drawExplosions: function(tick) {
+	drawExplosions: function(updateDelta) {
 	},
 
-	drawUI: function(tick) {
+	drawUI: function(updateDelta) {
 	  if(world.guiAim) {
 	    renderer._drawAimArc(1);
       renderer._lastAim = +new Date;      

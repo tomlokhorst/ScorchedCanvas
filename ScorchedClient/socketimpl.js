@@ -34,7 +34,7 @@
 			});
 		}
 		else if (msg.type == "quitPlayer") {
-			world.players = $.grep(world.players, function(player) { return player.id != msg.id; });
+			world.players = $.grep(world.players, function(player) { return player.id != msg.playerId; });
 		}
 		else if (msg.type == "gameUpdate") {
 			var updateItem = function(i, update) {
