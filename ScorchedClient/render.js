@@ -140,9 +140,12 @@ var renderer = {
 	},
 
 	drawTrace: function (p, v, a, m) { // position, velocity, accelleration, mass
+	    var path = new Array();
+
 	    var ctx = renderer.ctx;
 	    ctx.beginPath();
 	    ctx.moveTo(p.x, p.y);
+            path.push(p);
 
 	    var dt = 10;
 
@@ -152,9 +155,11 @@ var renderer = {
 	        p = p.add(dv, dt / 2);
 	        v = v.add(dv);
 	        ctx.lineTo(p.x, p.y);
+	        path.push(p);
 	    }
 
 	    ctx.stroke();
+            return path;
 	}
 
 };
