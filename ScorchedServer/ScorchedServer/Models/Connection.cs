@@ -37,6 +37,7 @@ namespace ScorchedServer.Models
     {
       var r = outputMsgs;
       outputMsgs = new List<object>();
+
       return r;
     }
   }
