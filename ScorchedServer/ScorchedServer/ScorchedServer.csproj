@@ -69,6 +69,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Game.cs" />
     <Compile Include="Models\Messages\Message.cs" />
     <Compile Include="Models\Messages\FireRequest.cs" />
     <Compile Include="Models\Messages\GenericMessage.cs" />
