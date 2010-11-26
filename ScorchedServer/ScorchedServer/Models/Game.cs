@@ -12,12 +12,29 @@ namespace ScorchedServer.Models
   public class Game
   {
     private Dictionary<string, Connection> allConnections = new Dictionary<string, Connection>();
-    private Subject<Connection> connections = new Subject<Connection>();
+    private Subject<Connection> connectionJoins = new Subject<Connection>();
 
     public Game()
     {
+      ConnectionJoins();
+      QuitPlayers();
+      GameUpdates();
+
+      var frs = from c in connectionJoins
+                from m in c.Messages
+                where m is FireRequest
+                select new { p = c.Player, fr = m as FireRequest };
+
+      frs.Subscribe(pfr => 
+      {
+        pfr.p.shoot(pfr.fr);
+      });
+    }
+
+    private void ConnectionJoins()
+    {
       var r = new Random();
-      connections.Subscribe(conn =>
+      connectionJoins.Subscribe(conn =>
       {
         var players = allConnections.Values.Select(co => co.Player);
 
@@ -36,7 +53,10 @@ namespace ScorchedServer.Models
           c.SendMessage(new { type = "newPlayer", player = conn.Player });
         }
       });
+    }
 
+    private void QuitPlayers()
+    {
       Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond)).Subscribe(l =>
       {
         var ps = new List<Player>();
@@ -59,8 +79,10 @@ namespace ScorchedServer.Models
         foreach (var k in keys)
           allConnections.Remove(k);
       });
+    }
 
-      
+    private void GameUpdates()
+    {
       int roundLength = 10000;
       int nextRound = 5000;
 
@@ -70,7 +92,7 @@ namespace ScorchedServer.Models
           conn.SendMessage(new
           {
             type = "gameUpdate",
-            state = new object[]{ },
+            state = new object[] { },
             nextRound = nextRound,
             roundLength = roundLength
           });
@@ -94,7 +116,7 @@ namespace ScorchedServer.Models
           conn = new Connection(allConnections.Keys.Count);
 
           // First notify other connections...
-          connections.OnNext(conn);
+          connectionJoins.OnNext(conn);
           // ...then add to allConnections (so newPlayer isn't send to own connection)
           allConnections.Add(session, conn);
         }

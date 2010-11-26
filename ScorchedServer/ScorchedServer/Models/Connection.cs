@@ -19,12 +19,15 @@ namespace ScorchedServer.Models
 
       var r = new Random();
 
+      int x = r.Next(800);
+
       Player = new Player
       {
         id = id,
         color = "#" + r.Next(10).ToString() + r.Next(10).ToString() + r.Next(10).ToString(),
-        pos = r.Next(800),
-        health = r.Next(100)
+        pos = x,
+        health = r.Next(100),
+        position = Vector.FromCart(Convert.ToDouble(x), Convert.ToDouble(Landscape.fakeLandscape[x]))
       };
 
       LastCheckin = DateTime.Now;
