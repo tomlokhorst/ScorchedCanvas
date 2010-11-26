@@ -1,8 +1,7 @@
 // Only internal representation. Doesn't get sent around.
 var world = {
 	landscape: [],
-	players: [{ id: 1, name: "aap", health: 40, score: 2000, angle: Math.PI / 2, color: "#FF0000", pos: 100 },
-		      { id: 2, name: "aad", health: 90, score: 1000, angle: 0.1, color: "#0000FF", pos: 400 }],
+	players: [],
 	bullets: [],
 	guiAim : false,
 	guiAngle: 45,

@@ -14,7 +14,7 @@ var renderer = {
 	},
 	
 	render: function() {
-	  console.log("rendering");
+	  //console.log("rendering");
 		renderer.tick++;
 		
 		renderer.ctx.clearRect(0,0,config.screenSize.width,config.screenSize.height);
@@ -99,7 +99,7 @@ var renderer = {
 
 	drawUI: function(tick) {
 	  if(world.guiAim) {
-	    renderer._drawUI(1);
+	    renderer._drawAimArc(1);
       renderer._lastAim = +new Date;      
     } else {
       var fade = new Date - renderer._lastAim;

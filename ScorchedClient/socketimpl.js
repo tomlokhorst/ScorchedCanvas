@@ -5,26 +5,22 @@
 	socket.onmessage = function(msg) {
 
 	
-//		console.log('onmessage:' + msg.type);
-//		console.log(msg);
+		console.log('onmessage:' + msg.type);
+		console.log(msg);
 		
-		if (msg.type == "gameInit") {
-			if (!world.landscape) {
-				world.landscape = msg.landscape;
-				
-				$.each(msg.players, function(i, player) {
-					world.players.push({ 
-						id: player.id,
-						health: 100,
-						score: 0,
-						angle: Math.PI / 2,
-						color: player.color, 
-						pos: player.pos
-					});
-				});					
-					
-				renderer.init();
-			}
+		if (msg.type == "gameInit") {			
+			world.landscape = msg.landscape;
+			
+			$.each(msg.players, function(i, player) {
+				world.players.push({
+					id: player.id,
+					health: 100,
+					score: 0,
+					angle: Math.PI / 2,
+					color: player.color, 
+					pos: player.pos
+				});
+			});
 		}
 		else if (msg.type == "gameUpdate") {
 			var updateItem = function(i, update) {
