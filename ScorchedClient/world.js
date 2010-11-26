@@ -4,7 +4,10 @@ var world = {
 	players: [{ id: 1, name: "aap", health: 40, score: 2000, angle: Math.PI / 2, color: "#FF0000", pos: { x: 100, y: 15 } },
 		      { id: 2, name: "aad", health: 90, score: 1000, angle: 0.1, color: "#0000FF", pos: { x: 400, y: 26 } }],
 	bullets: [],
-	guiAngle: 45
+	guiAim : 0,
+	guiAngle: 45,
+	guiPower: 10,
+	guiPoint: { x:0, y:0 }
 };
 /*
 var gameInit = {

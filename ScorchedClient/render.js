@@ -3,8 +3,8 @@ var renderer = {
 	ctx: null,
 	tick: 0,
 	
-	init: function() {
-		renderer.canvas = $("#canvas")[0];
+	init: function(canvas) {
+		renderer.canvas = canvas;
 		renderer.canvas.width = config.screenSize.width;
 		renderer.canvas.height = config.screenSize.height;
 		
@@ -93,6 +93,17 @@ var renderer = {
 	},
 
 	drawUI: function(tick) {
+	  var centerx = config.screenSize.width/2;
+	  var centery = config.screenSize.height/2;
+	  
+	  var x= world.guiPoint.x;
+	  var y= world.guiPoint.y;
+	  
+	  var ctx = renderer.ctx;
+	  ctx.beginPath();
+    ctx.moveTo(centerx, centery);
+    ctx.lineTo(x, y)
+    ctx.stroke();
 	}
 };
 

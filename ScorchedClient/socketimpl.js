@@ -3,8 +3,8 @@
 	socket.onopen = function(e) { /* Not implemented */ };
 	socket.onclose = function(e) { /* Not implemented */ };
 	socket.onmessage = function(msg) {
-		console.log('onmessage:' + msg.type);
-		console.log(msg);
+		//console.log('onmessage:' + msg.type);
+		//console.log(msg);
 	};
 	socket.onerror = function(e) { /* Not implemented */ };
 /*
