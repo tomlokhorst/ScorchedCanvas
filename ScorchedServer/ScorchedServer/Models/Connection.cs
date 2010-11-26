@@ -9,7 +9,7 @@ namespace ScorchedServer.Models
   {
     public Subject<Message> Messages { get; private set; }
     public Player Player { get; private set; }
-    public DateTime LastCheckin { get; private set; }
+    public DateTime LastCheckin { get; set; }
 
     private List<object> outputMsgs;
 

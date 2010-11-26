@@ -21,29 +21,48 @@ namespace ScorchedServer.Models
 
       var r = new Random();
 
-      connections.Subscribe(c =>
+      connections.Subscribe(conn =>
       {
         var players = allConnections.Values.Select(co => co.Player);
 
         var gameInitObj = new
         {
           type = "gameInit",
-          playerId = c.Player.id,
+          playerId = conn.Player.id,
           landscape = Landscape.fakeLandscape.Take(800).ToArray(),
           players = players
         };
 
-        c.SendMessage(gameInitObj);
+        conn.SendMessage(gameInitObj);
 
-        foreach (var co in allConnections.Values)
+        foreach (var c in allConnections.Values)
         {
-          co.SendMessage(new
-                {
-                  type = "newPlayer",
-                  player = c.Player
-                });
+          c.SendMessage(new { type = "newPlayer", player = conn.Player });
         }
       });
+
+      Observable.Timer(new TimeSpan(TimeSpan.TicksPerSecond)).Subscribe(l =>
+      {
+        var ps = new List<Player>();
+
+        foreach (var c in allConnections.Values)
+          if ((DateTime.Now - c.LastCheckin) > new TimeSpan(TimeSpan.TicksPerSecond))
+            ps.Add(c.Player);
+
+        foreach (var c in allConnections.Values)
+          foreach (var p in ps)
+            c.SendMessage(new { type = "quitPlayer", playerId = p.id });
+      });
+    }
+
+    private void startThread()
+    {
+      while (true)
+      {
+        Thread.Sleep(10000);
+        foreach (var conn in allConnections.Values)
+          conn.SendMessage(new { type = "gameUpdate", state = new object[]{ }, nextRound = 5000 });
+      }
     }
 
     private object obj = new object();
@@ -61,25 +80,19 @@ namespace ScorchedServer.Models
         else
         {
           conn = new Connection(allConnections.Keys.Count);
-          allConnections.Add(session, conn);
 
+          // First notify other connections...
           connections.OnNext(conn);
-
-          foreach (var msg in msgs)
-            conn.Messages.OnNext(msg);
+          // ...then add to allConnections (so newPlayer isn't send to own connection)
+          allConnections.Add(session, conn);
         }
 
-        return conn.GetOutput();
-      }
-    }
+        foreach (var msg in msgs)
+          conn.Messages.OnNext(msg);
 
-    private void startThread()
-    {
-      while (true)
-      {
-        Thread.Sleep(10000);
-        foreach (var conn in allConnections.Values)
-          conn.SendMessage(new { type = "gameUpdate", nextRound = 5000 });
+        conn.LastCheckin = DateTime.Now;
+
+        return conn.GetOutput();
       }
     }
   }
