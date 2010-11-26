@@ -26,14 +26,7 @@ namespace ScorchedServer.Controllers
         var game = HttpContext.Application["game"] as Game;
         var objs = game.HandleMessages(session, msgs);
 
-        var s = "";
-
-        foreach (var obj in objs)
-        {
-          s += callback + "(" + jss.Serialize(obj) + ");";
-        }
-
-        if (s == "")
+        if (objs.Count() == 0)
         {
           return new JavaScriptResult();
         }
@@ -41,7 +34,7 @@ namespace ScorchedServer.Controllers
         {
           return new JavaScriptResult
           {
-            Script = s
+            Script = callback + "(" + jss.Serialize(objs) + ");"
           };
         }
       }
