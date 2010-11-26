@@ -69,10 +69,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Message.cs" />
-    <Compile Include="Models\FireRequest.cs" />
-    <Compile Include="Models\GenericMessage.cs" />
-    <Compile Include="Models\UnknownMessage.cs" />
+    <Compile Include="Models\Messages\Message.cs" />
+    <Compile Include="Models\Messages\FireRequest.cs" />
+    <Compile Include="Models\Messages\GenericMessage.cs" />
+    <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\Shot.cs" />
+    <Compile Include="Models\Messages\UnknownMessage.cs" />
+    <Compile Include="Models\Weapon.cs" />
+    <Compile Include="Models\World.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
