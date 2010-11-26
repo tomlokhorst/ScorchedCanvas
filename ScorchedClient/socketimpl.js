@@ -14,14 +14,20 @@ var socket;
 			world.landscape = msg.landscape;
 			world.playerId = msg.playerId;
 			$.each(msg.players, function(i, player) {
-				world.players.push({
+			  var p = {
 					id: player.id,
 					health: player.health,
 					score: player.score,
 					angle: player.angle,
 					color: player.color, 
-					pos: player.pos
-				});
+					pos: player.pos,
+					posy: world.landscape[player.pos]
+				};
+				world.players.push(p);
+				  
+			  if (player.id == world.playerId)
+			    world.me = p
+
 			});
 		}
 		else if (msg.type == "newPlayer") {

@@ -20,6 +20,7 @@ var renderer = {
 	
 		//renderer.ctx.clearRect(0, 0, config.screenSize.width, config.screenSize.height);
 		renderer.drawBackground(updateDelta);
+		renderer._flip(renderer.drawTitle)(updateDelta);
 		renderer.drawLandscape(updateDelta);
 		renderer.drawPlayers(updateDelta);
 		renderer.drawExplosions(updateDelta);
@@ -33,16 +34,26 @@ var renderer = {
 	
 	// 256 color background 
 	drawBackground: function(tick) {
-	  var ctx = this.ctx;
+	  var ctx = renderer.ctx;
 	  var steps = 32;
 	  var stepSize = config.screenSize.height/steps;
 	  
 	  for( var step=steps ; step>=0 ; step--)
 	  {
 	    var color = step/steps * 255;
-	    ctx.fillStyle = rgba(color, 64 + color/2, 64 + color/2);
+	    ctx.fillStyle = rgba(color, 128 + color/2, 128 + color/2);
 	    ctx.fillRect(0, step * stepSize, config.screenSize.width, (step+1) * stepSize);
 	  }
+  },
+  
+  drawTitle: function(tick) {
+    var ctx = renderer.ctx;
+    ctx.font = "48px sans-serif";
+		ctx.fillStyle = rgba(255, 255, 255, 0.8);
+
+		var centerx = config.screenSize.width / 2;
+    var text = "Scorched Canvas";
+		ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
   },
 
 	drawLandscape : function(tick) {
@@ -64,10 +75,10 @@ var renderer = {
 			var player = world.players[i];
 
 			var tank = {};
-			tank.top = player.pos + config.tankHeight, tank.left = player.pos
-					- (config.tankWidth / 2);
+			tank.top = player.pos + config.tankHeight;
+			tank.left = player.pos - (config.tankWidth / 2);
 			tank.right = tank.left + config.tankWidth;
-			tank.bottom = world.landscape[player.pos];
+			tank.bottom = player.posy; //world.landscape[player.pos];
 			tank.center = {};
 			tank.center.x = player.pos;
 			tank.center.y = tank.bottom + (config.tankHeight / 2);
@@ -166,6 +177,13 @@ var renderer = {
 		if (world.guiAim) {
 			renderer._drawAimArc(1);
 			renderer._lastAim = +new Date;
+
+      // position, velocity, acceleration, mass
+      var pos = new Vector(world.me.pos, world.me.posy);
+      var vel = Vector.fromPolar(world.guiAngle, world.guiPower);
+      var acc = new Vector(0,-100);
+			renderer.drawTrace(pos,vel, acc, 3);
+			
 		} else {
 			var fade = new Date - renderer._lastAim;
 			if (fade < 200) {
@@ -230,8 +248,7 @@ var renderer = {
 
 		var centerx = config.screenSize.width / 2;
 		var centery = config.screenSize.height / 2;
-		ctx.fillText(text, centerx - ctx.measureText(text).width / 2, centery
-				+ fontSize / 3);
+		ctx.fillText(text, centerx - ctx.measureText(text).width / 2, centery	+ fontSize / 3);
 
 		ctx.restore();
 	},
@@ -247,11 +264,12 @@ var renderer = {
     var ctx = this.ctx;
     var count = countdown/10000; //countdown between 0..1
     
-    ctx.fillStyle = rgba(255,0,0);
+    ctx.fillStyle = rgba(255,0,0, 0.7);
     ctx.fillRect(x,y,width,height*count);
   },
 
-	drawTrace : function(p, v, a, m) { // position, velocity, accelleration, mass
+	drawTrace : function(p, v, a, m, time) { // position, velocity, accelleration, mass
+	  time = time || 1000;
 		var path = new Array();
 
 		var ctx = renderer.ctx;
@@ -261,7 +279,7 @@ var renderer = {
 
 		var dt = 10;
 
-		for ( var i = 0; i < 1000; i++) {
+		for ( var i = 0; i < time; i++) {
 			var dv = a.scale(dt / m);
 			p = p.add(v, dt);
 			p = p.add(dv, dt / 2);
@@ -272,6 +290,17 @@ var renderer = {
 
 		ctx.stroke();
 		return path;
+	},
+	
+	_flip : function(f) {
+	  return function(tick) {
+	    var ctx = renderer.ctx;
+	    ctx.save();
+		  ctx.translate(0, +config.screenSize.height);
+		  ctx.scale(1, -1);
+		  f(tick);
+		  ctx.restore();
+	  }
 	}
 
 };

@@ -2,6 +2,7 @@
 var world = {
 	landscape: [],
 	players: [],
+	me : {},
 	bullets: [],
 	explosions: [],
 	playerId: null,
