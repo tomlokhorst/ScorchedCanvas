@@ -1,7 +1,9 @@
 bin/
 obj/
 
-*.usr
+*.user
 *.suo
+*.dll
+*.pdb
 
 .project
