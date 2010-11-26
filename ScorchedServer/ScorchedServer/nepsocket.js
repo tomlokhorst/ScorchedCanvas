@@ -8,59 +8,59 @@ this._open(url + '/' + session);
 }
 
 NepSocket.prototype = {
-	queue: [],
-	_url: "",
-	_polling_delay: 500,
+  queue: [],
+  _url: "",
+  _polling_delay: 2000,
 
-	_open: function (url)
-	{
-	  this._url = url;
-	  var socket = this;
-	  // start the polling loop
-	  socket._ping();
-	},
+  _open: function (url)
+  {
+    this._url = url;
+    var socket = this;
+    // start the polling loop
+    socket._ping();
+  },
 
-	send: function (msg)
-	{
-	  //console.log("sending: " + msg);
-	  this.queue.push(msg);
-	},
+  send: function (msg)
+  {
+    //console.log("sending: " + msg);
+    this.queue.push(msg);
+  },
 
-	onmessage: function (msg) { },
+  onmessage: function (msg) { },
 
-	_ping: function ()
-	{
-	  //console.log("polling " + this._url);
-	  document.title = new Date();
-	  var socket = this;
+  _ping: function ()
+  {
+    //console.log("polling " + this._url);
+    document.title = new Date();
+    var socket = this;
 
-	  $.ajax({
-		type: "POST",
-		url: this._url + "?callback=?",
-		data: this.queue.length ? { "d": this.queue} : null,
-		dataType: "jsonp",
-		//cache: false,
-		success: function (data)
-		{
-		  //console.log("request complete");
-		  if (data)
-		  {
-			//var messages = data["d"];
-			//if (messages && messages.length)
-			  //for (var m = 0; m < messages.length; m++)
-				socket.onmessage(data);
-		  }
-		},
-		error: function (xhr, text, err)
-		{
-		  console.log("error: " + err);
-		  socket.onerror(err);
-		}
-	  });
-	  
-	  setTimeout(function () { socket._ping(); }, socket._polling_delay);
-	  this.queue = [];
-	}
+    $.ajax({
+      type: "POST",
+      url: this._url + "?callback=?",
+      data: { queue: JSON.stringify(this.queue) },
+      dataType: "jsonp",
+      //cache: false,
+      success: function (data)
+      {
+        //console.log("request complete");
+        if (data)
+        {
+          //var messages = data["d"];
+          //if (messages && messages.length)
+          //for (var m = 0; m < messages.length; m++)
+          socket.onmessage(data);
+        }
+      },
+      error: function (xhr, text, err)
+      {
+        console.log("error: " + err);
+        socket.onerror(err);
+      }
+    });
+
+    setTimeout(function () { socket._ping(); }, socket._polling_delay);
+    this.queue = [];
+  }
 };
 
 

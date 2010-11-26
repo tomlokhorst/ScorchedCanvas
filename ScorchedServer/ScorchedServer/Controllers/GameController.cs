@@ -4,21 +4,33 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using ScorchedServer.Models;
 
 namespace ScorchedServer.Controllers
 {
   public class GameController : Controller
   {
-    public JavaScriptResult Updates(string callback)
+    public JavaScriptResult Updates(string session, string callback)
     {
       this.HttpContext.Response.AddHeader("Access-Control-Allow-Origin", "*");
 
-      //var data = Request.Form[0];
+      JavaScriptSerializer jss = new JavaScriptSerializer();
+
+
+      var data = Request.Form["queue"];
+      if (data != null)
+      {
+        List<GenericMessage> x = jss.Deserialize<List<GenericMessage>>(data);
+
+        if (x.Count > 0)
+        {
+          int i = 0;
+        }
+      }
 
 
       var r = new Random();
 
-      JavaScriptSerializer jss = new JavaScriptSerializer();
       if (r.Next(16) == 0)
       {
 
@@ -29,11 +41,19 @@ namespace ScorchedServer.Controllers
           Script = callback + "(" + jss.Serialize(obj) + ");"
         };
       }
-
-      if (r.Next(6) == 0)
+      else if (r.Next(6) == 0)
       {
 
-        var obj = new { type = "gameUpdate", state = new object[]{ new {type = "fire", id = 1}, new { type = "updatePlayer", id = 2, health = 90 }} };
+        var obj = new { type = "gameUpdate", state = new object[] { new { type = "fire", id = 1 }, new { type = "updatePlayer", id = 2, health = 90 } } };
+
+        return new JavaScriptResult
+        {
+          Script = callback + "(" + jss.Serialize(obj) + ");"
+        };
+      } if (r.Next(6) == 0)
+      {
+
+        var obj = new { type = "joke", x = HttpContext.Application["x"] };
 
         return new JavaScriptResult
         {
