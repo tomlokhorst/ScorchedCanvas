@@ -1,5 +1,7 @@
+var socket;
+
 (function() {
-	var socket = new NepSocket(config.socketUrl);
+	socket = new NepSocket(config.socketUrl);
 	socket.onopen = function(e) { /* Not implemented */ };
 	socket.onclose = function(e) { /* Not implemented */ };
 	socket.onmessage = function(msg) {
@@ -24,13 +26,13 @@
 		}
 		else if (msg.type == "newPlayer") {
 			world.players.push({ 
-				id: msg.id,
-				name: msg.name,
+				id: player.id,
+				name: player.name,
 				health: 100,
 				score: 0,
 				angle: Math.PI / 2,
-				color: msg.color,
-				pos: msg.pos
+				color: player.color,
+				pos: player.pos
 			});
 		}
 		else if (msg.type == "quitPlayer") {
@@ -71,20 +73,4 @@
 		}
 	};
 	socket.onerror = function(e) { /* Not implemented */ };
-/*
-	$('#gameRequest').bind('click', function() {
-		socket.send({
-			type : 'gameRequest'
-		});
-	});
-
-	$('#fireRequest').bind('click', function() {
-		socket.send({
-			type : 'fireRequest',
-			angle : 30,
-			power : 100,
-			weaponType : 'cannon'
-		});
-	});	
-*/
 })();

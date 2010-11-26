@@ -44,7 +44,7 @@ NepSocket.prototype = {
 				});
 			},
 			error : function(xhr, text, err) {
-				console.log("error: " + err);
+				console.log("error: " + text);
 				socket.onerror(err);
 			}
 		});
