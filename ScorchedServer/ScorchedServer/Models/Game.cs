@@ -11,10 +11,8 @@ namespace ScorchedServer.Models
 {
   public class Game
   {
-    private Dictionary<string, Connection> connectionDictionary = new Dictionary<string, Connection>();
+    private Dictionary<string, Connection> allConnections = new Dictionary<string, Connection>();
     private Subject<Connection> connections = new Subject<Connection>();
-    private List<object> output = new List<object>();
-    private int x;
 
     public Game()
     {
@@ -25,21 +23,15 @@ namespace ScorchedServer.Models
 
       connections.Subscribe(c =>
       {
-        foreach (var co in connectionDictionary.Values)
+        foreach (var co in allConnections.Values)
         {
           co.SendMessage(new
-          {
-            type = "gameUpdate",
-            state = new object[]
-              {new
                 {
                   type = "newPlayer",
                   id = c.Id,
                   color = c.Color,
                   pos = c.Pos
-                }
-              }
-          });
+                });
         }
       });
     }
@@ -52,16 +44,16 @@ namespace ScorchedServer.Models
       {
         Connection conn;
 
-        if (connectionDictionary.ContainsKey(session))
+        if (allConnections.ContainsKey(session))
         {
-          conn = connectionDictionary[session];
+          conn = allConnections[session];
         }
         else
         {
-          conn = new Connection(connectionDictionary.Keys.Count);
-          connectionDictionary.Add(session, conn);
+          conn = new Connection(allConnections.Keys.Count);
+          allConnections.Add(session, conn);
 
-          var players = connectionDictionary.Values.Select(c => new { id = c.Id, color = c.Color, pos = c.Pos });
+          var players = allConnections.Values.Select(c => new { id = c.Id, color = c.Color, pos = c.Pos });
 
           var gameInitObj = new { type = "gameInit", id = conn.Id, landscape = Landscape.fakeLandscape.Take(800).ToArray(), players = players };
 
@@ -73,8 +65,6 @@ namespace ScorchedServer.Models
         }
 
         return conn.GetOutput();
-
-        //return handleMessages(msgs);
       }
     }
 
@@ -82,7 +72,6 @@ namespace ScorchedServer.Models
     {
       while (true)
       {
-        x++;
         Thread.Sleep(2000);
       }
     }
