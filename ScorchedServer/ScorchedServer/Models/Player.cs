@@ -14,5 +14,11 @@ namespace ScorchedServer.Models
         public string color { get; set; }
         public int health { get; set; }
         public int score { get; set; }
+        public int angle { get; set; }
+
+        public Player()
+        {
+          angle = Convert.ToInt32(Math.PI / 2);
+        }
     }
 }

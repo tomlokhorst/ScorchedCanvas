@@ -8,22 +8,23 @@ namespace ScorchedServer.Models
   class Connection
   {
     public Subject<Message> Messages { get; private set; }
-    public int Id { get; private set; }
-
-    public string Color;
-    public int Pos;
+    public Player Player { get; private set; }
 
     private List<object> outputMsgs;
 
     public Connection(int id)
     {
-      Id = id;
       Messages = new Subject<Message>();
 
       var r = new Random();
 
-      Color = "#" + r.Next(10).ToString() + r.Next(10).ToString() + r.Next(10).ToString();
-      Pos = r.Next(800);
+      Player = new Player
+      {
+        id = id,
+        color = "#" + r.Next(10).ToString() + r.Next(10).ToString() + r.Next(10).ToString(),
+        pos = r.Next(800),
+        health = r.Next(100)
+      };
 
       outputMsgs = new List<object>();
     }
