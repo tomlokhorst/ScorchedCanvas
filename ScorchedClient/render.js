@@ -3,8 +3,8 @@ var renderer = {
 	ctx: null,
 	tick: 0,
 	
-	init: function() {
-		renderer.canvas = $("#canvas")[0];
+	init: function(canvas) {
+		renderer.canvas = canvas;
 		renderer.canvas.width = config.screenSize.width;
 		renderer.canvas.height = config.screenSize.height;
 		renderer.ctx = renderer.canvas.getContext("2d");
@@ -14,15 +14,17 @@ var renderer = {
 	},
 	
 	render: function() {
+	  //console.log("rendering");
 		renderer.tick++;
 		
+		renderer.ctx.clearRect(0,0,config.screenSize.width,config.screenSize.height);
 		renderer.drawLandscape(renderer.tick);
 		renderer.drawPlayers(renderer.tick);
 		renderer.drawBullets(renderer.tick);
 		renderer.drawExplosions(renderer.tick);
 		renderer.drawUI(renderer.tick);
 		
-		setTimeout(renderer.render, 1000);
+		setTimeout(renderer.render, 50);
 	},
 	
 	drawLandscape: function(tick) {
@@ -95,5 +97,36 @@ var renderer = {
 	},
 
 	drawUI: function(tick) {
+	  if(world.guiAim) {
+	    renderer._drawAimArc(1);
+      renderer._lastAim = +new Date;      
+    } else {
+      var fade = new Date - renderer._lastAim;
+      if( fade < 200) {
+        renderer._drawAimArc( (200-fade)/200 );
+      }
+    }
+	},
+	
+	_drawAimArc: function(alpha)  {
+  	var centerx = config.screenSize.width/2;
+  	var centery = config.screenSize.height/2;
+
+	  var x= world.guiPoint.x;
+    var y= world.guiPoint.y;
+
+  	var ctx = renderer.ctx;
+  	ctx.beginPath();
+    ctx.moveTo(centerx, 0);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
+    var radgrad = ctx.createRadialGradient(centerx,0,0,centerx,0, world.guiPower);
+    radgrad.addColorStop(0, rgba(255, 255, 255 , alpha * 0.1));
+    radgrad.addColorStop(1, rgba(0, 0, 255, alpha * 0.5));
+    ctx.fillStyle = radgrad;
+	  ctx.beginPath();    
+    ctx.arc(centerx,0, world.guiPower , 0, -Math.PI);
+    ctx.fill();
 	}
 };

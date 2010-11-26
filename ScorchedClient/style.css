@@ -3,7 +3,8 @@ body {
 	overflow:hidden;
 }
 canvas {
-	/* border:solid 1px red; */
+	border:solid 1px red;
+	margin: auto;
 }
 .debugbuttons {
 	float: left;
