@@ -2,6 +2,7 @@ var renderer = {
 	canvas : null,
 	ctx : null,
 	tick : 0,
+	lastTimeDrawn: new Date().valueOf(),
 
 	init : function(canvas) {
 		renderer.canvas = canvas;
@@ -12,24 +13,22 @@ var renderer = {
 		renderer.ctx.translate(0, -config.screenSize.height);
 		renderer.render();
 	},
-
-	render : function() {
-		renderer.tick++;
-
+	
+	render: function() {
+		var now = new Date().valueOf();
+		var updateDelta = now - renderer.lastTimeDrawn;
+	
 		//renderer.ctx.clearRect(0, 0, config.screenSize.width, config.screenSize.height);
-		renderer.drawBackground(renderer.tick);
-		renderer.drawLandscape(renderer.tick);
-		renderer.drawPlayers(renderer.tick);
-		renderer.drawBullets(renderer.tick);
-		renderer.drawExplosions(renderer.tick);
-		renderer.drawUI(renderer.tick);
-		renderer.drawCountdown(renderer.tick);
-    
-		// var v = Vector.fromPolar(Math.PI / 3, 4);
-		// var a = Vector.fromCart(0, -0.01);
-		// renderer.drawTrace(Vector.origin, v, a, 1);
+		renderer.drawBackground(updateDelta);
+		renderer.drawLandscape(updateDelta);
+		renderer.drawPlayers(updateDelta);
+		renderer.drawExplosions(updateDelta);
+		renderer.drawBullets(updateDelta);		
+		renderer.drawUI(updateDelta);
+		renderer.drawCountdown(updateDelta);
 
-		setTimeout(renderer.render, 50);
+		renderer.lastTimeDrawn = now;
+		setTimeout(renderer.render, 16);
 	},
 	
 	// 256 color background 
@@ -117,14 +116,50 @@ var renderer = {
 
 		}
 	},
-
-	drawBullets : function(tick) {
+	
+	drawBullets: function(updateDelta) {
 		$.each(world.bullets, function(i, bullet) {
-			// "funky_bomb", // "cannon" / "nuke" / "mirv"
+			if (bullet.step === undefined) {
+				bullet.step = 0;
+				// mock
+				bullet.arc = renderer.drawTrace(Vector.origin, Vector.fromPolar(Math.PI / 3, 1), Vector.fromCart(0, -0.001), 1);
+				bullet.collision = true;
+			}
+
+			bullet.step += updateDelta / 15;
+			
+			if (bullet.step < bullet.arc.length) {
+				var bulletCoord = bullet.arc[Math.floor(bullet.step)];
+				var ctx = renderer.ctx;
+				ctx.fillStyle = "red";
+				ctx.beginPath();
+				ctx.arc(bulletCoord.x, bulletCoord.y, 3, 0, 2 * Math.PI, false);
+				ctx.fill();
+			}
+			else if (bullet.collision)
+			{
+				var lastCoord = bullet.arc[bullet.arc.length - 1];
+				world.explosions.push({
+					x: lastCoord.x,
+					y: lastCoord.y,
+					duration: 0
+				});
+			}
 		});
+		
+		world.bullets = $.grep(world.bullets, function(bullet) { return bullet.step < bullet.arc.length; });
 	},
 
-	drawExplosions : function(tick) {
+	drawExplosions: function(updateDelta) {
+		$.each(world.explosions, function(i, exp) {
+			exp.duration += updateDelta;
+			var alpha = exp.duration / 3000;
+			var ctx = renderer.ctx;
+			ctx.fillStyle = rgba(255, 0, 0, 1 - alpha);
+			ctx.fillRect(100, 100, 100, 100);
+		});
+		
+		world.explosions = $.grep(world.explosions, function(exp) { return exp.duration < 3000; });
 	},
 
 	drawUI : function(tick) {
@@ -162,42 +197,44 @@ var renderer = {
 		ctx.fill();
 	},
 	
-	drawCountdown: function(tick) {
-    
-    if(world.waiting)
-      return;
+	drawCountdown : function(tick) {
+		if (world.waiting)
+			return;
 
-    var countdown = world.nextRound - new Date();
-    
-    document.title  = "nog " + countdown + "sec"; 
+		var countdown = world.nextRound - new Date();
 
-    if (countdown <= 3000)
-      renderer._drawFinalSeconds(countdown);
-    
-    if (countdown <= 10000)
-      renderer._drawRoundProgress(countdown);
+		document.title = "nog " + countdown + "sec";
+
+		if (countdown <= 3000)
+			renderer._drawFinalSeconds(countdown);
+
+		if (countdown <= 10000)
+			renderer._drawRoundProgress(countdown);
 	},
-	
-	_drawFinalSeconds: function(countdown) {
-	  var count = countdown/1000; // countdown between 0..10
-	  var text = Math.ceil(count);    
-	  var ctx = this.ctx;
 
-	  ctx.save();	  
-	  renderer.ctx.translate(0, +config.screenSize.height);
-	  ctx.scale(1,-1);
+	_drawFinalSeconds : function(countdown) {
+		var count = countdown / 1000; // countdown between 0..10
+		var text = Math.ceil(count);
+		var ctx = this.ctx;
 
-	  var ratio = (count % 1);
-	  var fontSize = 180 / ratio;
-  	ctx.font = ~~fontSize + "px sans-serif";
-    ctx.fillStyle = rgba(255,0,0, ratio);
+		var ratio = (count % 1);
+		if(ratio == 0) return;
 
-  	var centerx = config.screenSize.width/2;
-    var centery = config.screenSize.height/2;    
-  	ctx.fillText(text, centerx - ctx.measureText(text).width/2, centery + fontSize/3);
-  	
-  	ctx.restore();
-  },
+		ctx.save();
+		renderer.ctx.translate(0, +config.screenSize.height);
+		ctx.scale(1, -1);
+
+		var fontSize = 180 / ratio;
+		ctx.font = ~~fontSize + "px sans-serif";
+		ctx.fillStyle = rgba(255, 0, 0, ratio);
+
+		var centerx = config.screenSize.width / 2;
+		var centery = config.screenSize.height / 2;
+		ctx.fillText(text, centerx - ctx.measureText(text).width / 2, centery
+				+ fontSize / 3);
+
+		ctx.restore();
+	},
   
   _drawRoundProgress: function(countdown) {
     if(countdown < 0) return;

@@ -2,6 +2,8 @@
 var world = {
 	landscape: [],
 	players: [],
+	bullets: [],
+	explosions: [],
 	playerId: null,
 	bullets: [],
 	guiAim : false,
