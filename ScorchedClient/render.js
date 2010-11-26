@@ -86,10 +86,9 @@ var renderer = {
 	},
 	
 	drawBullets: function(tick) {
-		//$.each(world.bullets, fnuction(i, bullet) {
-			
-		//});
-		//"funky_bomb", // "cannon" / "nuke" / "mirv"
+		$.each(world.bullets, function(i, bullet) {
+		//"funky_bomb", // "cannon" / "nuke" / "mirv"	
+		});		
 	},
 
 	drawExplosions: function(tick) {
