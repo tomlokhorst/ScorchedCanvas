@@ -1,9 +1,9 @@
-var renderer = {	
-	canvas: null,
-	ctx: null,
-	lastTimeDrawn: new Date().valueOf(),
-	
-	init: function(canvas) {
+var renderer = {
+	canvas : null,
+	ctx : null,
+	tick : 0,
+
+	init : function(canvas) {
 		renderer.canvas = canvas;
 		renderer.canvas.width = config.screenSize.width;
 		renderer.canvas.height = config.screenSize.height;
@@ -12,7 +12,7 @@ var renderer = {
 		renderer.ctx.translate(0, -config.screenSize.height);
 		renderer.render();
 	},
-
+	
 	render: function() {
 		var now = new Date().valueOf();
 		var updateDelta = now - renderer.lastTimeDrawn;
@@ -28,10 +28,10 @@ var renderer = {
 		renderer.lastTimeDrawn = now;
 		setTimeout(renderer.render, 16);
 	},
-	
-	drawLandscape: function(updateDelta) {
+
+	drawLandscape : function(tick) {
 		var ctx = renderer.ctx;
-		ctx.fillStyle = "black";
+		ctx.fillStyle = rgba(155,255,155);
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
 		for ( var x = 0; x < world.landscape.length; x++) {
@@ -41,8 +41,8 @@ var renderer = {
 		ctx.lineTo(x, 0);
 		ctx.fill();
 	},
-	
-	drawPlayers: function(updateDelta) {
+
+	drawPlayers : function(tick) {
 		var ctx = renderer.ctx;
 		for ( var i = 0; i < world.players.length; i++) {
 			var player = world.players[i];
@@ -129,8 +129,6 @@ var renderer = {
 				});
 			}
 		});
-		
-		world.bullets = $.grep(world.bullets, function(bullet) { return bullet.step < bullet.arc.length; });
 	},
 
 	drawExplosions: function(updateDelta) {
@@ -181,38 +179,59 @@ var renderer = {
 		ctx.fill();
 	},
 	
-	drawCountdown: function(tick) {
-		if(world.nextRound==null)
-			return;
-		
-		var ctx = this.ctx;
-		var centerx = config.screenSize.width / 2;
-		var centery = config.screenSize.height / 2;
-
-		var count = world.nextRound - new Date();
-
-		count /= 1000;
-		document.title  = "nog " + count + "sec"; 
-		if (count > 3)
+	drawCountdown : function(tick) {
+		if (world.waiting)
 			return;
 
+		var countdown = world.nextRound - new Date();
+
+		document.title = "nog " + countdown + "sec";
+
+		if (countdown <= 3000)
+			renderer._drawFinalSeconds(countdown);
+
+		if (countdown <= 10000)
+			renderer._drawRoundProgress(countdown);
+	},
+
+	_drawFinalSeconds : function(countdown) {
+		var count = countdown / 1000; // countdown between 0..10
 		var text = Math.ceil(count);
+		var ctx = this.ctx;
 
-		var ratio = count % 1;
-		if(ratio == 0) {
-			return;
-		}
-		
+		var ratio = (count % 1);
+		if(ratio == 0) return;
+
 		ctx.save();
 		renderer.ctx.translate(0, +config.screenSize.height);
 		ctx.scale(1, -1);
+
 		var fontSize = 180 / ratio;
 		ctx.font = ~~fontSize + "px sans-serif";
 		ctx.fillStyle = rgba(255, 0, 0, ratio);
-		ctx.fillText(text, centerx - ctx.measureText(text).width / 2, centery + fontSize / 3);
+
+		var centerx = config.screenSize.width / 2;
+		var centery = config.screenSize.height / 2;
+		ctx.fillText(text, centerx - ctx.measureText(text).width / 2, centery
+				+ fontSize / 3);
 
 		ctx.restore();
 	},
+  
+  _drawRoundProgress: function(countdown) {
+    if(countdown < 0) return;
+    var x = config.screenSize.width * 0.95;
+    var y = config.screenSize.height * 0.05;
+    
+    var width = config.screenSize.width * 0.025;
+    var height = config.screenSize.height * 0.90;
+    
+    var ctx = this.ctx;
+    var count = countdown/10000; //countdown between 0..1
+    
+    ctx.fillStyle = rgba(255,0,0);
+    ctx.fillRect(x,y,width,height*count);
+  },
 
 	drawTrace : function(p, v, a, m) { // position, velocity, accelleration, mass
 		var path = new Array();

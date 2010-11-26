@@ -1,12 +1,16 @@
 body {
-	margin:0;
+	margin: 0 auto;
 	overflow:hidden;
+	width: 100%;
+	xborder: 1px solid black;
+	text-align: center;
+  	background-color: rgb(200,255,200);
 }
-canvas {
-	border:solid 1px red;
-	margin: auto;
-}
-.debugbuttons {
-	float: left;
-	z-index: 100;
+
+#canvas {
+	xmargin: auto;
+	xborder:solid 1px red;
+	width: 800px;
+	background-color: white;
+
 }

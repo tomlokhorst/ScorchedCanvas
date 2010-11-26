@@ -72,7 +72,7 @@ var socket = new NepSocket("http://localhost:86/gameupdates");
   socket.onclose = function (e) { /* Not implemented */ };
   socket.onmessage = function (o)
   { 
-    $('#log').append('<p>Received: ' + o.type + '<br>' + JSON.stringify(o) + '</p>'); 
+    $('#log').prepend('<p>Received: ' + o.type + '<br>' + JSON.stringify(o) + '</p>'); 
   };
   socket.onerror = function (e) { /* Not implemented */ };
 

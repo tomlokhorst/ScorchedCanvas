@@ -6,27 +6,30 @@ using System.Drawing;
 
 namespace ScorchedServer.Models
 {
-    public class Shot
+  public class Shot
+  {
+    public Weapon Weapon { get; set; }
+    public Point Origin { get; set; }
+    public double Angle { get; set; }
+    public double Power { get; set; }
+
+    // p = start position
+    // v = star velocity
+    // a = acceleration
+    public static IEnumerable<Vector> Trace(Vector p, Vector v, Vector a, float mass = 1)
     {
-        public Weapon Weapon { get; set; }
-        public Point Origin { get; set; }
-        public float Angle { get; set; }
-        public float Power { get; set; }
+      yield return p;
 
-        public static IEnumerable<Vector> Trace(Vector p, Vector v, Vector a, float mass)
-        {
-            yield return p;
+      int dt = 10;
 
-            int dt = 10;
-            
-            while (true)
-            {
-                Vector dv = a.Scale(dt / mass);
-                p = p.Add(v, dt);
-                p = p.Add(dv, dt / 2);
-                v = v.Add(dv);
-                yield return p;
-            }
-        }
+      while (true)
+      {
+        Vector dv = a.Scale(dt / mass);
+        p = p.Add(v, dt);
+        p = p.Add(dv, dt / 2);
+        v = v.Add(dv);
+        yield return p;
+      }
     }
+  }
 }
