@@ -27,7 +27,7 @@ namespace ScorchedServer.Models
     public void shoot(FireRequest fr)
     {
       lastShot = Shot.Trace(position, Vector.FromPolar(fr.angle, fr.power), Vector.FromCart(0, -0.01))
-        .TakeWhile(v => v.Y > 30);
+        .TakeWhile(v => Convert.ToInt32(v.Y) >= Landscape.fakeLandscape[Convert.ToInt32(v.X)]);
     }
 
     internal object getLastShot()
