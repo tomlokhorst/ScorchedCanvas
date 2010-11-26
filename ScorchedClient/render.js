@@ -163,6 +163,7 @@ var renderer = {
 		if(world.nextRound==null)
 			return;
 		
+		var ctx = this.ctx;
 		var centerx = config.screenSize.width / 2;
 		var centery = config.screenSize.height / 2;
 
@@ -173,18 +174,19 @@ var renderer = {
 		if (count > 3)
 			return;
 
-		var text = Math.ceil(count);    
-		var ctx = this.ctx;
-		ctx.save();
+		var text = Math.ceil(count);
 
+		var ratio = count % 1;
+		if(ratio == 0) {
+			return;
+		}
+		
+		ctx.save();
 		renderer.ctx.translate(0, +config.screenSize.height);
 		ctx.scale(1, -1);
-
-		var ratio = (count % 1);
 		var fontSize = 180 / ratio;
 		ctx.font = ~~fontSize + "px sans-serif";
 		ctx.fillStyle = rgba(255, 0, 0, ratio);
-
 		ctx.fillText(text, centerx - ctx.measureText(text).width / 2, centery + fontSize / 3);
 
 		ctx.restore();
