@@ -22,20 +22,23 @@
 				});
 			});
 		}
+		else if (msg.type == "newPlayer") {
+			world.players.push({ 
+				id: msg.id,
+				name: msg.name,
+				health: 100,
+				score: 0,
+				angle: Math.PI / 2,
+				color: msg.color,
+				pos: msg.pos
+			});
+		}
+		else if (msg.type == "quitPlayer") {
+			world.players = $.grep(world.players, function(player) { return player.id != msg.id; });
+		}
 		else if (msg.type == "gameUpdate") {
 			var updateItem = function(i, update) {
-				if (update.type == "newPlayer") {
-					world.players.push({ 
-						id: update.id,
-						name: update.name,
-						health: 100,
-						score: 0,
-						angle: Math.PI / 2,
-						color: update.color,
-						pos: update.pos
-					});
-				}
-				else if (update.type == "updatePlayer") {
+				if (update.type == "updatePlayer") {
 					
 					var filtered = $.grep(world.players, function(player) { return player.id == update.id; });
 					
@@ -48,9 +51,6 @@
 					player.angle = update.angle || player.angle;
 					player.color = update.color || player.color;
 					player.pos = update.pos || player.pos;
-				}
-				else if (update.type == "quitPlayer") {
-					world.players = $.grep(world.players, function(player) { return player.id != update.id; });
 				}
 				else if (update.type == "fire") {
 					world.bullets.push({ id: update.id, weaponType: world.weaponType, arc: world.arc });
