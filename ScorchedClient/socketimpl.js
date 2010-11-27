@@ -64,7 +64,7 @@ var socket;
 					player.pos = update.player.pos || player.pos;
 				}
 				else if (update.type == 'fire') {
-					world.bullets.push({ id: update.playerId, arc: update.arc });
+					world.bullets.push({ id: update.playerId, arc: update.arc, step: 0, collision: true });
 				}
 				else {
 					console.log('UNIMPLEMENTED: ' + update.type);

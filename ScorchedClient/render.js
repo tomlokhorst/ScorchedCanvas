@@ -139,14 +139,6 @@ var renderer = {
 	
 	drawBullets: function(updateDelta) {
 		$.each(world.bullets, function(i, bullet) {
-			
-			if (bullet.step === undefined) {
-				bullet.step = 0;
-				// mock
-				//bullet.arc = renderer.drawTrace(Vector.origin, Vector.fromPolar(Math.PI / 3, 1), Vector.fromCart(0, -0.001), 1);
-				bullet.collision = true;
-			}
-
 			bullet.step += updateDelta / 40;
 			
 			if (bullet.step < bullet.arc.length) {
