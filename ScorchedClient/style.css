@@ -22,4 +22,5 @@ body {
   width: 200px;
   color: white;
   text-align: left;
+  display: none;
 }

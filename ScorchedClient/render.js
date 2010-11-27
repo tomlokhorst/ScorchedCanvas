@@ -22,10 +22,10 @@ var renderer = {
 		renderer.drawBackground(updateDelta);
 		renderer._flip(renderer.drawTitle)(updateDelta);
 		renderer.drawLandscape(updateDelta);
+		renderer.drawUI(updateDelta);
 		renderer.drawPlayers(updateDelta);
 		renderer.drawExplosions(updateDelta);
-		renderer.drawBullets(updateDelta);		
-		renderer.drawUI(updateDelta);
+		renderer.drawBullets(updateDelta);
 		renderer.drawCountdown(updateDelta);
 
 		renderer.lastTimeDrawn = now;
@@ -164,7 +164,7 @@ var renderer = {
 	},
 
 	drawExplosions: function(updateDelta) {
-	  var ctx = renderer.ctx;
+		var ctx = renderer.ctx;
 	  
 		$.each(world.explosions, function(i, exp) {
 			exp.duration += updateDelta;
@@ -177,26 +177,19 @@ var renderer = {
 			ctx.arc(exp.x, exp.y, 50, 0, Math.PI*2, false);
 			ctx.fill();
 			
-			
 			// skake
-			if (exp.shake)
-      {
-        ctx.translate(0, -exp.shake);
-        //renderer.shakex = renderer.shakey = 0;
-      }
-      
-      if (exp.duration < 500)
-      {
-			  exp.shake = -exp.shake || 7;
-			  exp.shake *= 0.9
-			  			  
-        ctx.translate(0, exp.shake);
-        console.log( exp.shake);
-      }
-      else 
-      {
-        exp.shake = null;
-      }
+			if (exp.shake) {
+				ctx.translate(0, -exp.shake);
+				//renderer.shakex = renderer.shakey = 0;
+			}
+
+			if (exp.duration < 500) {
+				exp.shake = -exp.shake || 7;
+				exp.shake *= 0.9;
+				ctx.translate(0, exp.shake);
+			} else {
+				exp.shake = null;
+			}
 		});
 		
 		world.explosions = $.grep(world.explosions, function(exp) { return exp.duration < 500; });
@@ -211,7 +204,7 @@ var renderer = {
 			var pos = new Vector(world.me.pos, world.me.posy);
 			var vel = Vector.fromPolar(world.guiAngle, world.guiPower);
 			var acc = new Vector(0,-1);
-			renderer.drawTrace(pos,vel, acc, 100);
+			renderer.drawTrace(pos, vel, acc, 100);
 		} else {
 			var fade = new Date - renderer._lastAim;
 			if (fade < 200) {
@@ -296,7 +289,7 @@ var renderer = {
 	},
 
 	drawTrace : function(p, v, a, m, time) { // position, velocity, accelleration, mass
-		time = time || 1000;
+		time = time || 16;
 		var path = new Array();
 
 		var ctx = renderer.ctx;
@@ -305,7 +298,9 @@ var renderer = {
 		path.push(p);
 
 		var dt = 10;
-
+		var minX = config.screenSize.width;
+		var maxX = 0;
+		
 		for ( var i = 0; i < time; i++) {
 			var dv = a.scale(dt / m);
 			p = p.add(v, dt);
@@ -313,8 +308,20 @@ var renderer = {
 			v = v.add(dv);
 			ctx.lineTo(p.x, p.y);
 			path.push(p);
+			if(p.y > 0 && p.x < minX) {
+				minX = p.x;
+			}
+			if(p.y > 0 && p.x > maxX) {
+				maxX = p.x;
+			}
 		}
 
+		var gradientEnd = maxX - world.me.pos > world.me.pos - minX ? maxX : minX;
+		var gradient = ctx.createLinearGradient(world.me.pos, world.me.posy, gradientEnd, world.me.posy+400);
+		gradient.addColorStop(0, rgba(255, 255, 255));
+		gradient.addColorStop(.4, rgba(255, 255, 255, 0));
+		ctx.strokeStyle = gradient;
+		ctx.lineWidth = 2;
 		ctx.stroke();
 		return path;
 	},
