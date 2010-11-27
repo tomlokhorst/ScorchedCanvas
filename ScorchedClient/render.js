@@ -17,19 +17,23 @@ var renderer = {
 	render: function() {
 		var now = new Date().valueOf();
 		var updateDelta = now - renderer.lastTimeDrawn;
-	
 		//renderer.ctx.clearRect(0, 0, config.screenSize.width, config.screenSize.height);
+		
 		renderer.drawBackground(updateDelta);
-		renderer._flip(renderer.drawTitle)(updateDelta);
+		
+		renderer.drawBullets(updateDelta);
+		
 		renderer.drawLandscape(updateDelta);
+		
+		renderer._flip(renderer.drawTitle)(updateDelta);
 		if (!world.gameover)
 		  renderer.drawUI(updateDelta);
 		renderer.drawPlayers(updateDelta);
 		renderer.drawExplosions(updateDelta);
-		renderer.drawBullets(updateDelta);
+		
 		if (!world.gameover)
 		  renderer.drawCountdown(updateDelta);
-
+		
 		renderer.lastTimeDrawn = now;
 		setTimeout(renderer.render, 40);
 	},
