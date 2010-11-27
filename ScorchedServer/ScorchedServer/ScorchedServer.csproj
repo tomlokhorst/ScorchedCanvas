@@ -83,6 +83,7 @@
     <Compile Include="Models\Messages\FireRequest.cs" />
     <Compile Include="Models\Messages\GenericMessage.cs" />
     <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\Rectangle.cs" />
     <Compile Include="Models\Shot.cs" />
     <Compile Include="Models\Messages\UnknownMessage.cs" />
     <Compile Include="Models\Vector.cs" />
