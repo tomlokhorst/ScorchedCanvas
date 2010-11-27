@@ -7,8 +7,8 @@ var socket;
 	socket.onmessage = function(msg) {
 
 	
-		//console.log('onmessage:' + msg.type);
-		//console.log(msg);
+	  console.log('onmessage:' + msg.type);
+		console.log(msg);
 		
 		if (msg.type == 'gameInit') {			
 			world.landscape = msg.landscape;
@@ -60,6 +60,7 @@ var socket;
 					var player = filtered[0];
 					player.name = update.player.name || player.name;
 					player.health = update.player.health || player.health;
+					console.log("socket health" + player.health);
 					player.score = update.player.score || player.score;
 					player.angle = update.player.angle || player.angle;
 					player.color = update.player.color || player.color;

@@ -59,7 +59,7 @@ var renderer = {
 		  ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
 		  var angle = 90-(world.guiAngle / Math.PI * 180);
   		var power = world.guiPower * 10;
-      var subText = angle.toFixed(0) + " degrees " + "power " + power.toFixed(0);
+      var subText = angle.toFixed(0) + " degrees / "+ "power " + power.toFixed(0);
       ctx.font = "24px sans-serif";		
   		ctx.fillText(subText  , centerx - ctx.measureText(subText).width / 2,  100);
     }
@@ -114,6 +114,8 @@ var renderer = {
 			tank.health.l = Math.floor(config.tankWidth * player.health);
 			tank.barrel.x = Math.cos(player.angle) * config.barrelLength;
 			tank.barrel.y = Math.sin(player.angle) * config.barrelLength;
+			if (player.id == world.me.id)
+			  world.me.tank = tank;
 
 			// barrel
 			ctx.strokeStyle = player.color; "#888";
@@ -150,11 +152,16 @@ var renderer = {
 			}
 			
 			// health
+			//console.log(player.health);
+			
 			ctx.strokeStyle = rgba(255,0,0,0.7);;
 			ctx.beginPath();
 			ctx.moveTo(tank.health.x, tank.health.y);
 			ctx.lineTo(tank.health.x + tank.health.l, tank.health.y);
 			ctx.stroke();
+		  
+			// health bar background
+      
 			ctx.strokeStyle = rgba(255,155,155,0.7);
 			ctx.beginPath();
 			ctx.moveTo(tank.health.x + tank.health.l, tank.health.y);

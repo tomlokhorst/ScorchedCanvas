@@ -64,9 +64,11 @@ var UI = {
     world.guiPoint = { x:x, y:y };
     
     var centerx = config.screenSize.width/2;
-    var dx = x - centerx;
-    world.guiAngle = Math.atan2(y, dx);
-    world.guiPower = Math.sqrt( dx*dx + y*y ) / 100;
+    //var dx = x - centerx;
+    var dx = x - world.me.tank.center.x;
+    var dy = y - world.me.tank.center.y;
+    world.guiAngle = Math.atan2(dy, dx);
+    world.guiPower = Math.sqrt( dx*dx + dy*dy ) / 100;
   },
   
   // calculate angle / power from current aim
