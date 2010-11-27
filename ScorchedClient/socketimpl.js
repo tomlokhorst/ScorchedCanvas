@@ -55,7 +55,8 @@ var socket;
 					
 					var filtered = $.grep(world.players, function(player) { return player.id == update.player.id; });
 					
-					assert(filtered.length == 0, 'Kan player ' + update.player.id + ' niet vinden');
+					if (filtered.length == 0) return;
+					//assert(filtered.length == 0, 'Kan player ' + update.player.id + ' niet vinden');
 					
 					var player = filtered[0];
 					player.name = update.player.name || player.name;
