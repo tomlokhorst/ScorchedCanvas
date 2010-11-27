@@ -27,8 +27,21 @@ var UI = {
   },
     
   startAim: function(evt) {
+
     evt.preventDefault();
     world.guiAim = true;
+    
+    if (evt.touches && evt.touches.length)
+    {
+      var xpos = evt.touches[0].pageX;
+      var ypos =  evt.touches[0].pageY;
+    }
+    else
+    {
+      var xpos = evt.pageX;
+      var ypos =  evt.pageY;
+    }
+    $("#log").html(xpos + "," + ypos);
   },
   
   // update aiming
@@ -36,21 +49,26 @@ var UI = {
     evt.preventDefault();
     var offset = $(UI.canvas).offset();
     
-    var xpos = evt.pageX || evt.touches[0].pageX;
-    var ypos = evt.pageY || evt.touches[0].pageY;
+    if (evt.touches && evt.touches.length)
+    {
+      var xpos = evt.touches[0].pageX;
+      var ypos =  evt.touches[0].pageY;
+    }
+    else
+    {
+      var xpos = evt.pageX;
+      var ypos =  evt.pageY;
+    }
     
-    UI.aim = { 
-      x : xpos - offset.left,
-      y : config.screenSize.height - (ypos - offset.top)
-    };
     
-    var x = UI.aim.x;
-    var y = UI.aim.y;
+    $("#log").html(xpos + "," + ypos);
+    var x = xpos - offset.left;
+    var y = config.screenSize.height - (ypos - offset.top);
     world.guiPoint = { x:x, y:y };
     
     var centerx = config.screenSize.width/2;
     var dx = x - centerx;
-    world.guiAngle = Math.atan2(y, dx );
+    world.guiAngle = Math.atan2(y, dx);
     world.guiPower = Math.sqrt( dx*dx + y*y ) / 100;
   },
   

@@ -14,3 +14,12 @@ body {
 	background-color: white;
 
 }
+
+#log
+{
+  position:absolute; 
+  background-color: rgba(100,100,100,0.7);
+  width: 200px;
+  color: white;
+  text-align: left;
+}
