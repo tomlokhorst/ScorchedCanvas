@@ -27,8 +27,8 @@ namespace ScorchedServer.Models
     
     public Rectangle GetRectangle()
     {
-      var tankHeight = 16;
-      var tankWidth = 32;
+      var tankHeight = 10;
+      var tankWidth = 40;
 
       return new Rectangle
       {
@@ -43,14 +43,18 @@ namespace ScorchedServer.Models
       lastFireRequest = fr;
 
       lastShot = Shot.Trace(position, Vector.FromPolar(fr.angle, fr.power), Vector.FromCart(0, -0.01));
-        //.TakeWhile(v => (Convert.ToInt32(v.X) > Landscape.fakeLandscape.Length && Convert.ToInt32(v.X) >= 0) ? false : Convert.ToInt32(v.Y) >= Landscape.fakeLandscape[Convert.ToInt32(v.X)]);
+    }
+
+    internal void clearLastShot()
+    {
+      lastShot = null;
     }
 
     internal object getLastShot(IEnumerable<Player> players)
     {
       if (lastShot == null)
         return null;
-      
+
       var tanks = players.Select(p => p.GetRectangle());
 
       Func<Rectangle, bool> collision = r => tanks.Any(t => overlap(r, t));
@@ -59,9 +63,30 @@ namespace ScorchedServer.Models
 
       var limitedShots = rectangles.TakeWhile(r => !collision(r)).Select(r => r.LeftTop);
 
-      var o = new { type = "fire", playerId = id, arc = limitedShots.Take(1000).Select(v => new { x = v.X, y = v.Y}) };
-      lastShot = null;
+      var o = new { type = "fire", playerId = id, arc = limitedShots.Take(1000).Select(v => new { x = v.X, y = v.Y }) };
       return o;
+    }
+
+    internal IEnumerable<object> getPlayersHitPlusWin(IEnumerable<Player> players)
+    {
+      if (lastShot == null)
+        yield break;
+
+      var playersPlusTanks = players.Select(p => Tuple.Create(p, p.GetRectangle()));
+
+      Func<Rectangle, IEnumerable<Player>> collide = r =>
+        playersPlusTanks.SelectMany(pt => overlap(r, pt.Item2) ? new[] { pt.Item1 } : Enumerable.Empty<Player>());
+
+      var rectangles = lastShot.Zip(lastShot.Skip(1), (v1, v2) => new Rectangle { LeftTop = v1, RightBottom = v2 });
+
+      var playersHit = rectangles.Take(1000).Select(collide);
+
+      foreach (var p in players)
+      {
+        p.health -= 0.1;
+
+        yield return new { type = "updatePlayer", player = p };
+      }
     }
 
     internal bool overlap(Rectangle r1, Rectangle r2)
