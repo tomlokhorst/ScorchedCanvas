@@ -57,7 +57,11 @@ var renderer = {
 		{
 		  var text = "The Mother of All Games";
 		  ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
-
+		  var angle = 90-(world.guiAngle / Math.PI * 180);
+  		var power = world.guiPower * 10;
+      var subText = angle.toFixed(0) + " degrees " + "power " + power.toFixed(0);
+      ctx.font = "24px sans-serif";		
+  		ctx.fillText(subText  , centerx - ctx.measureText(subText).width / 2,  100);
     }
 		else
 		{
@@ -112,7 +116,7 @@ var renderer = {
 			tank.barrel.y = Math.sin(player.angle) * config.barrelLength;
 
 			// barrel
-			ctx.strokeStyle = "#888";
+			ctx.strokeStyle = player.color; "#888";
 			ctx.lineWidth = config.barrelThickness;
 			ctx.beginPath();
 			ctx.moveTo(tank.center.x, tank.center.y);
@@ -146,12 +150,12 @@ var renderer = {
 			}
 			
 			// health
-			ctx.strokeStyle = "darkgreen";
+			ctx.strokeStyle = rgba(255,0,0,0.7);;
 			ctx.beginPath();
 			ctx.moveTo(tank.health.x, tank.health.y);
 			ctx.lineTo(tank.health.x + tank.health.l, tank.health.y);
 			ctx.stroke();
-			ctx.strokeStyle = "red";
+			ctx.strokeStyle = rgba(255,155,155,0.7);
 			ctx.beginPath();
 			ctx.moveTo(tank.health.x + tank.health.l, tank.health.y);
 			ctx.lineTo(tank.right, tank.health.y);
