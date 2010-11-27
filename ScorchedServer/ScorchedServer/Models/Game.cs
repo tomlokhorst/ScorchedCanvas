@@ -31,6 +31,7 @@ namespace ScorchedServer.Models
       frs.Subscribe(cfr => 
       {
         cfr.c.Player.shoot(cfr.fr);
+        SendMessageToAll(new { type = "aim", playerId = cfr.c.Player.id, angle = cfr.fr.angle });
       });
     }
 
