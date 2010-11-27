@@ -120,8 +120,8 @@ var renderer = {
 			ctx.font = "13px sans-serif";
 			ctx.fillStyle = rgba(255, 255, 255, 0.8);
 			
-			var text = '#' + player.id;
-			ctx.fillText(text, player.pos - ctx.measureText(text).width / 2, posy);
+			var text = player.id;
+			ctx.fillText(text, player.pos - ctx.measureText(text).width / 2, config.screenSize.height - 3 - posy);
 		})(player.posy);
 
 		}
