@@ -115,6 +115,14 @@ var renderer = {
 			ctx.moveTo(tank.health.x + tank.health.l, tank.health.y);
 			ctx.lineTo(tank.right, tank.health.y);
 			ctx.stroke();
+		renderer._flip(function(posy)
+		{
+			ctx.font = "13px sans-serif";
+			ctx.fillStyle = rgba(255, 255, 255, 0.8);
+			
+			var text = '#' + player.id;
+			ctx.fillText(text, player.pos - ctx.measureText(text).width / 2, posy);
+		})(player.posy);
 
 		}
 	},
