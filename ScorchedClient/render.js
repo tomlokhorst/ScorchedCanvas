@@ -155,13 +155,18 @@ var renderer = {
 	drawExplosions: function(updateDelta) {
 		$.each(world.explosions, function(i, exp) {
 			exp.duration += updateDelta;
-			var alpha = exp.duration / 3000;
+			var alpha = exp.duration / 500;
 			var ctx = renderer.ctx;
-			ctx.fillStyle = rgba(255, 0, 0, 1 - alpha);
-			ctx.fillRect(exp.x, exp.y, 100, 100);
+			var radgrad = ctx.createRadialGradient(exp.x, exp.y, 0, exp.x, exp.y, 50);
+			radgrad.addColorStop(0, rgba(255, 255, 0, 1 - alpha));
+			radgrad.addColorStop(1, rgba(255, 0, 0, 1 - alpha));
+			ctx.fillStyle = radgrad;
+			ctx.beginPath();
+			ctx.arc(exp.x, exp.y, 50, 0, Math.PI*2, false);
+			ctx.fill();
 		});
 		
-		world.explosions = $.grep(world.explosions, function(exp) { return exp.duration < 3000; });
+		world.explosions = $.grep(world.explosions, function(exp) { return exp.duration < 500; });
 	},
 
 	drawUI : function(tick) {
