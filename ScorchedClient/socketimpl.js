@@ -38,7 +38,8 @@ var socket;
 				score: msg.player.score,
 				angle: msg.player.angle,
 				color: msg.player.color,
-				pos: msg.player.pos
+				pos: msg.player.pos,
+				posy: world.landscape[msg.player.pos]
 			});
 		}
 		else if (msg.type == "quitPlayer") {

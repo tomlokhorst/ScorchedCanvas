@@ -78,7 +78,7 @@ var renderer = {
 			tank.top = player.pos + config.tankHeight;
 			tank.left = player.pos - (config.tankWidth / 2);
 			tank.right = tank.left + config.tankWidth;
-			tank.bottom = player.posy; //world.landscape[player.pos];
+			tank.bottom = player.posy;
 			tank.center = {};
 			tank.center.x = player.pos;
 			tank.center.y = tank.bottom + (config.tankHeight / 2);
@@ -91,27 +91,18 @@ var renderer = {
 			tank.barrel.x = Math.cos(player.angle) * config.barrelLength;
 			tank.barrel.y = Math.sin(player.angle) * config.barrelLength;
 
-			// debug
-			if (config.debug) {
-				ctx.fillStyle = "red";
-				ctx.fillRect(player.pos.x, player.pos.y, tank.width,
-						tank.height);
-			}
-
-
 			// barrel
 			ctx.strokeStyle = "darkgrey";
 			ctx.lineWidth = config.barrelThickness;
 			ctx.beginPath();
 			ctx.moveTo(tank.center.x, tank.center.y);
-			ctx.lineTo(tank.center.x + tank.barrel.x, tank.center.y
-					+ tank.barrel.y);
+			ctx.lineTo(tank.center.x + tank.barrel.x,
+					   tank.center.y + tank.barrel.y);
 			ctx.stroke();
 			
 			// tank
 			ctx.fillStyle = player.color;
-			ctx.fillRect(tank.left, tank.bottom, config.tankWidth,
-					config.tankHeight);
+			ctx.fillRect(tank.left, tank.bottom, config.tankWidth, config.tankHeight);
 
 			// health
 			ctx.strokeStyle = "darkgreen";
