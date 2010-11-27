@@ -43,7 +43,7 @@ namespace ScorchedServer.Models
       outputMsgs.Add(obj);
     }
 
-    public IEnumerable<object> GetOutput()
+    public IEnumerable<object> GenerateOutput()
     {
       var r = outputMsgs;
       outputMsgs = new List<object>();
