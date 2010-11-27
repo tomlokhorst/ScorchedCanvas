@@ -160,7 +160,6 @@ var renderer = {
 			var radgrad = ctx.createRadialGradient(exp.x, exp.y, 0, exp.x, exp.y, 50);
 			radgrad.addColorStop(0, rgba(255, 255, 0, 1 - alpha));
 			radgrad.addColorStop(1, rgba(255, 0, 0, 1 - alpha));
-			console.log(alpha);
 			ctx.fillStyle = radgrad;
 			ctx.beginPath();
 			ctx.arc(exp.x, exp.y, 50, 0, Math.PI*2, false);
