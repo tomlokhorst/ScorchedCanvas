@@ -68,5 +68,29 @@
 				s.parentNode.insertBefore(ga, s);
 			})();
 		</script>
+		<div class="bar">
+			<a href="#" id="musicToggle" onclick="Music.toggle(); return false;"></a>
+			<div id="music"></div>
+		</div>
+		<script>
+			var sound = '<div style="visibility:hidden;position:absolute;top:0;left:0;width:0;height:0;"><object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/UuRkAyRfz_c?fs=1&amp;hl=nl_NL&amp;rel=0&amp;autoplay=1""></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/UuRkAyRfz_c?fs=1&amp;hl=nl_NL&amp;rel=0&amp;autoplay=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object></div>';
+			var Music = {
+				on: false,
+				play: function() {					
+					$("#music").html(sound);
+					$("#musicToggle").html("turn music off");
+					Music.on = true;
+				},
+				stop: function() {
+					$("#music").html("");
+					$("#musicToggle").html("turn music on");
+					Music.on = false;
+				},
+				toggle: function() {
+					Music.on ? Music.stop() : Music.play();
+				}
+			};
+			Music.play();
+		</script>
 	</body>
 </html>
