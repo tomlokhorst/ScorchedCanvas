@@ -163,7 +163,7 @@ var renderer = {
 	},
 
 	drawExplosions: function(updateDelta) {
-	  var ctx = renderer.ctx;
+		var ctx = renderer.ctx;
 	  
 		$.each(world.explosions, function(i, exp) {
 			exp.duration += updateDelta;
@@ -176,26 +176,19 @@ var renderer = {
 			ctx.arc(exp.x, exp.y, 50, 0, Math.PI*2, false);
 			ctx.fill();
 			
-			
 			// skake
-			if (exp.shake)
-      {
-        ctx.translate(0, -exp.shake);
-        //renderer.shakex = renderer.shakey = 0;
-      }
-      
-      if (exp.duration < 500)
-      {
-			  exp.shake = -exp.shake || 7;
-			  exp.shake *= 0.9
-			  			  
-        ctx.translate(0, exp.shake);
-        console.log( exp.shake);
-      }
-      else 
-      {
-        exp.shake = null;
-      }
+			if (exp.shake) {
+				ctx.translate(0, -exp.shake);
+				//renderer.shakex = renderer.shakey = 0;
+			}
+
+			if (exp.duration < 500) {
+				exp.shake = -exp.shake || 7;
+				exp.shake *= 0.9;
+				ctx.translate(0, exp.shake);
+			} else {
+				exp.shake = null;
+			}
 		});
 		
 		world.explosions = $.grep(world.explosions, function(exp) { return exp.duration < 500; });
