@@ -94,8 +94,18 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="homepage.css" />
     <Content Include="index.html" />
-    <Content Include="nepsocket.js" />
+    <Content Include="play\index.html" />
+    <Content Include="play\jquery-1.4.4.min.js" />
+    <Content Include="play\nepsocket.js" />
+    <Content Include="play\render.js" />
+    <Content Include="play\socketimpl.js" />
+    <Content Include="play\style.css" />
+    <Content Include="play\userinput.js" />
+    <Content Include="play\utils.js" />
+    <Content Include="play\world.js" />
+    <Content Include="screenshot.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -141,7 +151,7 @@
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>http://localhost:86/</CustomServerUrl>
+          <CustomServerUrl>http://localhost:8080</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
