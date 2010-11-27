@@ -15,6 +15,17 @@ var world = {
 	waiting: true,
 	gameover: false
 };
+
+// Lanscape generator:
+/*
+world.landscape = [];
+for ( var i = 0; i < 800; i++) {
+	world.landscape.push(Math.sin((i + 20) / 50) * 50 + 150
+			+ Math.sin((i + 80) / 100) * 100);
+};
+*/
+
+
 /*
 var gameInit = {
   type: "gameInitResponse",
