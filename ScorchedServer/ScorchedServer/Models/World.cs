@@ -10,6 +10,6 @@ namespace ScorchedServer.Models
     {
         public Size Size { get; set; }
         public List<Player> Players { get; set; }
-        public int[] Landscape { get; set; }
+        public double[] Landscape { get; set; }
     }
 }

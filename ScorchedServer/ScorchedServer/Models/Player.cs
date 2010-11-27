@@ -11,11 +11,11 @@ namespace ScorchedServer.Models
     public int id { get; set; }
     public string name { get; set; }
     public Vector position { get; set; }
-    public int pos { get; set; } // x position
+    public double pos { get; set; } // x position
     public string color { get; set; }
-    public int health { get; set; }
+    public double health { get; set; }
     public int score { get; set; }
-    public int angle { get; set; }
+    public double angle { get; set; }
 
     private IEnumerable<Vector> lastShot;
 
