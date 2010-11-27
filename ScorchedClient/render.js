@@ -34,27 +34,26 @@ var renderer = {
 	
 	// 256 color background 
 	drawBackground: function(tick) {
-	  var ctx = renderer.ctx;
-	  var steps = 32;
-	  var stepSize = config.screenSize.height/steps;
-	  
-	  for( var step=steps ; step>=0 ; step--)
-	  {
-	    var color = step/steps * 255;
-	    ctx.fillStyle = rgba(color, 128 + color/2, 128 + color/2);
-	    ctx.fillRect(0, step * stepSize, config.screenSize.width, (step+1) * stepSize);
-	  }
-  },
+		var ctx = renderer.ctx;
+		var steps = 32;
+		var stepSize = config.screenSize.height/steps;
+		
+		for( var step=steps ; step>=0 ; step--) {
+			var color = step/steps * 255;
+			ctx.fillStyle = rgba(color, 128 + color/2, 128 + color/2);
+			ctx.fillRect(0, step * stepSize, config.screenSize.width, (step+1) * stepSize);
+		}
+	},
   
-  drawTitle: function(tick) {
-    var ctx = renderer.ctx;
-    ctx.font = "48px sans-serif";
+	drawTitle: function(tick) {
+		var ctx = renderer.ctx;
+		ctx.font = "48px sans-serif";
 		ctx.fillStyle = rgba(255, 255, 255, 0.8);
-
+		
 		var centerx = config.screenSize.width / 2;
-    var text = "Scorched Canvas";
+		var text = "Scorched Canvas";
 		ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
-  },
+	},
 
 	drawLandscape : function(tick) {
 		var ctx = renderer.ctx;
@@ -69,7 +68,7 @@ var renderer = {
 		ctx.fill();
 	},
 
-	drawPlayers : function(tick) {
+	drawPlayers : function(updateDelta) {
 		var ctx = renderer.ctx;
 		for ( var i = 0; i < world.players.length; i++) {
 			var player = world.players[i];
@@ -104,6 +103,17 @@ var renderer = {
 			ctx.fillStyle = player.color;
 			ctx.fillRect(tank.left, tank.bottom, config.tankWidth, config.tankHeight);
 
+			// me circle
+			if(player == world.me) {
+				if(player.glow == null) player.glow = 0;
+				player.glow += updateDelta / 4;
+				var glow = Math.abs((player.glow % 512) - 256);
+				ctx.strokeStyle = rgba(glow, glow, 255);
+				ctx.beginPath();
+				ctx.arc(player.pos, player.posy + 5, 25, 0, 2 * Math.PI, false);
+				ctx.stroke();
+			}
+			
 			// health
 			ctx.strokeStyle = "darkgreen";
 			ctx.beginPath();
@@ -115,14 +125,14 @@ var renderer = {
 			ctx.moveTo(tank.health.x + tank.health.l, tank.health.y);
 			ctx.lineTo(tank.right, tank.health.y);
 			ctx.stroke();
-		renderer._flip(function(posy)
-		{
-			ctx.font = "13px sans-serif";
-			ctx.fillStyle = rgba(255, 255, 255, 0.8);
 			
-			var text = player.id;
-			ctx.fillText(text, player.pos - ctx.measureText(text).width / 2, config.screenSize.height - 3 - posy);
-		})(player.posy);
+			// Player id
+			renderer._flip(function(posy) {
+				ctx.font = "13px sans-serif";
+				ctx.fillStyle = rgba(255, 255, 255, 0.8);
+				var text = player.id;
+				ctx.fillText(text, player.pos - ctx.measureText(text).width / 2, config.screenSize.height - 3 - posy);
+			})(player.posy);
 
 		}
 	},
@@ -182,12 +192,11 @@ var renderer = {
 			//renderer._drawAimArc(1);
 			renderer._lastAim = +new Date;
 
-      // position, velocity, acceleration, mass
-      var pos = new Vector(world.me.pos, world.me.posy);
-      var vel = Vector.fromPolar(world.guiAngle, world.guiPower);
-      var acc = new Vector(0,-1);
+			// position, velocity, acceleration, mass
+			var pos = new Vector(world.me.pos, world.me.posy);
+			var vel = Vector.fromPolar(world.guiAngle, world.guiPower);
+			var acc = new Vector(0,-1);
 			renderer.drawTrace(pos,vel, acc, 100);
-			
 		} else {
 			var fade = new Date - renderer._lastAim;
 			if (fade < 200) {
@@ -257,23 +266,23 @@ var renderer = {
 		ctx.restore();
 	},
   
-  _drawRoundProgress: function(countdown) {
-    if(countdown < 0) return;
-    var x = config.screenSize.width * 0.95;
-    var y = config.screenSize.height * 0.05;
-    
-    var width = config.screenSize.width * 0.025;
-    var height = config.screenSize.height * 0.90;
-    
-    var ctx = this.ctx;
-    var count = countdown/10000; //countdown between 0..1
-    
-    ctx.fillStyle = rgba(255,0,0, 0.7);
-    ctx.fillRect(x,y,width,height*count);
-  },
+	_drawRoundProgress: function(countdown) {
+		if(countdown < 0) return;
+		var x = config.screenSize.width * 0.95;
+		var y = config.screenSize.height * 0.05;
+		
+		var width = config.screenSize.width * 0.025;
+		var height = config.screenSize.height * 0.90;
+		
+		var ctx = this.ctx;
+		var count = countdown/10000; //countdown between 0..1
+		
+		ctx.fillStyle = rgba(255,0,0, 0.7);
+		ctx.fillRect(x,y,width,height*count);
+	},
 
 	drawTrace : function(p, v, a, m, time) { // position, velocity, accelleration, mass
-	  time = time || 1000;
+		time = time || 1000;
 		var path = new Array();
 
 		var ctx = renderer.ctx;
@@ -297,16 +306,15 @@ var renderer = {
 	},
 	
 	_flip : function(f) {
-	  return function(tick) {
-	    var ctx = renderer.ctx;
-	    ctx.save();
-		  ctx.translate(0, +config.screenSize.height);
-		  ctx.scale(1, -1);
-		  f(tick);
-		  ctx.restore();
-	  }
+		return function(tick) {
+			var ctx = renderer.ctx;
+			ctx.save();
+			ctx.translate(0, +config.screenSize.height);
+			ctx.scale(1, -1);
+			f(tick);
+			ctx.restore();
+		}
 	}
-
 };
 
 function Vector(x, y) {
