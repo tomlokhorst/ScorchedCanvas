@@ -18,12 +18,12 @@ var UI = {
     UI.socket = socket;
     UI.centerx = config.screenSize.width/2;
     UI.centery = config.screenSize.height/2;
-    $(canvas).bind("mousemove", UI.aim);
-    $(canvas).bind("touchmove", UI.aim);
-    $(canvas).bind("mouseup", UI.fire);
-    $(canvas).bind("touchend", UI.fire);
-    $(canvas).bind("mousedown", UI.startAim);
-    $(canvas).bind("touchstart", UI.startAim);
+    $(document).bind("mousemove", UI.aim);
+    $(document).bind("touchmove", UI.aim);
+    $(document).bind("mouseup", UI.fire);
+    $(document).bind("touchend", UI.fire);
+    $(document).bind("mousedown", UI.startAim);
+    $(document).bind("touchstart", UI.startAim);
   },
     
   startAim: function(evt) {
@@ -72,6 +72,7 @@ var UI = {
   // calculate angle / power from current aim
   fire: function(evt) {
     evt.preventDefault();
+    if (world.gameover) return;
     world.guiAim = false;
     //console.log("fire");
     UI.socket.send({

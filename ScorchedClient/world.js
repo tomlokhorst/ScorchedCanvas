@@ -12,7 +12,8 @@ var world = {
 	guiPower: 10,
 	guiPoint: { x:0, y:0 },
 	nextRound: null,
-	waiting: true
+	waiting: true,
+	gameover: false
 };
 
 // Lanscape generator:

@@ -22,11 +22,13 @@ var renderer = {
 		renderer.drawBackground(updateDelta);
 		renderer._flip(renderer.drawTitle)(updateDelta);
 		renderer.drawLandscape(updateDelta);
-		renderer.drawUI(updateDelta);
+		if (!world.gameover)
+		  renderer.drawUI(updateDelta);
 		renderer.drawPlayers(updateDelta);
 		renderer.drawExplosions(updateDelta);
 		renderer.drawBullets(updateDelta);
-		renderer.drawCountdown(updateDelta);
+		if (!world.gameover)
+		  renderer.drawCountdown(updateDelta);
 
 		renderer.lastTimeDrawn = now;
 		setTimeout(renderer.render, 40);
@@ -45,14 +47,38 @@ var renderer = {
 		}
 	},
   
-	drawTitle: function(tick) {
+	drawTitle: function(updateDelta) {
 		var ctx = renderer.ctx;
 		ctx.font = "48px sans-serif";
 		ctx.fillStyle = rgba(255, 255, 255, 0.8);
 		
 		var centerx = config.screenSize.width / 2;
-		var text = "The Mother of All Games";
-		ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
+		if (!world.gameover)
+		{
+		  var text = "The Mother of All Games";
+		  ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
+		  var angle = 90-(world.guiAngle / Math.PI * 180);
+  		var power = world.guiPower * 10;
+      var subText = angle.toFixed(0) + " degrees " + "power " + power.toFixed(0);
+      ctx.font = "24px sans-serif";		
+  		ctx.fillText(subText  , centerx - ctx.measureText(subText).width / 2,  100);
+    }
+		else
+		{
+		  var text = "Game Over";
+		  
+		  if(renderer._titleGlow == null) renderer._titleGlow = 0;
+			renderer._titleGlow += updateDelta / 4;
+			
+		  var glow = Math.abs((renderer._titleGlow % 512) - 256);
+      ctx.fillStyle = rgba(glow, glow, 255);
+		  ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
+
+      var subText = "reload to play again";
+      ctx.font = "24px sans-serif";		
+  		ctx.fillText(subText  , centerx - ctx.measureText(subText).width / 2,  100);
+		 } 
+
 	},
 
 	drawLandscape : function(tick) {
@@ -85,13 +111,12 @@ var renderer = {
 			tank.health.x = tank.left;
 			tank.barrel = {};
 			tank.health.y = tank.bottom - config.healthIndicatorBottomMargin;
-			tank.health.l = Math
-					.floor(config.tankWidth * (player.health / 100));
+			tank.health.l = Math.floor(config.tankWidth * player.health);
 			tank.barrel.x = Math.cos(player.angle) * config.barrelLength;
 			tank.barrel.y = Math.sin(player.angle) * config.barrelLength;
 
 			// barrel
-			ctx.strokeStyle = "darkgrey";
+			ctx.strokeStyle = player.color; "#888";
 			ctx.lineWidth = config.barrelThickness;
 			ctx.beginPath();
 			ctx.moveTo(tank.center.x, tank.center.y);
@@ -99,9 +124,19 @@ var renderer = {
 					   tank.center.y + tank.barrel.y);
 			ctx.stroke();
 			
-			// tank
+			// new Tank
+			
 			ctx.fillStyle = player.color;
-			ctx.fillRect(tank.left, tank.bottom, config.tankWidth, config.tankHeight);
+			ctx.beginPath();
+			ctx.moveTo(tank.left, tank.bottom);
+			ctx.lineTo(tank.left + config.tankWidth, tank.bottom);
+			ctx.lineTo(tank.left + config.tankWidth - config.tankGapWidth, tank.bottom + config.tankHeight);
+			ctx.lineTo(tank.left + config.tankGapWidth, tank.bottom + config.tankHeight);
+			ctx.fill();
+			
+			ctx.beginPath();
+			ctx.arc(tank.left+(config.tankWidth/2), tank.bottom-(config.tankHeight) + 1 , 2*config.tankWidth/4, Math.PI - (Math.PI / 3.5), 2 * Math.PI + (Math.PI / 3.5), true);
+			ctx.fill();
 
 			// me circle
 			if(player == world.me) {
@@ -115,24 +150,16 @@ var renderer = {
 			}
 			
 			// health
-			ctx.strokeStyle = "darkgreen";
+			ctx.strokeStyle = rgba(255,0,0,0.7);;
 			ctx.beginPath();
 			ctx.moveTo(tank.health.x, tank.health.y);
 			ctx.lineTo(tank.health.x + tank.health.l, tank.health.y);
 			ctx.stroke();
-			ctx.strokeStyle = "red";
+			ctx.strokeStyle = rgba(255,155,155,0.7);
 			ctx.beginPath();
 			ctx.moveTo(tank.health.x + tank.health.l, tank.health.y);
 			ctx.lineTo(tank.right, tank.health.y);
 			ctx.stroke();
-			
-			// Player id
-			renderer._flip(function(posy) {
-				ctx.font = "13px sans-serif";
-				ctx.fillStyle = rgba(255, 255, 255, 0.8);
-				var text = player.id;
-				ctx.fillText(text, player.pos - ctx.measureText(text).width / 2, config.screenSize.height - 3 - posy);
-			})(player.posy);
 
 		}
 	},
