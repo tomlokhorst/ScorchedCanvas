@@ -29,7 +29,7 @@ var renderer = {
 		renderer.drawCountdown(updateDelta);
 
 		renderer.lastTimeDrawn = now;
-		setTimeout(renderer.render, 16);
+		setTimeout(renderer.render, 40);
 	},
 	
 	// 256 color background 
@@ -234,8 +234,6 @@ var renderer = {
 
 		var countdown = world.nextRound - new Date();
 
-		//document.title = "nog " + countdown + "sec";
-
 		if (countdown <= 3000)
 			renderer._drawFinalSeconds(countdown);
 
@@ -244,6 +242,7 @@ var renderer = {
 	},
 
 	_drawFinalSeconds : function(countdown) {
+		// TODO optimize this function. It seems to slow down the rendering a lot...
 		var count = countdown / 1000; // countdown between 0..10
 		var text = Math.ceil(count);
 		var ctx = this.ctx;
