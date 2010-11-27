@@ -26,7 +26,7 @@ var socket;
 				world.players.push(p);
 				  
 			  if (player.id == world.playerId)
-			    world.me = p
+			    world.me = p;
 
 			});
 		}

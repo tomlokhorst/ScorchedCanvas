@@ -19,35 +19,62 @@ var UI = {
     UI.centerx = config.screenSize.width/2;
     UI.centery = config.screenSize.height/2;
     $(canvas).bind("mousemove", UI.aim);
+    $(canvas).bind("touchmove", UI.aim);
     $(canvas).bind("mouseup", UI.fire);
+    $(canvas).bind("touchend", UI.fire);
     $(canvas).bind("mousedown", UI.startAim);
+    $(canvas).bind("touchstart", UI.startAim);
   },
     
-  startAim: function() {
+  startAim: function(evt) {
+
+    evt.preventDefault();
     world.guiAim = true;
+    
+    if (evt.touches && evt.touches.length)
+    {
+      var xpos = evt.touches[0].pageX;
+      var ypos =  evt.touches[0].pageY;
+    }
+    else
+    {
+      var xpos = evt.pageX;
+      var ypos =  evt.pageY;
+    }
+    $("#log").html(xpos + "," + ypos);
   },
   
   // update aiming
   aim: function(evt) {      
+    evt.preventDefault();
     var offset = $(UI.canvas).offset();
     
-    UI.aim = { 
-      x : evt.pageX - offset.left,
-      y : config.screenSize.height - (evt.pageY - offset.top)
-    };
+    if (evt.touches && evt.touches.length)
+    {
+      var xpos = evt.touches[0].pageX;
+      var ypos =  evt.touches[0].pageY;
+    }
+    else
+    {
+      var xpos = evt.pageX;
+      var ypos =  evt.pageY;
+    }
     
-    var x = UI.aim.x;
-    var y = UI.aim.y;
+    
+    $("#log").html(xpos + "," + ypos);
+    var x = xpos - offset.left;
+    var y = config.screenSize.height - (ypos - offset.top);
     world.guiPoint = { x:x, y:y };
     
     var centerx = config.screenSize.width/2;
     var dx = x - centerx;
-    world.guiAngle = Math.atan2(y, dx );
+    world.guiAngle = Math.atan2(y, dx);
     world.guiPower = Math.sqrt( dx*dx + y*y ) / 100;
   },
   
   // calculate angle / power from current aim
   fire: function(evt) {
+    evt.preventDefault();
     world.guiAim = false;
     console.log("fire");
     UI.socket.send({
