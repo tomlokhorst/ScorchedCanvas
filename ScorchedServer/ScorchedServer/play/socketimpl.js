@@ -13,8 +13,9 @@ var socket;
 		if (msg.type == 'gameInit') {			
 			world.landscape = msg.landscape;
 			world.playerId = msg.playerId;
+			world.nextRound = msg.nextRound;
 			$.each(msg.players, function(i, player) {
-				var p = {
+				var p = new Player( {
 					id: player.id,
 					health: player.health,
 					score: player.score,
@@ -22,7 +23,7 @@ var socket;
 					color: player.color, 
 					pos: player.pos,
 					posy: world.landscape[player.pos]
-				};
+				});
 				world.players.push(p);
 				  
 				if (player.id == world.playerId)
@@ -30,7 +31,7 @@ var socket;
 			});
 		}
 		else if (msg.type == 'newPlayer') {
-			world.players.push({ 
+		  var p = new Player( { 
 				id: msg.player.id,
 				name: msg.player.name,
 				health: msg.player.health,
@@ -40,6 +41,7 @@ var socket;
 				pos: msg.player.pos,
 				posy: world.landscape[msg.player.pos]
 			});
+			world.players.push(p);
 		}
 		else if (msg.type == 'quitPlayer') {
 		  if (msg.playerId == world.me.id)
@@ -47,7 +49,6 @@ var socket;
 			world.players = $.grep(world.players, function(player) { return player.id != msg.playerId; });
 		}
 		else if (msg.type == 'gameUpdate') {
-			world.waiting = false;
 			world.nextRound = +new Date + config.roundTime;
 		  
 			$.each(msg.state,  function(i, update) {

@@ -17,7 +17,6 @@ var renderer = {
 	render: function() {
 		var now = new Date().valueOf();
 		var updateDelta = now - renderer.lastTimeDrawn;
-		//renderer.ctx.clearRect(0, 0, config.screenSize.width, config.screenSize.height);
 		
 		renderer.drawBackground(updateDelta);
 		
@@ -118,8 +117,6 @@ var renderer = {
 			tank.health.l = Math.floor(config.tankWidth * player.health);
 			tank.barrel.x = Math.cos(player.angle) * config.barrelLength;
 			tank.barrel.y = Math.sin(player.angle) * config.barrelLength;
-			if (player.id == world.me.id)
-			  world.me.tank = tank;
 
 			// barrel
 			ctx.strokeStyle = player.color; "#888";
@@ -274,9 +271,9 @@ var renderer = {
 	},
 	
 	drawCountdown : function(tick) {
-		if (world.waiting)
-			return;
-
+	  if (!world.nextRound) // maybe we haven't had a gameInit yet
+	    return;
+	  
 		var countdown = world.nextRound - new Date();
 
 		if (countdown <= 3000)
