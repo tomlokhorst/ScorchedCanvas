@@ -10,11 +10,11 @@ var socket;
 		console.log('onmessage:' + msg.type);
 		console.log(msg);
 		
-		if (msg.type == "gameInit") {			
+		if (msg.type == 'gameInit') {			
 			world.landscape = msg.landscape;
 			world.playerId = msg.playerId;
 			$.each(msg.players, function(i, player) {
-			  var p = {
+				var p = {
 					id: player.id,
 					health: player.health,
 					score: player.score,
@@ -25,12 +25,11 @@ var socket;
 				};
 				world.players.push(p);
 				  
-			  if (player.id == world.playerId)
-			    world.me = p;
-
+				if (player.id == world.playerId)
+					world.me = p;
 			});
 		}
-		else if (msg.type == "newPlayer") {
+		else if (msg.type == 'newPlayer') {
 			world.players.push({ 
 				id: msg.player.id,
 				name: msg.player.name,
@@ -42,19 +41,19 @@ var socket;
 				posy: world.landscape[msg.player.pos]
 			});
 		}
-		else if (msg.type == "quitPlayer") {
+		else if (msg.type == 'quitPlayer') {
 			world.players = $.grep(world.players, function(player) { return player.id != msg.playerId; });
 		}
-		else if (msg.type == "gameUpdate") {
-		  world.waiting = false;
-		  world.nextRound = +new Date + config.roundTime;
+		else if (msg.type == 'gameUpdate') {
+			world.waiting = false;
+			world.nextRound = +new Date + config.roundTime;
 		  
-		  $.each(msg.state,  function(i, update) {
-				if (update.type == "updatePlayer") {
+			$.each(msg.state,  function(i, update) {
+				if (update.type == 'updatePlayer') {
 					
 					var filtered = $.grep(world.players, function(player) { return player.id == update.player.id; });
 					
-					assert(filtered.length == 0, "Kan player " + update.player.id + " niet vinden");
+					assert(filtered.length == 0, 'Kan player ' + update.player.id + ' niet vinden');
 					
 					var player = filtered[0];
 					player.name = update.player.name || player.name;
@@ -64,13 +63,23 @@ var socket;
 					player.color = update.player.color || player.color;
 					player.pos = update.player.pos || player.pos;
 				}
-				else if (update.type == "fire") {
+				else if (update.type == 'fire') {
 					world.bullets.push({ id: update.playerId, arc: update.arc });
 				}
 				else {
-					console.log("UNIMPLEMENTED: " + update.type);
+					console.log('UNIMPLEMENTED: ' + update.type);
 				}
 			});
+		}
+		else if(msg.type == 'aim') {
+			for(var i=0; i<world.players.length; i++) {
+				if(world.players[i].id == msg.playerId) {
+					world.players[i].angle = msg.angle;
+				}
+			}
+		}
+		else {
+			console.log('UNIMPLEMENTED: ' + msg.type);
 		}
 	};
 	socket.onerror = function(e) { /* Not implemented */ };

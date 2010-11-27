@@ -49,17 +49,15 @@ var UI = {
     evt.preventDefault();
     var offset = $(UI.canvas).offset();
     
-    if (evt.touches && evt.touches.length)
-    {
-      var xpos = evt.touches[0].pageX;
-      var ypos =  evt.touches[0].pageY;
+    var xpos, ypos;
+    if (evt.touches && evt.touches.length) {
+      xpos = evt.touches[0].pageX;
+      ypos =  evt.touches[0].pageY;
     }
-    else
-    {
-      var xpos = evt.pageX;
-      var ypos =  evt.pageY;
+    else {
+      xpos = evt.pageX;
+      ypos =  evt.pageY;
     }
-    
     
     $("#log").html(xpos + "," + ypos);
     var x = xpos - offset.left;
