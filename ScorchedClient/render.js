@@ -171,10 +171,11 @@ var renderer = {
 	},
 
 	drawExplosions: function(updateDelta) {
+	  var ctx = renderer.ctx;
+	  
 		$.each(world.explosions, function(i, exp) {
 			exp.duration += updateDelta;
-			var alpha = exp.duration / 500;
-			var ctx = renderer.ctx;
+			var alpha = exp.duration / 500;	
 			var radgrad = ctx.createRadialGradient(exp.x, exp.y, 0, exp.x, exp.y, 50);
 			radgrad.addColorStop(0, rgba(255, 255, 0, 1 - alpha));
 			radgrad.addColorStop(1, rgba(255, 0, 0, 1 - alpha));
@@ -182,6 +183,27 @@ var renderer = {
 			ctx.beginPath();
 			ctx.arc(exp.x, exp.y, 50, 0, Math.PI*2, false);
 			ctx.fill();
+			
+			
+			// skake
+			if (exp.shake)
+      {
+        ctx.translate(0, -exp.shake);
+        //renderer.shakex = renderer.shakey = 0;
+      }
+      
+      if (exp.duration < 500)
+      {
+			  exp.shake = -exp.shake || 7;
+			  exp.shake *= 0.9
+			  			  
+        ctx.translate(0, exp.shake);
+        console.log( exp.shake);
+      }
+      else 
+      {
+        exp.shake = null;
+      }
 		});
 		
 		world.explosions = $.grep(world.explosions, function(exp) { return exp.duration < 500; });

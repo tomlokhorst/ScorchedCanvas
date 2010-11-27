@@ -73,7 +73,7 @@ var UI = {
   fire: function(evt) {
     evt.preventDefault();
     world.guiAim = false;
-    console.log("fire");
+    //console.log("fire");
     UI.socket.send({
 		type : 'fireRequest',
 		angle : world.guiAngle,
