@@ -85,13 +85,12 @@ var renderer = {
 			tank.health.x = tank.left;
 			tank.barrel = {};
 			tank.health.y = tank.bottom - config.healthIndicatorBottomMargin;
-			tank.health.l = Math
-					.floor(config.tankWidth * (player.health / 100));
+			tank.health.l = Math.floor(config.tankWidth * player.health);
 			tank.barrel.x = Math.cos(player.angle) * config.barrelLength;
 			tank.barrel.y = Math.sin(player.angle) * config.barrelLength;
 
 			// barrel
-			ctx.strokeStyle = "darkgrey";
+			ctx.strokeStyle = "#888";
 			ctx.lineWidth = config.barrelThickness;
 			ctx.beginPath();
 			ctx.moveTo(tank.center.x, tank.center.y);
@@ -99,9 +98,19 @@ var renderer = {
 					   tank.center.y + tank.barrel.y);
 			ctx.stroke();
 			
-			// tank
+			// new Tank
+			
 			ctx.fillStyle = player.color;
-			ctx.fillRect(tank.left, tank.bottom, config.tankWidth, config.tankHeight);
+			ctx.beginPath();
+			ctx.moveTo(tank.left, tank.bottom);
+			ctx.lineTo(tank.left + config.tankWidth, tank.bottom);
+			ctx.lineTo(tank.left + config.tankWidth - config.tankGapWidth, tank.bottom + config.tankHeight);
+			ctx.lineTo(tank.left + config.tankGapWidth, tank.bottom + config.tankHeight);
+			ctx.fill();
+			
+			ctx.beginPath();
+			ctx.arc(tank.left+(config.tankWidth/2), tank.bottom-(config.tankHeight) + 1 , 2*config.tankWidth/4, Math.PI - (Math.PI / 3.5), 2 * Math.PI + (Math.PI / 3.5), true);
+			ctx.fill();
 
 			// me circle
 			if(player == world.me) {
@@ -125,14 +134,6 @@ var renderer = {
 			ctx.moveTo(tank.health.x + tank.health.l, tank.health.y);
 			ctx.lineTo(tank.right, tank.health.y);
 			ctx.stroke();
-			
-			// Player id
-			renderer._flip(function(posy) {
-				ctx.font = "13px sans-serif";
-				ctx.fillStyle = rgba(255, 255, 255, 0.8);
-				var text = player.id;
-				ctx.fillText(text, player.pos - ctx.measureText(text).width / 2, config.screenSize.height - 3 - posy);
-			})(player.posy);
 
 		}
 	},
