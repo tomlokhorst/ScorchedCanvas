@@ -6,6 +6,8 @@ using System.Reactive;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Runtime.CompilerServices;
+using System.Concurrency;
 
 namespace ScorchedServer.Models
 {
@@ -32,26 +34,35 @@ namespace ScorchedServer.Models
       });
     }
 
+    private void SendMessageToAll(object msg)
+    {
+      lock (allConnections)
+      {
+        foreach (var c in allConnections.Values)
+          c.SendMessage(msg);
+      }
+    }
+
     private void ConnectionJoins()
     {
       var r = new Random();
       connectionJoins.Subscribe(conn =>
       {
-        var players = allConnections.Values.Select(co => co.Player);
-
-        var gameInitObj = new
+        lock (allConnections)
         {
-          type = "gameInit",
-          playerId = conn.Player.id,
-          landscape = Landscape.fakeLandscape.Take(800).ToArray(),
-          players = players
-        };
+          var players = allConnections.Values.Select(co => co.Player);
 
-        conn.SendMessage(gameInitObj);
+          var gameInitObj = new
+          {
+            type = "gameInit",
+            playerId = conn.Player.id,
+            landscape = Landscape.fakeLandscape.Take(800).ToArray(),
+            players = players
+          };
 
-        foreach (var c in allConnections.Values)
-        {
-          c.SendMessage(new { type = "newPlayer", player = conn.Player });
+          conn.SendMessage(gameInitObj);
+
+          SendMessageToAll(new { type = "newPlayer", player = conn.Player });
         }
       });
     }
@@ -60,25 +71,27 @@ namespace ScorchedServer.Models
     {
       Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond)).Subscribe(l =>
       {
-        var ps = new List<Player>();
-        var keys = new List<String>();
-
-        foreach (var kv in allConnections)
+        lock (allConnections)
         {
-          var c = kv.Value;
-          if ((DateTime.Now - c.LastCheckin) > new TimeSpan(TimeSpan.TicksPerSecond * 5))
+          var ps = new List<Player>();
+          var keys = new List<String>();
+
+          foreach (var kv in allConnections)
           {
-            ps.Add(c.Player);
-            keys.Add(kv.Key);
+            var c = kv.Value;
+            if ((DateTime.Now - c.LastCheckin) > new TimeSpan(TimeSpan.TicksPerSecond * 5))
+            {
+              ps.Add(c.Player);
+              keys.Add(kv.Key);
+            }
           }
+
+          foreach (var p in ps)
+            SendMessageToAll(new { type = "quitPlayer", playerId = p.id });
+
+          foreach (var k in keys)
+            allConnections.Remove(k);
         }
-
-        foreach (var p in ps)
-          foreach (var c in allConnections.Values)
-            c.SendMessage(new { type = "quitPlayer", playerId = p.id });
-
-        foreach (var k in keys)
-          allConnections.Remove(k);
       });
     }
 
@@ -89,30 +102,34 @@ namespace ScorchedServer.Models
 
       Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond * 15)).Subscribe(l =>
       {
-        var state = new List<object>();
-
-        foreach (var p in allConnections.Values.Select(c => c.Player))
+        lock (allConnections)
         {
-          var o = p.getLastShot();
-          if (o != null)
-            state.Add(o);
-        }
+          var state = new List<object>();
 
-        foreach (var conn in allConnections.Values)
-        {
-          conn.SendMessage(new
+          foreach (var p in allConnections.Values.Select(c => c.Player))
           {
-            type = "gameUpdate",
-            state = state,
-            nextRound = nextRound,
-            roundLength = roundLength
-          });
+            var o = p.getLastShot();
+            if (o != null)
+              state.Add(o);
+          }
+
+          foreach (var conn in allConnections.Values)
+          {
+            conn.SendMessage(new
+            {
+              type = "gameUpdate",
+              state = state,
+              nextRound = nextRound,
+              roundLength = roundLength
+            });
+          }
         }
       });
     }
 
     private object obj = new object();
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<object> HandleMessages(string session, IEnumerable<Message> msgs)
     {
       lock (obj)
@@ -127,12 +144,10 @@ namespace ScorchedServer.Models
         {
           conn = new Connection(lastId++);
 
-          allConnections.Add(session, conn);
-
           // First notify other connections...
           connectionJoins.OnNext(conn);
           // ...then add to allConnections (so newPlayer isn't send to own connection)
-          //allConnections.Add(session, conn);
+          allConnections.Add(session, conn);
         }
 
         foreach (var msg in msgs)
