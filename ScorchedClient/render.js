@@ -22,10 +22,10 @@ var renderer = {
 		renderer.drawBackground(updateDelta);
 		renderer._flip(renderer.drawTitle)(updateDelta);
 		renderer.drawLandscape(updateDelta);
+		renderer.drawUI(updateDelta);
 		renderer.drawPlayers(updateDelta);
 		renderer.drawExplosions(updateDelta);
-		renderer.drawBullets(updateDelta);		
-		renderer.drawUI(updateDelta);
+		renderer.drawBullets(updateDelta);
 		renderer.drawCountdown(updateDelta);
 
 		renderer.lastTimeDrawn = now;
@@ -51,7 +51,7 @@ var renderer = {
 		ctx.fillStyle = rgba(255, 255, 255, 0.8);
 		
 		var centerx = config.screenSize.width / 2;
-		var text = "Scorched Canvas";
+		var text = "The Mother of All Games";
 		ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
 	},
 
@@ -196,7 +196,7 @@ var renderer = {
 			var pos = new Vector(world.me.pos, world.me.posy);
 			var vel = Vector.fromPolar(world.guiAngle, world.guiPower);
 			var acc = new Vector(0,-1);
-			renderer.drawTrace(pos,vel, acc, 100);
+			renderer.drawTrace(pos, vel, acc, 100);
 		} else {
 			var fade = new Date - renderer._lastAim;
 			if (fade < 200) {
@@ -281,7 +281,7 @@ var renderer = {
 	},
 
 	drawTrace : function(p, v, a, m, time) { // position, velocity, accelleration, mass
-		time = time || 1000;
+		time = time || 16;
 		var path = new Array();
 
 		var ctx = renderer.ctx;
@@ -290,7 +290,9 @@ var renderer = {
 		path.push(p);
 
 		var dt = 10;
-
+		var minX = config.screenSize.width;
+		var maxX = 0;
+		
 		for ( var i = 0; i < time; i++) {
 			var dv = a.scale(dt / m);
 			p = p.add(v, dt);
@@ -298,8 +300,20 @@ var renderer = {
 			v = v.add(dv);
 			ctx.lineTo(p.x, p.y);
 			path.push(p);
+			if(p.y > 0 && p.x < minX) {
+				minX = p.x;
+			}
+			if(p.y > 0 && p.x > maxX) {
+				maxX = p.x;
+			}
 		}
 
+		var gradientEnd = maxX - world.me.pos > world.me.pos - minX ? maxX : minX;
+		var gradient = ctx.createLinearGradient(world.me.pos, world.me.posy, gradientEnd, world.me.posy+400);
+		gradient.addColorStop(0, rgba(255, 255, 255));
+		gradient.addColorStop(.4, rgba(255, 255, 255, 0));
+		ctx.strokeStyle = gradient;
+		ctx.lineWidth = 2;
 		ctx.stroke();
 		return path;
 	},

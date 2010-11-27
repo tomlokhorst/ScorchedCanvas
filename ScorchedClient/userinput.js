@@ -59,7 +59,6 @@ var UI = {
       ypos =  evt.pageY;
     }
     
-    $("#log").html(xpos + "," + ypos);
     var x = xpos - offset.left;
     var y = config.screenSize.height - (ypos - offset.top);
     world.guiPoint = { x:x, y:y };
