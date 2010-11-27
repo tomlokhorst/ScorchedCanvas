@@ -7,8 +7,8 @@ var socket;
 	socket.onmessage = function(msg) {
 
 	
-		console.log('onmessage:' + msg.type);
-		console.log(msg);
+		//console.log('onmessage:' + msg.type);
+		//console.log(msg);
 		
 		if (msg.type == 'gameInit') {			
 			world.landscape = msg.landscape;
