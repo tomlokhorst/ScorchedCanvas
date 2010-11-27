@@ -29,7 +29,7 @@ namespace ScorchedServer.Models
         id = id,
         color = "#" + r.Next(10).ToString() + r.Next(10).ToString() + r.Next(10).ToString(),
         pos = x,
-        health = r.NextDouble(),
+        health = 1,
         position = Vector.FromCart(Convert.ToDouble(x), Landscape.fakeLandscape[x])
       };
 
