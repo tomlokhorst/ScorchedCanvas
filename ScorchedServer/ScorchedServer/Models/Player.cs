@@ -79,9 +79,9 @@ namespace ScorchedServer.Models
 
       var rectangles = lastShot.Zip(lastShot.Skip(1), (v1, v2) => new Rectangle { LeftTop = v1, RightBottom = v2 });
 
-      var playersHit = rectangles.Take(1000).Select(collide);
+      var playersHit = rectangles.Take(1000).SelectMany(collide);
 
-      foreach (var p in players)
+      foreach (var p in playersHit)
       {
         p.health -= 0.1;
 
