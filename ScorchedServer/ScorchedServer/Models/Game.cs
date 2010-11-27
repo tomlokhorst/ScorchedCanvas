@@ -89,18 +89,6 @@ namespace ScorchedServer.Models
 
     private void GameUpdates()
     {
-      int roundLength = 5000;
-      int nextRound = 5000;
-
-      Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond / 100)).Subscribe(l =>
-      {
-        lock (allConnections)
-        {
-          foreach (var c in allConnections)
-            Thread.Sleep(100);
-        }
-      });
-
       Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond * 10)).Subscribe(l =>
       {
         var state = new List<object>();
@@ -117,9 +105,7 @@ namespace ScorchedServer.Models
           conn.SendMessage(new
           {
             type = "gameUpdate",
-            state = state,
-            nextRound = nextRound,
-            roundLength = roundLength
+            state = state
           });
         }
       });
