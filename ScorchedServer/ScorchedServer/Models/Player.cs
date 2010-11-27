@@ -86,6 +86,9 @@ namespace ScorchedServer.Models
         p.health -= 0.1;
 
         yield return new { type = "updatePlayer", player = p };
+
+        if (p.health <= 0)
+          yield return new { type = "quitPlayer", playerId = p.id };
       }
     }
 
