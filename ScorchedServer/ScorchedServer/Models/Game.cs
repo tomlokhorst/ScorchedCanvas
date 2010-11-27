@@ -98,10 +98,10 @@ namespace ScorchedServer.Models
 
     private void GameUpdates()
     {
-      int roundLength = 10000;
+      int roundLength = 5000;
       int nextRound = 5000;
 
-      Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond * 15)).Subscribe(l =>
+      Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond * 10)).Subscribe(l =>
       {
         lock (allConnections)
         {
