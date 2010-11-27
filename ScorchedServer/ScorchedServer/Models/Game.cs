@@ -106,13 +106,12 @@ namespace ScorchedServer.Models
           p.clearLastShot();
         }
 
-        foreach (var conn in allConnections.Values)
+        SendMessageToAll(new { type = "gameUpdate", state = state });
+
+        foreach (var p in players)
         {
-          conn.SendMessage(new
-          {
-            type = "gameUpdate",
-            state = state
-          });
+          if (p.health <= 0)
+            SendMessageToAll(new { type = "quitPlayer", playerId = p.id });
         }
       });
     }
