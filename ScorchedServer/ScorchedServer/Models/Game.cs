@@ -93,9 +93,11 @@ namespace ScorchedServer.Models
       {
         var state = new List<object>();
 
-        foreach (var p in allConnections.Values.Select(c => c.Player))
+        var players = allConnections.Values.Select(c => c.Player);
+
+        foreach (var p in players)
         {
-          var o = p.getLastShot();
+          var o = p.getLastShot(players);
           if (o != null)
             state.Add(o);
         }
