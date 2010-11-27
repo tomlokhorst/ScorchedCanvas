@@ -1,0 +1,47 @@
+body {
+	width: 1000px;
+	margin: 0 auto;
+	padding: 20px;
+	-moz-box-shadow: 0 0 8px #888;
+	-webkit-box-shadow: 0 0 8px #888;
+	box-shadow: 0 0 8px #888;
+	font-family: Verdana;
+}
+
+h1 {
+	text-shadow: -1px -1px 2px #00F;
+	text-align: center;
+}
+
+a {
+	color: #000;
+}
+
+.screenshot {
+	float: left;
+}
+.screenshot img {
+	width: 400px;
+	height: 300px;
+	-moz-box-shadow: 5px 5px 5px #888;
+	-webkit-box-shadow: 5px 5px 5px #888;
+	box-shadow: 5px 5px 5px #888;
+	border: none;
+}
+
+.description {
+	color: #fff;
+	padding: 10px;
+	margin-left: 420px;
+	background-color: #3F9F9F;
+	-moz-border-radius: 16px;
+	-webkit-border-radius: 16px;
+	border-radius: 16px;
+	-moz-box-shadow: 5px 5px 5px #888;
+	-webkit-box-shadow: 5px 5px 5px #888;
+	box-shadow: 5px 5px 5px #888;
+}
+
+.clear {
+	clear: both;
+}
