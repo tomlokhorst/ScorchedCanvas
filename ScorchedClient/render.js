@@ -22,11 +22,13 @@ var renderer = {
 		renderer.drawBackground(updateDelta);
 		renderer._flip(renderer.drawTitle)(updateDelta);
 		renderer.drawLandscape(updateDelta);
-		renderer.drawUI(updateDelta);
+		if (!world.gameover)
+		  renderer.drawUI(updateDelta);
 		renderer.drawPlayers(updateDelta);
 		renderer.drawExplosions(updateDelta);
 		renderer.drawBullets(updateDelta);
-		renderer.drawCountdown(updateDelta);
+		if (!world.gameover)
+		  renderer.drawCountdown(updateDelta);
 
 		renderer.lastTimeDrawn = now;
 		setTimeout(renderer.render, 40);
@@ -45,14 +47,34 @@ var renderer = {
 		}
 	},
   
-	drawTitle: function(tick) {
+	drawTitle: function(updateDelta) {
 		var ctx = renderer.ctx;
 		ctx.font = "48px sans-serif";
 		ctx.fillStyle = rgba(255, 255, 255, 0.8);
 		
 		var centerx = config.screenSize.width / 2;
-		var text = "The Mother of All Games";
-		ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
+		if (!world.gameover)
+		{
+		  var text = "The Mother of All Games";
+		  ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
+
+    }
+		else
+		{
+		  var text = "Game Over";
+		  
+		  if(renderer._titleGlow == null) renderer._titleGlow = 0;
+			renderer._titleGlow += updateDelta / 4;
+			
+		  var glow = Math.abs((renderer._titleGlow % 512) - 256);
+      ctx.fillStyle = rgba(glow, glow, 255);
+		  ctx.fillText(text, centerx - ctx.measureText(text).width / 2,  64);
+
+      var subText = "reload to play again";
+      ctx.font = "24px sans-serif";		
+  		ctx.fillText(subText  , centerx - ctx.measureText(subText).width / 2,  100);
+		 } 
+
 	},
 
 	drawLandscape : function(tick) {

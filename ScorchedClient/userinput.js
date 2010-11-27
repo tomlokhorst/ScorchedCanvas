@@ -72,6 +72,7 @@ var UI = {
   // calculate angle / power from current aim
   fire: function(evt) {
     evt.preventDefault();
+    if (world.gameover) return;
     world.guiAim = false;
     //console.log("fire");
     UI.socket.send({

@@ -42,6 +42,8 @@ var socket;
 			});
 		}
 		else if (msg.type == 'quitPlayer') {
+		  if (msg.playerId == world.me.id)
+		    world.gameover = true;
 			world.players = $.grep(world.players, function(player) { return player.id != msg.playerId; });
 		}
 		else if (msg.type == 'gameUpdate') {
