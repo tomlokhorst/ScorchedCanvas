@@ -17,6 +17,8 @@ namespace ScorchedServer.Models
     private Dictionary<string, Connection> allConnections = new Dictionary<string, Connection>();
     private Subject<Connection> connectionJoins = new Subject<Connection>(Scheduler.CurrentThread);
 
+    private DateTime nextRoundBegin;
+
     public Game()
     {
       ConnectionJoins();
@@ -51,6 +53,7 @@ namespace ScorchedServer.Models
         var gameInitObj = new
         {
           type = "gameInit",
+          nextRound = (nextRoundBegin - DateTime.Now).Milliseconds,
           playerId = conn.Player.id,
           landscape = Landscape.fakeLandscape.Take(800).ToArray(),
           players = players
@@ -89,8 +92,11 @@ namespace ScorchedServer.Models
 
     private void GameUpdates()
     {
-      Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond * 10)).Subscribe(l =>
+      int roundTime = 10;
+
+      Observable.Interval(new TimeSpan(TimeSpan.TicksPerSecond * roundTime)).Subscribe(l =>
       {
+        nextRoundBegin = DateTime.Now + new TimeSpan(TimeSpan.TicksPerSecond * roundTime);
         var state = new List<object>();
 
         var players = allConnections.Values.Select(c => c.Player);
