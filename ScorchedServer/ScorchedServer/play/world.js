@@ -2,7 +2,7 @@
 var world = {
 	landscape: [],
 	players: [],
-	me : {},
+	me: {},
 	bullets: [],
 	explosions: [],
 	playerId: null,
@@ -12,7 +12,6 @@ var world = {
 	guiPower: 10,
 	guiPoint: { x:0, y:0 },
 	nextRound: null,
-	waiting: true,
 	gameover: false
 };
 

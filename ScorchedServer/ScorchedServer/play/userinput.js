@@ -51,7 +51,7 @@ var UI = {
     
     var xpos, ypos;
     if (evt.touches && evt.touches.length) {
-      xpos = evt.touches[0].pageX;
+      xpos =  evt.touches[0].pageX;
       ypos =  evt.touches[0].pageY;
     }
     else {
@@ -63,15 +63,11 @@ var UI = {
     var y = config.screenSize.height - (ypos - offset.top);
     world.guiPoint = { x:x, y:y };
     
-    var centerx = config.screenSize.width/2;
-    var dx = x - centerx;
-    world.guiAngle = Math.atan2(y, dx);
-    world.guiPower = Math.sqrt( dx*dx + y*y ) / 100;
-//    //var dx = x - centerx;
-//    var dx = x - world.me.tank.center.x;
-//    var dy = y - world.me.tank.center.y;
-//    world.guiAngle = Math.atan2(dy, dx);
-//    world.guiPower = Math.sqrt( dx*dx + dy*dy ) / 100;
+    var dx = x - world.me.pos;
+    var dy = y - world.me.posy;
+
+    world.guiAngle = Math.atan2(dy, dx);
+    world.guiPower = Math.sqrt( dx*dx + dy*dy ) / 100;
   },
   
   // calculate angle / power from current aim
@@ -81,11 +77,11 @@ var UI = {
     world.guiAim = false;
     //console.log("fire");
     UI.socket.send({
-		type : 'fireRequest',
-		angle : world.guiAngle,
-		barrelAngle : world.guiAngle,
-		power : world.guiPower,
-		weaponType : 'cannon'
-	});
+  		type : 'fireRequest',
+  		angle : world.guiAngle,
+  		barrelAngle : world.guiAngle,
+  		power : world.guiPower,
+  		weaponType : 'cannon'
+  	});
   },
 };
