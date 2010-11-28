@@ -4,6 +4,7 @@ function Player(options) {
 	this.health = options.health;
 	this.score = options.score;
 	this.angle = options.angle;
+	this.barrelAngle = options.barrelAngle;
 	this.color = options.color;
 	this.pos = options.pos;
 	this.posy = options.posy;
