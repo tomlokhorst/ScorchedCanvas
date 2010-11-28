@@ -113,11 +113,11 @@ var renderer = {
 			tank.body.rightBottom = tank.rect.rightBottom;
 			tank.health = {};
 			tank.health.x = tank.rect.left;
-			tank.barrel = {};
 			tank.health.y = tank.bottom - config.healthIndicatorBottomMargin;
 			tank.health.l = Math.floor(config.tankWidth * player.health);
-			tank.barrel.x = Math.cos(player.barrelAngle) * config.barrelLength;
-			tank.barrel.y = Math.sin(player.barrelAngle) * config.barrelLength;
+			tank.barrel = {};
+			tank.barrel.start = tank.center;
+			tank.barrel.end = tank.center.move(config.barrelLength, 0).rotate(player.barrelAngle, tank.barrel.start);
 			if (player.id == world.me.id)
 			  world.me.tank = tank;
 
@@ -125,9 +125,8 @@ var renderer = {
 			ctx.strokeStyle = player.color; "#888";
 			ctx.lineWidth = config.barrelThickness;
 			ctx.beginPath();
-			ctx.moveTo(tank.center.x, tank.center.y);
-			ctx.lineTo(tank.center.x + tank.barrel.x,
-					   tank.center.y + tank.barrel.y);
+			ctx.moveTo(tank.barrel.start.x, tank.barrel.start.y);
+			ctx.lineTo(tank.barrel.end.x, tank.barrel.end.y);
 			ctx.stroke();
 			
 			// new Tank
