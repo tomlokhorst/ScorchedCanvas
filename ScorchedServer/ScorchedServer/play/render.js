@@ -127,15 +127,15 @@ var renderer = {
 			if (player.id == world.me.id)
 			  world.me.tank = tank;
 
-			// barrel
-			ctx.strokeStyle = player.color; "#888";
-			ctx.lineWidth = config.barrelThickness;
-			ctx.beginPath();
-			ctx.moveTo(tank.barrel.start.x, tank.barrel.start.y);
-			ctx.lineTo(tank.barrel.end.x, tank.barrel.end.y);
-			ctx.stroke();
+			// Rotate tank
+			tank.body = vectorSpaceRotate(tank.body, player.angle, tank.center);
+			tank.barrel = vectorSpaceRotate(tank.barrel, player.angle, tank.center);
+			tank.turret = vectorSpaceRotate(tank.turret, player.angle, tank.center);
+			tank.turret.startAngle + player.angle;
+			tank.turret.endAngle + player.angle;
+
 			
-			// new Tank
+			// tank body
 			ctx.fillStyle = player.color;
 			ctx.beginPath();
 			ctx.moveTo(tank.body.leftBottom.x, tank.body.leftBottom.y);
@@ -144,7 +144,15 @@ var renderer = {
 			ctx.lineTo(tank.body.leftTop.x, tank.body.leftTop.y);
 			ctx.fill();
 
-			
+			// tank barrel
+			ctx.strokeStyle = player.color; "#888";
+			ctx.lineWidth = config.barrelThickness;
+			ctx.beginPath();
+			ctx.moveTo(tank.barrel.start.x, tank.barrel.start.y);
+			ctx.lineTo(tank.barrel.end.x, tank.barrel.end.y);
+			ctx.stroke();
+
+			// tank turret
 			ctx.beginPath();
 			ctx.arc(tank.turret.center.x, tank.turret.center.y, tank.turret.radius, tank.turret.startAngle, tank.turret.endAngle, tank.turret.anticlockwise);
 			ctx.fill();
@@ -506,5 +514,17 @@ Rectangle.fromVectors = function (v1, v2)
   var bottom = v1.y < v2.y ? v1.y : v2.y;
 
   return new Rectangle(top, left, right, bottom);
+}
+
+function vectorSpaceRotate(obj, angle, origin)
+{
+  var copy = {};
+  for (var v in obj)
+    if (obj[v] instanceof Vector)
+      copy[v] = obj[v].rotate(angle, origin);
+    else
+      copy[v] = obj[v];
+
+  return copy;
 }
 
