@@ -130,8 +130,8 @@ var renderer = {
 			tank.body = vectorSpaceRotate(tank.body, player.angle, tank.center);
 			tank.barrel = vectorSpaceRotate(tank.barrel, player.angle, tank.center);
 			tank.turret = vectorSpaceRotate(tank.turret, player.angle, tank.center);
-			tank.turret.startAngle + player.angle;
-			tank.turret.endAngle + player.angle;
+			tank.turret.startAngle += player.angle;
+			tank.turret.endAngle += player.angle;
 
 			
 			// tank body
