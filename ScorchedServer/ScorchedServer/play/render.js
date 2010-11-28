@@ -270,10 +270,7 @@ var renderer = {
 		ctx.fill();
 	},
 	
-	drawCountdown : function(tick) {
-	  if (!world.nextRound) // maybe we haven't had a gameInit yet
-	    return;
-	  
+	drawCountdown : function(tick) {	  
 		var countdown = world.nextRound - new Date();
 
 		if (countdown <= 3000)
@@ -290,7 +287,7 @@ var renderer = {
 		var ctx = this.ctx;
 
 		var ratio = (count % 1);
-		if(ratio == 0) return;
+		if (ratio == 0) return;
 
 		ctx.save();
 		renderer.ctx.translate(0, +config.screenSize.height);
@@ -372,28 +369,3 @@ var renderer = {
 	}
 };
 
-function Vector(x, y) {
-	this.x = x;
-	this.y = y;
-
-	this.add = function(that, factor) {
-		if (factor === undefined) {
-			factor = 1;
-		}
-		return new Vector(this.x + that.x * factor, this.y + that.y * factor);
-	}
-
-	this.scale = function(factor) {
-		return new Vector(x * factor, y * factor);
-	}
-}
-
-Vector.fromPolar = function(th, r) {
-	return Vector.fromCart(Math.cos(th) * r, Math.sin(th) * r);
-};
-
-Vector.fromCart = function(x, y) {
-	return new Vector(x, y);
-};
-
-Vector.origin = Vector.fromCart(0, 0);

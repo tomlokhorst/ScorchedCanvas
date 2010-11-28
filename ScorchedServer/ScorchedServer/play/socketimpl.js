@@ -13,7 +13,7 @@ var socket;
 		if (msg.type == 'gameInit') {			
 			world.landscape = msg.landscape;
 			world.playerId = msg.playerId;
-			world.nextRound = msg.nextRound;
+			world.nextRound = +new Date + msg.nextRound;
 			$.each(msg.players, function(i, player) {
 				var p = new Player( {
 					id: player.id,

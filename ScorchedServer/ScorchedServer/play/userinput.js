@@ -63,7 +63,6 @@ var UI = {
     var y = config.screenSize.height - (ypos - offset.top);
     world.guiPoint = { x:x, y:y };
     
-    var centerx = config.screenSize.width/2;
     var dx = x - world.me.pos;
     var dy = y - world.me.posy;
 
@@ -78,10 +77,10 @@ var UI = {
     world.guiAim = false;
     //console.log("fire");
     UI.socket.send({
-		type : 'fireRequest',
-		angle : world.guiAngle,
-		power : world.guiPower,
-		weaponType : 'cannon'
-	});
+  		type : 'fireRequest',
+  		angle : world.guiAngle,
+  		power : world.guiPower,
+  		weaponType : 'cannon'
+  	});
   },
 };
