@@ -104,10 +104,10 @@ var renderer = {
 			var player = world.players[i];
 
 			var tank = {};
-			tank.top = player.pos + config.tankHeight;
+			tank.top = player.pos + (config.tankHeight / 2);
 			tank.left = player.pos - (config.tankWidth / 2);
 			tank.right = tank.left + config.tankWidth;
-			tank.bottom = player.posy;
+			tank.bottom = player.posy - (config.tankHeight / 2);
 			tank.center = {};
 			tank.center.x = player.pos;
 			tank.center.y = tank.bottom + (config.tankHeight / 2);
@@ -116,8 +116,8 @@ var renderer = {
 			tank.barrel = {};
 			tank.health.y = tank.bottom - config.healthIndicatorBottomMargin;
 			tank.health.l = Math.floor(config.tankWidth * player.health);
-			tank.barrel.x = Math.cos(player.angle) * config.barrelLength;
-			tank.barrel.y = Math.sin(player.angle) * config.barrelLength;
+			tank.barrel.x = Math.cos(player.barrelAngle) * config.barrelLength;
+			tank.barrel.y = Math.sin(player.barrelAngle) * config.barrelLength;
 			if (player.id == world.me.id)
 			  world.me.tank = tank;
 
@@ -131,7 +131,6 @@ var renderer = {
 			ctx.stroke();
 			
 			// new Tank
-			
 			ctx.fillStyle = player.color;
 			ctx.beginPath();
 			ctx.moveTo(tank.left, tank.bottom);
@@ -139,6 +138,7 @@ var renderer = {
 			ctx.lineTo(tank.left + config.tankWidth - config.tankGapWidth, tank.bottom + config.tankHeight);
 			ctx.lineTo(tank.left + config.tankGapWidth, tank.bottom + config.tankHeight);
 			ctx.fill();
+
 			
 			ctx.beginPath();
 			ctx.arc(tank.left+(config.tankWidth/2), tank.bottom-(config.tankHeight) + 1 , 2*config.tankWidth/4, Math.PI - (Math.PI / 3.5), 2 * Math.PI + (Math.PI / 3.5), true);

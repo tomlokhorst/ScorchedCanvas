@@ -18,7 +18,8 @@ var socket;
 					id: player.id,
 					health: player.health,
 					score: player.score,
-					angle: player.angle,
+					angle: player.barrelAngle ? player.angle : 0,
+					barrelAngle: player.barrelAngle || player.angle,
 					color: player.color, 
 					pos: player.pos,
 					posy: world.landscape[player.pos]
@@ -35,7 +36,8 @@ var socket;
 				name: msg.player.name,
 				health: msg.player.health,
 				score: msg.player.score,
-				angle: msg.player.angle,
+			  angle: player.barrelAngle ? player.angle : 0,
+		    barrelAngle: player.barrelAngle || player.angle,
 				color: msg.player.color,
 				pos: msg.player.pos,
 				posy: world.landscape[msg.player.pos]
@@ -63,7 +65,8 @@ var socket;
 					player.health = update.player.health || player.health;
 					console.log("socket health" + player.health);
 					player.score = update.player.score || player.score;
-					player.angle = update.player.angle || player.angle;
+			    player.angle = update.player.barrelAngle ? update.player.angle : 0;
+			    player.barrelAngle = update.player.barrelAngle || update.player.angle || player.barrelAngle || player.barrelAngle,
 					player.color = update.player.color || player.color;
 					player.pos = update.player.pos || player.pos;
 				}
@@ -78,7 +81,7 @@ var socket;
 		else if(msg.type == 'aim') {
 			for(var i=0; i<world.players.length; i++) {
 				if(world.players[i].id == msg.playerId) {
-					world.players[i].angle = msg.angle;
+					world.players[i].barrelAngle = msg.barrelAngle || msg.angle;
 				}
 			}
 		}
@@ -88,3 +91,4 @@ var socket;
 	};
 	socket.onerror = function(e) { /* Not implemented */ };
 })();
+

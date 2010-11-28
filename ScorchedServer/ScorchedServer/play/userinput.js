@@ -83,6 +83,7 @@ var UI = {
     UI.socket.send({
 		type : 'fireRequest',
 		angle : world.guiAngle,
+		barrelAngle : world.guiAngle,
 		power : world.guiPower,
 		weaponType : 'cannon'
 	});
