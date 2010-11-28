@@ -106,6 +106,11 @@ var renderer = {
 			var tank = {};
 			tank.center = Vector.fromCart(player.pos, player.posy)
 			tank.rect = Rectangle.fromCenter(tank.center, config.tankWidth, config.tankHeight);
+			tank.body = {};
+			tank.body.leftTop = tank.rect.leftTop.move(config.tankGapWidth, 0);
+			tank.body.rightTop = tank.rect.rightTop.move(-config.tankGapWidth, 0);
+			tank.body.leftBottom = tank.rect.leftBottom;
+			tank.body.rightBottom = tank.rect.rightBottom;
 			tank.health = {};
 			tank.health.x = tank.rect.left;
 			tank.barrel = {};
@@ -128,10 +133,10 @@ var renderer = {
 			// new Tank
 			ctx.fillStyle = player.color;
 			ctx.beginPath();
-			ctx.moveTo(tank.rect.left, tank.rect.bottom);
-			ctx.lineTo(tank.rect.right, tank.rect.bottom);
-			ctx.lineTo(tank.rect.right - config.tankGapWidth, tank.rect.top);
-			ctx.lineTo(tank.rect.left + config.tankGapWidth, tank.rect.top);
+			ctx.moveTo(tank.body.leftBottom.x, tank.body.leftBottom.y);
+			ctx.lineTo(tank.body.rightBottom.x, tank.body.rightBottom.y);
+			ctx.lineTo(tank.body.rightTop.x, tank.body.rightTop.y);
+			ctx.lineTo(tank.body.leftTop.x, tank.body.leftTop.y);
 			ctx.fill();
 
 			
@@ -382,6 +387,12 @@ function Vector(x, y)
       factor = 1;
     }
     return new Vector(this.x + that.x * factor, this.y + that.y * factor);
+  }
+
+  // Convenience function
+  this.move = function(dx, dy)
+  {
+    return this.add(Vector.fromCart(dx, dy));
   }
   
   this.scale = function(factor)
