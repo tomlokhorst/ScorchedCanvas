@@ -118,6 +118,12 @@ var renderer = {
 			tank.barrel = {};
 			tank.barrel.start = tank.center;
 			tank.barrel.end = tank.center.move(config.barrelLength, 0).rotate(player.barrelAngle, tank.barrel.start);
+			tank.turret = {};
+			tank.turret.center = Vector.fromCart(tank.center.x, tank.rect.bottom - tank.rect.height + 1);
+			tank.turret.radius = 2 * config.tankWidth / 4;
+			tank.turret.startAngle = Math.PI - (Math.PI / 3.5);
+			tank.turret.endAngle = 2 * Math.PI + (Math.PI / 3.5);
+			tank.turret.anticlockwise = true;
 			if (player.id == world.me.id)
 			  world.me.tank = tank;
 
@@ -140,7 +146,7 @@ var renderer = {
 
 			
 			ctx.beginPath();
-			ctx.arc(tank.center.x, tank.rect.bottom - tank.rect.height + 1, 2*config.tankWidth/4, Math.PI - (Math.PI / 3.5), 2 * Math.PI + (Math.PI / 3.5), true);
+			ctx.arc(tank.turret.center.x, tank.turret.center.y, tank.turret.radius, tank.turret.startAngle, tank.turret.endAngle, tank.turret.anticlockwise);
 			ctx.fill();
 
 			// me circle
