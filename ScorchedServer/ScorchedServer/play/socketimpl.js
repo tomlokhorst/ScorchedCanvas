@@ -102,39 +102,21 @@ function serverSideComputeOptimalAngle(p)
   p.position = Vector.fromCart(p.pos, p.posy);
   p.rect = Rectangle.fromCenter(p.position, config.tankWidth, config.tankHeight);
 
-  var dx0 ;
-  var dy0;
-  var a0;
-  var alpha;
-
-  for (var i = -80; i < 80; i++)
+  // Maybe the tanks shouldn't be this close to the edge anyway?
+  if (p.rect.centerRight.x > world.landscape.length)
   {
-    alpha = i * Math.PI / 180;
-    var rect = p.rect.rotate(alpha, p.position);
+    var dx = p.rect.center.x - p.rect.centerLeft.x;
+    var dy = p.rect.center.y - world.landscape[p.rect.centerLeft.x];
+    var alpha = Math.atan2(dy, dx);
 
-    var dx1 = p.rect.centerRight.x - rect.centerRight.x;
-    var dy1 = world.landscape[Math.round(rect.centerRight.x)] - rect.centerRight.y;
-    var a1 = Math.atan2(dy1, dx1);
-
-    if (dx0 === undefined)
-    {
-      dx0 = dx1;
-      dy0 = a1;
-      a0 = a1;
-    }
-
-    if ((a1 * Math.PI * 180) < 2 && a1 != 0)
-    {
-      break;
-    }
-    else
-    {
-      dx0 = dx1;
-      dy0 = a1;
-      a0 = a1;
-    }
+    p.angle = alpha;
   }
+  else
+  {
+    var dx = p.rect.centerRight.x - p.rect.center.x;
+    var dy = world.landscape[p.rect.centerRight.x] - p.rect.center.y;
+    var alpha = Math.atan2(dy, dx);
 
-  p.angle = alpha > 0 ? alpha - Math.PI / 6 : alpha + Math.PI / 6;
+    p.angle = alpha;
+  }
 }
-
