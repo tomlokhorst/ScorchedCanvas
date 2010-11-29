@@ -2,54 +2,53 @@ function Vector(x, y)
 {
   this.x = x;
   this.y = y;
-  
-  this.add = function(that, factor)
+
+  this.add = function(dx, dy)
   {
-    if (factor === undefined)
-    {
-      factor = 1;
-    }
-    return new Vector(this.x + that.x * factor, this.y + that.y * factor);
+    var that = dx;
+ 
+    if (that instanceof Vector)
+      return Vector.fromCart(this.x + that.x, this.y + that.y);
+    else
+      return Vector.fromCart(this.x + dx, this.y + dy);
   }
 
-  // Convenience function
-  this.move = function(dx, dy)
+  this.subtract = function (dx, dy)
   {
-    return this.add(Vector.fromCart(dx, dy));
+    var that = dx;
+ 
+    if (that instanceof Vector)
+      return Vector.fromCart(this.x - that.x, this.y - that.y);
+    else
+      return Vector.fromCart(this.x - dx, this.y - dy);
   }
   
   this.scale = function(factor)
   {
- 	  return new Vector(x * factor, y * factor);
+ 	  return Vector.fromCart(x * factor, y * factor);
   }
   
   this.rotate = function(angle, origin)
   {
     origin = origin || Vector.origin;
+    var delta = this.subtract(origin);
+
+    var dx = Math.cos(angle) * delta.x - Math.sin(angle) * delta.y;
+    var dy = Math.sin(angle) * delta.x + Math.cos(angle) * delta.y;
   
-    var dx = this.x - origin.x;
-    var dy = this.y - origin.y;
-  
-    var dist = Math.sqrt(dx * dx + dy * dy);
-    var a1 = Math.atan2(dy, dx);
-    var a2 = a1 + angle;
-    var dx2 = Math.cos(a2) * dist;
-    var dy2 = Math.sin(a2) * dist;
-  
-    return new Vector(origin.x + dx2, origin.y + dy2);
+    return new Vector(origin.x + dx, origin.y + dy);
   }
   
   this.toString = function ()
   {
-    return "Vector { x: " + this.x + ", y: " + this.y + "}";
+    return "{ x: " + this.x + ", y: " + this.y + "}";
   }
 }
 
 
-
 Vector.fromPolar = function(th, r)
 {
-	return Vector.fromCart(Math.cos(th) * r, Math.sin(th) * r);
+	return new Vector(Math.cos(th) * r, Math.sin(th) * r);
 }
 
 Vector.fromCart = function(x, y)

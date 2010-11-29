@@ -1,26 +1,28 @@
-body {
+body
+{
 	margin: 0 auto;
-	overflow:hidden;
+	overflow: hidden;
 	width: 100%;
-	xborder: 1px solid black;
 	text-align: center;
-  	background-color: rgb(200,255,200);
+  /* background-color: rgb(200,255,200); */
+  background: #000;
 }
 
-#canvas {
-	xmargin: auto;
-	xborder:solid 1px red;
-	width: 800px;
+#canvas
+{
 	background-color: white;
-
+	width: 800px;
 }
 
 #log
 {
-  position:absolute; 
+  position: absolute; 
   background-color: rgba(100,100,100,0.7);
-  width: 200px;
+  font-family: monospace, courier;
+  font-size: 80%;
+  width: 300px;
   color: white;
   text-align: left;
-  display: none;
+  top: 0;
 }
+

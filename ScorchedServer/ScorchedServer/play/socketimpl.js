@@ -102,21 +102,14 @@ function serverSideComputeOptimalAngle(p)
   p.position = Vector.fromCart(p.pos, p.posy);
   p.rect = Rectangle.fromCenter(p.position, config.tankWidth, config.tankHeight);
 
-  // Maybe the tanks shouldn't be this close to the edge anyway?
-  if (p.rect.centerRight.x > world.landscape.length)
-  {
-    var dx = p.rect.center.x - p.rect.centerLeft.x;
-    var dy = p.rect.center.y - world.landscape[p.rect.centerLeft.x];
-    var alpha = Math.atan2(dy, dx);
+  var dx = p.rect.centerRight.x - p.rect.center.x;
+  var dy = world.landscape[p.rect.centerRight.x] - p.rect.center.y;
+  var alpha = Math.atan2(dy, dx);
 
-    p.angle = alpha;
-  }
-  else
-  {
-    var dx = p.rect.centerRight.x - p.rect.center.x;
-    var dy = world.landscape[p.rect.centerRight.x] - p.rect.center.y;
-    var alpha = Math.atan2(dy, dx);
+  dx = p.rect.center.x - p.rect.centerLeft.x;
+  dy = p.rect.center.y - world.landscape[p.rect.centerLeft.x];
+  beta = Math.atan2(dy, dx);
 
-    p.angle = alpha;
-  }
+  p.angle = (alpha + beta) / 2;
 }
+

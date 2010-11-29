@@ -120,13 +120,13 @@ var renderer = {
 			tank.center = Vector.fromCart(player.pos, player.posy)
 			tank.rect = Rectangle.fromCenter(tank.center, config.tankWidth, config.tankHeight);
 			tank.body = {};
-			tank.body.leftTop = tank.rect.leftTop.move(config.tankGapWidth, 0);
-			tank.body.rightTop = tank.rect.rightTop.move(-config.tankGapWidth, 0);
+			tank.body.leftTop = tank.rect.leftTop.add(config.tankGapWidth, 0);
+			tank.body.rightTop = tank.rect.rightTop.add(-config.tankGapWidth, 0);
 			tank.body.leftBottom = tank.rect.leftBottom;
 			tank.body.rightBottom = tank.rect.rightBottom;
 			tank.barrel = {};
 			tank.barrel.start = tank.center;
-			tank.barrel.end = tank.center.move(config.barrelLength, 0).rotate(player.barrelAngle - player.angle, tank.barrel.start);
+			tank.barrel.end = tank.center.add(config.barrelLength, 0).rotate(player.barrelAngle - player.angle, tank.barrel.start);
 			tank.turret = {};
 			tank.turret.center = Vector.fromCart(tank.center.x, tank.rect.bottom - tank.rect.height + 1);
 			tank.turret.radius = 2 * config.tankWidth / 4;
@@ -364,8 +364,8 @@ var renderer = {
 		
 		for ( var i = 0; i < time; i++) {
 			var dv = a.scale(dt / m);
-			p = p.add(v, dt);
-			p = p.add(dv, dt / 2);
+			p = p.add(v.scale(dt));
+			p = p.add(dv.scale(dt / 2));
 			v = v.add(dv);
 			ctx.lineTo(p.x, p.y);
 			path.push(p);
