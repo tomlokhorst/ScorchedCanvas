@@ -12,8 +12,19 @@ var world = {
 	guiPower: 10,
 	guiPoint: { x:0, y:0 },
 	nextRound: null,
-	gameover: false
+	gameover: false,
+  starfield: []
 };
+
+
+for (var y = 0; y < config.screenSize.height; y++)
+{
+  world.starfield[y] = [];
+  for (var x = 0; x < config.screenSize.width; x++)
+  {
+    world.starfield[y][x] = ((Math.random() * 200) < 1);
+  }
+}
 
 // Lanscape generator:
 /*

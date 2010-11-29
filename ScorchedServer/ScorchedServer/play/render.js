@@ -37,17 +37,31 @@ var renderer = {
 		setTimeout(renderer.render, 40);
 	},
 	
-	// 256 color background 
 	drawBackground: function(tick) {
+	{ 
 		var ctx = renderer.ctx;
-		var steps = 32;
-		var stepSize = config.screenSize.height/steps;
-		
-		for( var step=steps ; step>=0 ; step--) {
-			var color = step/steps * 255;
-			ctx.fillStyle = rgba(color, 128 + color/2, 128 + color/2);
-			ctx.fillRect(0, step * stepSize, config.screenSize.width, (step+1) * stepSize);
-		}
+	  // 256 color background 
+		//var steps = 32;
+		//var stepSize = config.screenSize.height/steps;
+		//
+		//for( var step=steps ; step>=0 ; step--) {
+		//	var color = step/steps * 255;
+		//	ctx.fillStyle = rgba(color, 128 + color/2, 128 + color/2);
+		//	ctx.fillRect(0, step * stepSize, config.screenSize.width, (step+1) * stepSize);
+		//}
+		ctx.fillStyle = '#141428';
+		ctx.fillRect(0, 0, config.screenSize.width, config.screenSize.height);
+
+    for (var y = 0; y < config.screenSize.height; y++)
+    for (var x = 0; x < config.screenSize.width; x++)
+    {
+      if (world.starfield[y][x])
+      {
+        var alpha = (y / config.screenSize.height) - .2;
+        ctx.fillStyle = rgba(255, 255, 255, alpha);
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
 	},
   
 	drawTitle: function(updateDelta) {
@@ -86,7 +100,7 @@ var renderer = {
 
 	drawLandscape : function(tick) {
 		var ctx = renderer.ctx;
-		ctx.fillStyle = rgba(64,255,64);
+		ctx.fillStyle = '#248C24'; // rgba(64,255,64);
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
 		for ( var x = 0; x < world.landscape.length; x++) {
