@@ -214,6 +214,7 @@ var renderer = {
 				ctx.fill();
 			}
 			else if (bullet.collision) {
+      debugger
 				var lastCoord = bullet.arc[bullet.arc.length - 1];
 				world.explosions.push({
 					x: lastCoord.x,

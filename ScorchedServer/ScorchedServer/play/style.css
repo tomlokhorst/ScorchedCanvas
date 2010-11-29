@@ -27,6 +27,7 @@ body
   color: white;
   text-align: left;
   top: 0;
+  display:none;
 }
 
 /* on iPhone/iPad scale the canvas down */

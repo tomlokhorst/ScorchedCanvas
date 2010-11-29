@@ -20,12 +20,11 @@ var socket;
 					health: player.health,
 					score: player.score,
 					angle: player.barrelAngle ? player.angle : 0,
-					barrelAngle: player.barrelAngle || player.angle,
+					barrelAngle: player.barrelAngle ? player.barrelAngle : player.angle,
 					color: player.color, 
 					pos: player.pos,
 					posy: world.landscape[player.pos]
 				});
-serverSideComputeOptimalAngle(p);
 				world.players.push(p);
 				  
 				if (player.id == world.playerId)
@@ -33,18 +32,18 @@ serverSideComputeOptimalAngle(p);
 			});
 		}
 		else if (msg.type == 'newPlayer') {
+    debugger
 		  var p = new Player( { 
 				id: msg.player.id,
 				name: msg.player.name,
 				health: msg.player.health,
 				score: msg.player.score,
-			  angle: player.barrelAngle ? player.angle : 0,
-		    barrelAngle: player.barrelAngle || player.angle,
+				angle: msg.player.barrelAngle ? msg.player.angle : 0,
+				barrelAngle: msg.player.barrelAngle ? msg.player.barrelAngle : msg.player.angle,
 				color: msg.player.color,
 				pos: msg.player.pos,
 				posy: world.landscape[msg.player.pos]
 			});
-serverSideComputeOptimalAngle(p);
 			world.players.push(p);
 		}
 		else if (msg.type == 'quitPlayer') {
@@ -68,11 +67,10 @@ serverSideComputeOptimalAngle(p);
 					player.health = update.player.health || player.health;
 					console.log("socket health" + player.health);
 					player.score = update.player.score || player.score;
-			    player.angle = update.player.barrelAngle ? update.player.angle : 0;
-			    player.barrelAngle = update.player.barrelAngle || update.player.angle || player.barrelAngle || player.barrelAngle,
+			    player.angle = update.player.angle || player.angle;
+			    player.barrelAngle = update.player.barrelAngle || update.player.angle;
 					player.color = update.player.color || player.color;
 					player.pos = update.player.pos || player.pos;
-serverSideComputeOptimalAngle(player);
 				}
 				else if (update.type == 'fire') {
 					world.bullets.push({ id: update.playerId, arc: update.arc, step: 0, collision: true });
@@ -95,21 +93,4 @@ serverSideComputeOptimalAngle(player);
 	};
 	socket.onerror = function(e) { /* Not implemented */ };
 })();
-
-// This code must be moved to server side
-function serverSideComputeOptimalAngle(p)
-{
-  p.position = Vector.fromCart(p.pos, p.posy);
-  p.rect = Rectangle.fromCenter(p.position, config.tankWidth, config.tankHeight);
-
-  var dx = p.rect.centerRight.x - p.rect.center.x;
-  var dy = world.landscape[p.rect.centerRight.x] - p.rect.center.y;
-  var alpha = Math.atan2(dy, dx);
-
-  dx = p.rect.center.x - p.rect.centerLeft.x;
-  dy = p.rect.center.y - world.landscape[p.rect.centerLeft.x];
-  beta = Math.atan2(dy, dx);
-
-  p.angle = (alpha + beta) / 2;
-}
 
