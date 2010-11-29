@@ -37,7 +37,7 @@ var renderer = {
 		setTimeout(renderer.render, 40);
 	},
 	
-	drawBackground: function(tick) {
+	drawBackground: function(tick)
 	{ 
 		var ctx = renderer.ctx;
 	  // 256 color background 
