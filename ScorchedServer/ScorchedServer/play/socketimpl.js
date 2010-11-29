@@ -32,7 +32,7 @@ var socket;
 			});
 		}
 		else if (msg.type == 'newPlayer') {
-    debugger
+    //debugger
 		  var p = new Player( { 
 				id: msg.player.id,
 				name: msg.player.name,
