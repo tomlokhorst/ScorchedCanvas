@@ -11,7 +11,6 @@ var renderer = {
 		renderer.ctx = renderer.canvas.getContext("2d");
 		renderer.ctx.scale(1, -1);
 		renderer.ctx.translate(0, -config.screenSize.height);
-		renderer.render();
 	},
 	
 	render: function() {

@@ -12,10 +12,13 @@ body
 {
 	background-color: white;
 	width: 800px;
+	height: 600px ;
+	
 }
 
 #log
 {
+  xdisplay: none;
   position: absolute; 
   background-color: rgba(100,100,100,0.7);
   font-family: monospace, courier;
@@ -26,3 +29,10 @@ body
   top: 0;
 }
 
+/* on iPhone/iPad scale the canvas down */
+@media screen and (max-device-width: 480px) {
+  #canvas {
+    width: 267px;
+    height: 200px;
+  }
+}

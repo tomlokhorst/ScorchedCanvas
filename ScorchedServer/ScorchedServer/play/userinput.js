@@ -6,8 +6,6 @@ handles the mouse events for aiming (mousemove) and firing (mouseup)
 */
 
 var UI = {
-  centerx: 0,
-  centery: 0,
   canvas: null,
   socket: null,
   modes : ["wait", "aim"],
@@ -16,8 +14,7 @@ var UI = {
   init: function(canvas, socket) {
     UI.canvas = canvas;
     UI.socket = socket;
-    UI.centerx = config.screenSize.width/2;
-    UI.centery = config.screenSize.height/2;
+
     $(document).bind("mousemove", UI.aim);
     $(document).bind("touchmove", UI.aim);
     $(document).bind("mouseup", UI.fire);
@@ -25,46 +22,52 @@ var UI = {
     $(document).bind("mousedown", UI.startAim);
     $(document).bind("touchstart", UI.startAim);
   },
+  
+  // get the x,y coords relative to the canvas, in canvas pixels, corrected for css scaling
+  getCanvasCoord: function(evt) {
+    // get coords relative to the page
+    var pageX, pageY;
     
+    // check if we're on a touch device
+    var touches = evt.originalEvent.touches;
+    if (touches && touches.length) {
+      pageX =  touches[0].pageX;
+      pageY =  touches[0].pageY;
+    }
+    else {
+      pageX = evt.pageX;
+      pageY = evt.pageY;
+    }
+    
+    // correct for:
+    // 1. the offset of the canvas element
+    // 2. screen pixels vs canvas pixels (there is a difference when the canvas is scaled using css)
+    var c = $(UI.canvas);
+    var offset = c.offset();
+    var hor_ratio = c.attr("width") / c.width();
+    var vert_ratio = c.attr("height") / c.height();
+    
+    var canvasX = hor_ratio * (pageX-offset.left);
+    var canvasY = config.screenSize.height - vert_ratio * (pageY-offset.top);
+    
+    return { x:canvasX, y:canvasY };
+  },
+  
   startAim: function(evt) {
-
-    evt.preventDefault();
     world.guiAim = true;
-    
-    if (evt.touches && evt.touches.length)
-    {
-      var xpos = evt.touches[0].pageX;
-      var ypos =  evt.touches[0].pageY;
-    }
-    else
-    {
-      var xpos = evt.pageX;
-      var ypos =  evt.pageY;
-    }
-    $("#log").html(xpos + "," + ypos);
+    UI.aim(evt);
   },
   
   // update aiming
   aim: function(evt) {      
     evt.preventDefault();
-    var offset = $(UI.canvas).offset();
+        
+    var pos = UI.getCanvasCoord(evt);
+            
+    world.guiPoint = pos;
     
-    var xpos, ypos;
-    if (evt.touches && evt.touches.length) {
-      xpos =  evt.touches[0].pageX;
-      ypos =  evt.touches[0].pageY;
-    }
-    else {
-      xpos = evt.pageX;
-      ypos =  evt.pageY;
-    }
-    
-    var x = xpos - offset.left;
-    var y = config.screenSize.height - (ypos - offset.top);
-    world.guiPoint = { x:x, y:y };
-    
-    var dx = x - world.me.pos;
-    var dy = y - world.me.posy;
+    var dx = pos.x - world.me.pos;
+    var dy = pos.y - world.me.posy;
 
     world.guiAngle = Math.atan2(dy, dx);
     world.guiPower = Math.sqrt( dx*dx + dy*dy ) / 100;

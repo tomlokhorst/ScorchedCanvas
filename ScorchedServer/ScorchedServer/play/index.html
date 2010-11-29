@@ -4,13 +4,17 @@
 		<title>The Mother of All Games</title>
 		<link rel="stylesheet" type="text/css" href="style.css"/>
 		<link rel="stylesheet" type="text/css" href="http://q42.nl/w00tcamp/w00tcamp-footer.css"/>
+		<meta name="viewport" content="user-scalable=no, width=device-width" />
+   	<meta name="apple-mobile-web-app-capable" content="yes" /> 
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	</head>
 	<body>
+
 		<div id="log">log</div>
 		<canvas id="canvas"></canvas>
 		<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
 		<script type="text/javascript">
-		        if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function () { } };
+		  if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function () { } };
 
 			var config = {
 				socketUrl: 'http://themotherofallgames.com/gameupdates',
@@ -40,7 +44,7 @@
 			var c = $("#canvas")[0];
 			UI.init(c, socket);
 			renderer.init(c);
-			renderer.render();
+      renderer.render();
 			$("#log").html("hoi");
 		</script>
 		<script type="text/javascript">
