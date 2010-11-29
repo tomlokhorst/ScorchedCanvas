@@ -29,11 +29,6 @@ namespace ScorchedServer.Models
       return Math.Sqrt(X * X + Y * Y);
     }
 
-    public Vector Add(Vector that)
-    {
-      return FromCart(this.X + that.X, this.Y + that.Y);
-    }
-
     public Vector Add(double dx, double dy)
     {
       return FromCart(this.X + dx, this.Y + dy);
@@ -52,16 +47,6 @@ namespace ScorchedServer.Models
       var dy = Math.Cos(angle) * delta.X + Math.Sin(angle) * delta.Y;
 
       return new Vector(origin.X + dx, origin.Y + dy);
-    }
-
-    public Vector Add(Vector that, double factor)
-    {
-      return FromCart(this.X + that.X * factor, this.Y + that.Y * factor);
-    }
-
-    public Vector Scale(double factor)
-    {
-      return FromCart(this.X * factor, this.Y * factor);
     }
 
     public override String ToString()

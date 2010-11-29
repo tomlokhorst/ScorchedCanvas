@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Drawing;
+using ScorchedServer.Properties;
 
 namespace ScorchedServer.Models
 {
@@ -16,6 +17,7 @@ namespace ScorchedServer.Models
     public double health { get; set; }
     public int score { get; set; }
     public double angle { get; set; }
+    public double barrelAngle { get; set; }
     private FireRequest lastFireRequest;
 
     private IEnumerable<Vector> lastShot;
@@ -27,14 +29,10 @@ namespace ScorchedServer.Models
     
     public Rectangle GetRectangle()
     {
-      var tankHeight = 10;
-      var tankWidth = 40;
-
-      return new Rectangle
-      {
-        LeftTop = Vector.FromCart(position.X - tankWidth / 2, position.Y + tankHeight),
-        RightBottom = Vector.FromCart(position.X + tankWidth / 2, position.Y)
-      };
+      // TODO : Rectangle should be rotated to match player angle.
+      // Collission detection should be changed to line intersection.
+      var posBellow = Vector.FromCart(this.position.X, this.position.Y - Settings.Default.tankHeight / 2);
+      return Rectangle.FromCenter(posBellow, Settings.Default.tankWidth, Settings.Default.tankHeight);
     }
 
 
@@ -59,11 +57,17 @@ namespace ScorchedServer.Models
 
       Func<Rectangle, bool> collision = r => tanks.Any(t => overlap(r, t));
 
-      var rectangles = lastShot.Zip(lastShot.Skip(1), (v1, v2) => new Rectangle { LeftTop = v1, RightBottom = v2 });
+      var rectangles = lastShot.Zip(lastShot.Skip(1), Rectangle.FromVectors);
 
       var limitedShots = rectangles.TakeWhile(r => !collision(r)).Select(r => r.LeftTop);
 
-      var o = new { type = "fire", playerId = id, arc = limitedShots.Take(1000).Select(v => new { x = v.X, y = v.Y }) };
+      var arc = limitedShots.Take(1000).ToArray();
+
+      // In case you shout yourself.
+      if (arc.Length == 0)
+        return null;
+
+      var o = new { type = "fire", playerId = id, arc = arc.Select(v => new { x = v.X, y = v.Y }) };
       return o;
     }
 
@@ -77,7 +81,7 @@ namespace ScorchedServer.Models
       Func<Rectangle, IEnumerable<Player>> collide = r =>
         playersPlusTanks.SelectMany(pt => overlap(r, pt.Item2) ? new[] { pt.Item1 } : Enumerable.Empty<Player>());
 
-      var rectangles = lastShot.Zip(lastShot.Skip(1), (v1, v2) => new Rectangle { LeftTop = v1, RightBottom = v2 });
+      var rectangles = lastShot.Zip(lastShot.Skip(1), Rectangle.FromVectors);
 
       var playersHit = rectangles.Take(1000).SelectMany(collide);
 

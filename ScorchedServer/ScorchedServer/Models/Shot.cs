@@ -24,10 +24,10 @@ namespace ScorchedServer.Models
 
       while (true)
       {
-        Vector dv = a.Scale(dt / mass);
-        p = p.Add(v, dt);
-        p = p.Add(dv, dt / 2);
-        v = v.Add(dv);
+        Vector dv = a * (dt / mass);
+        p = p + v * dt;
+        p = p + dv * (dt / 2);
+        v = v + dv;
         yield return p;
       }
     }
