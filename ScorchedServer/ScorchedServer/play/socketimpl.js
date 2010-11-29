@@ -125,12 +125,10 @@ function serverSideComputeOptimalAngle(p)
 
     if ((a1 * Math.PI * 180) < 2 && a1 != 0)
     {
-      console.log('done' + (a1 * Math.PI * 180));
       break;
     }
     else
     {
-      console.log(a1 * Math.PI * 180);
       dx0 = dx1;
       dy0 = a1;
       a0 = a1;

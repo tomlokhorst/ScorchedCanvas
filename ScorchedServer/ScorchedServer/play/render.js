@@ -110,10 +110,6 @@ var renderer = {
 			tank.body.rightTop = tank.rect.rightTop.move(-config.tankGapWidth, 0);
 			tank.body.leftBottom = tank.rect.leftBottom;
 			tank.body.rightBottom = tank.rect.rightBottom;
-			tank.health = {};
-			tank.health.x = tank.rect.left;
-			tank.health.y = tank.bottom - config.healthIndicatorBottomMargin;
-			tank.health.l = Math.floor(config.tankWidth * player.health);
 			tank.barrel = {};
 			tank.barrel.start = tank.center;
 			tank.barrel.end = tank.center.move(config.barrelLength, 0).rotate(player.barrelAngle - player.angle, tank.barrel.start);
@@ -123,6 +119,11 @@ var renderer = {
 			tank.turret.startAngle = Math.PI - (Math.PI / 3.5);
 			tank.turret.endAngle = 2 * Math.PI + (Math.PI / 3.5);
 			tank.turret.anticlockwise = true;
+			tank.health = {};
+			tank.health.y      =  tank.rect.bottom - config.healthIndicatorBottomMargin
+			tank.health.start  = Vector.fromCart(tank.rect.left, tank.health.y);
+			tank.health.middle = Vector.fromCart(tank.rect.left + config.tankWidth * player.health, tank.health.y);
+			tank.health.end    = Vector.fromCart(tank.rect.left + config.tankWidth, tank.health.y)
 			if (player.id == world.me.id)
 			  world.me.tank = tank;
 
@@ -132,6 +133,7 @@ var renderer = {
 			tank.turret = vectorSpaceRotate(tank.turret, player.angle, tank.center);
 			tank.turret.startAngle += player.angle;
 			tank.turret.endAngle += player.angle;
+			tank.health = vectorSpaceRotate(tank.health, player.angle, tank.center);
 
 			
 			// tank body
@@ -155,6 +157,22 @@ var renderer = {
 			ctx.beginPath();
 			ctx.arc(tank.turret.center.x, tank.turret.center.y, tank.turret.radius, tank.turret.startAngle, tank.turret.endAngle, tank.turret.anticlockwise);
 			ctx.fill();
+			
+			// health
+			
+			ctx.strokeStyle = rgba(255,0,0,0.7);;
+			ctx.beginPath();
+			ctx.moveTo(tank.health.start.x, tank.health.start.y);
+			ctx.lineTo(tank.health.middle.x, tank.health.middle.y);
+			ctx.stroke();
+		  
+			// health bar background
+      
+			ctx.strokeStyle = rgba(255,155,155,0.7);
+			ctx.beginPath();
+			ctx.moveTo(tank.health.middle.x, tank.health.middle.y);
+			ctx.lineTo(tank.health.end.x, tank.health.end.y);
+			ctx.stroke();
 
 			// me circle
 			if(player == world.me) {
@@ -166,23 +184,6 @@ var renderer = {
 				ctx.arc(player.pos, player.posy + 5, 25, 0, 2 * Math.PI, false);
 				ctx.stroke();
 			}
-			
-			// health
-			//console.log(player.health);
-			
-			ctx.strokeStyle = rgba(255,0,0,0.7);;
-			ctx.beginPath();
-			ctx.moveTo(tank.health.x, tank.health.y);
-			ctx.lineTo(tank.health.x + tank.health.l, tank.health.y);
-			ctx.stroke();
-		  
-			// health bar background
-      
-			ctx.strokeStyle = rgba(255,155,155,0.7);
-			ctx.beginPath();
-			ctx.moveTo(tank.health.x + tank.health.l, tank.health.y);
-			ctx.lineTo(tank.right, tank.health.y);
-			ctx.stroke();
 
 		}
 	},
