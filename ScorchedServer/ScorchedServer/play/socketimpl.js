@@ -32,13 +32,14 @@ var socket;
 			});
 		}
 		else if (msg.type == 'newPlayer') {
+    debugger
 		  var p = new Player( { 
 				id: msg.player.id,
 				name: msg.player.name,
 				health: msg.player.health,
 				score: msg.player.score,
-				angle: player.barrelAngle ? player.angle : 0,
-				barrelAngle: player.barrelAngle ? player.barrelAngle : player.angle,
+				angle: msg.player.barrelAngle ? msg.player.angle : 0,
+				barrelAngle: msg.player.barrelAngle ? msg.player.barrelAngle : msg.player.angle,
 				color: msg.player.color,
 				pos: msg.player.pos,
 				posy: world.landscape[msg.player.pos]
