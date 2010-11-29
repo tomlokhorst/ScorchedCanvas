@@ -75,6 +75,11 @@ function Rectangle(top, left, right, bottom)
   this.height = this.top - this.bottom;
   this.center = Vector.fromCart(this.left + this.width / 2, this.bottom + this.height /2);
 
+  this.centerTop    = Vector.fromCart(this.center.x, top);
+  this.centerLeft   = Vector.fromCart(left, this.center.y);
+  this.centerRight  = Vector.fromCart(right, this.center.y);
+  this.centerBottom = Vector.fromCart(this.center.x, bottom);
+
   this.rotate = function(angle, origin)
   {
     var v1 = this.leftTop.rotate(angle, origin);

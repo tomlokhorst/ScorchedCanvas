@@ -25,6 +25,7 @@ var socket;
 					pos: player.pos,
 					posy: world.landscape[player.pos]
 				});
+serverSideComputeOptimalAngle(p);
 				world.players.push(p);
 				  
 				if (player.id == world.playerId)
@@ -43,6 +44,7 @@ var socket;
 				pos: msg.player.pos,
 				posy: world.landscape[msg.player.pos]
 			});
+serverSideComputeOptimalAngle(p);
 			world.players.push(p);
 		}
 		else if (msg.type == 'quitPlayer') {
@@ -70,6 +72,7 @@ var socket;
 			    player.barrelAngle = update.player.barrelAngle || update.player.angle || player.barrelAngle || player.barrelAngle,
 					player.color = update.player.color || player.color;
 					player.pos = update.player.pos || player.pos;
+serverSideComputeOptimalAngle(player);
 				}
 				else if (update.type == 'fire') {
 					world.bullets.push({ id: update.playerId, arc: update.arc, step: 0, collision: true });
@@ -92,4 +95,48 @@ var socket;
 	};
 	socket.onerror = function(e) { /* Not implemented */ };
 })();
+
+// This code must be moved to server side
+function serverSideComputeOptimalAngle(p)
+{
+  p.position = Vector.fromCart(p.pos, p.posy);
+  p.rect = Rectangle.fromCenter(p.position, config.tankWidth, config.tankHeight);
+
+  var dx0 ;
+  var dy0;
+  var a0;
+  var alpha;
+
+  for (var i = -80; i < 80; i++)
+  {
+    alpha = i * Math.PI / 180;
+    var rect = p.rect.rotate(alpha, p.position);
+
+    var dx1 = p.rect.centerRight.x - rect.centerRight.x;
+    var dy1 = world.landscape[Math.round(rect.centerRight.x)] - rect.centerRight.y;
+    var a1 = Math.atan2(dy1, dx1);
+
+    if (dx0 === undefined)
+    {
+      dx0 = dx1;
+      dy0 = a1;
+      a0 = a1;
+    }
+
+    if ((a1 * Math.PI * 180) < 2 && a1 != 0)
+    {
+      console.log('done' + (a1 * Math.PI * 180));
+      break;
+    }
+    else
+    {
+      console.log(a1 * Math.PI * 180);
+      dx0 = dx1;
+      dy0 = a1;
+      a0 = a1;
+    }
+  }
+
+  p.angle = alpha > 0 ? alpha - Math.PI / 6 : alpha + Math.PI / 6;
+}
 
