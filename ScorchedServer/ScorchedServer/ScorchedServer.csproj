@@ -93,6 +93,7 @@
     <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\Landscape.cs" />
+    <Compile Include="Models\LineSegment.cs" />
     <Compile Include="Models\Messages\Message.cs" />
     <Compile Include="Models\Messages\FireRequest.cs" />
     <Compile Include="Models\Messages\GenericMessage.cs" />

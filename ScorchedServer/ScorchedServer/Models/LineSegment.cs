@@ -11,6 +11,7 @@ namespace ScorchedServer.Models
     public Vector V2 { get; private set; }
 
     public LineSegment(Vector v1, Vector v2)
+      : this()
     {
       this.V1 = v1;
       this.V2 = v2;
@@ -50,11 +51,21 @@ namespace ScorchedServer.Models
       return null;
     }
 
-    public IEnumerable<LineSegment> ClosedPath(IEnumerable<Vector> vs)
+    public override String ToString()
+    {
+      return string.Format("{{ Vector: {0}, Vector: {1} }}", this.V1, this.V2);
+    }
+
+    public static LineSegment FromVectors(Vector v1, Vector v2)
+    {
+      return new LineSegment(v1, v2);
+    }
+
+    public static IEnumerable<LineSegment> ClosedPath(IEnumerable<Vector> vs)
     {
       Vector first = Vector.Origin(); // To satisfy compiler
       Vector? prev = null;
-      
+
       foreach (Vector v in vs)
       {
         if (prev != null)
@@ -66,11 +77,6 @@ namespace ScorchedServer.Models
       }
 
       yield return new LineSegment((Vector)prev, first);
-    }
-
-    public override String ToString()
-    {
-      return string.Format("{{ Vector: {0}, Vector: {1} }}", this.V1, this.V2);
     }
   }
 }

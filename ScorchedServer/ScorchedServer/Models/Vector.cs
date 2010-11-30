@@ -11,9 +11,10 @@ namespace ScorchedServer.Models
     public double Y { get; private set; }
 
     private Vector(double x, double y)
+      : this()
     {
-      this.X = x;
-      this.Y = y;
+      X = x;
+      Y = y;
     }
 
     public double Theta()

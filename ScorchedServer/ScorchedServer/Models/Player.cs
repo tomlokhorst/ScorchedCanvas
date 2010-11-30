@@ -68,13 +68,15 @@ namespace ScorchedServer.Models
       if (lastShot == null)
         return null;
 
-      var tanks = players.Select(p => p.GetRectangle());
+      var tanks = from p in players
+                  where p != this
+                  select LineSegment.ClosedPath(p.Shape());
 
-      Func<Rectangle, bool> collision = r => tanks.Any(t => overlap(r, t));
+      Func<LineSegment, bool> collision = l1 => tanks.Any(tank => tank.Any(l2 => l1.Intersection(l2) != null));
 
-      var rectangles = lastShot.Zip(lastShot.Skip(1), Rectangle.FromVectors);
+      var lineSegments = lastShot.Zip(lastShot.Skip(1), LineSegment.FromVectors);
 
-      var limitedShots = rectangles.TakeWhile(r => !collision(r)).Select(r => r.LeftTop);
+      var limitedShots = lineSegments.TakeWhile(r => !collision(r)).Select(l => l.V1);
 
       var arc = limitedShots.Take(1000).ToArray();
 
@@ -84,6 +86,11 @@ namespace ScorchedServer.Models
 
       var o = new { type = "fire", playerId = id, arc = arc.Select(v => new { x = v.X, y = v.Y }) };
       return o;
+    }
+
+    private Vector intersect(LineSegment s, IEnumerable<Vector> tank)
+    {
+      throw new NotImplementedException();
     }
 
     internal IEnumerable<object> getPlayersHitPlusWin(IEnumerable<Player> players)
