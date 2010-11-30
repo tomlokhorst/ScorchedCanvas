@@ -52,13 +52,15 @@ var renderer = {
 		ctx.fillRect(0, 0, config.screenSize.width, config.screenSize.height);
 
     for (var y = 0; y < config.screenSize.height; y++)
-    for (var x = 0; x < config.screenSize.width; x++)
     {
-      if (world.starfield[y][x])
+      var alpha = (y / config.screenSize.height) - .2;
+      for (var x = 0; x < config.screenSize.width; x++)
       {
-        var alpha = (y / config.screenSize.height) - .2;
-        ctx.fillStyle = rgba(255, 255, 255, alpha);
-        ctx.fillRect(x, y, 1, 1);
+        if (world.starfield[y][x])
+        {
+          ctx.fillStyle = rgba(255, 255, 255, alpha);
+          ctx.fillRect(x, y, 1, 1);
+        }
       }
     }
 	},
@@ -213,8 +215,7 @@ var renderer = {
 				ctx.arc(bulletCoord.x, bulletCoord.y, 3, 0, 2 * Math.PI, false);
 				ctx.fill();
 			}
-			else if (bullet.collision) {
-      debugger
+			else if (bullet.collision && bullet.arc.length > 0) {
 				var lastCoord = bullet.arc[bullet.arc.length - 1];
 				world.explosions.push({
 					x: lastCoord.x,
