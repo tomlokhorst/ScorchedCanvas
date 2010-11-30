@@ -40,5 +40,14 @@ namespace ScorchedServer.Properties {
                 return ((int)(this["tankHeight"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int tankGapWidth {
+            get {
+                return ((int)(this["tankGapWidth"]));
+            }
+        }
     }
 }

@@ -35,9 +35,12 @@ namespace ScorchedServer.Models
       return Rectangle.FromCenter(posBellow, Settings.Default.tankWidth, Settings.Default.tankHeight);
     }
 
-    public IEnumerable<Vector> Shape()
+    public IEnumerable<Vector> Shape
     {
-      return basicShape().Select(v => v.Rotate(this.angle, this.position));
+      get
+      {
+        return basicShape().Select(v => v.Rotate(this.angle, this.position));
+      }
     }
 
     private IEnumerable<Vector> basicShape()
@@ -45,8 +48,8 @@ namespace ScorchedServer.Models
       double dx = Settings.Default.tankWidth / 2;
       double dy = Settings.Default.tankHeight / 2;
 
-      yield return Vector.FromCart(this.position.X + dx, this.position.Y + dy);
-      yield return Vector.FromCart(this.position.X - dx, this.position.Y + dy);
+      yield return Vector.FromCart(this.position.X + dx + Settings.Default.tankGapWidth, this.position.Y + dy);
+      yield return Vector.FromCart(this.position.X - dx - Settings.Default.tankGapWidth, this.position.Y + dy);
       yield return Vector.FromCart(this.position.X - dx, this.position.Y - dy);
       yield return Vector.FromCart(this.position.X + dx, this.position.Y - dy);
     }
@@ -70,9 +73,9 @@ namespace ScorchedServer.Models
 
       var tanks = from p in players
                   where p != this
-                  select LineSegment.ClosedPath(p.Shape());
+                  select new { player = p, lines = LineSegment.ClosedPath(p.Shape) };
 
-      Func<LineSegment, bool> collision = l1 => tanks.Any(tank => tank.Any(l2 => l1.Intersection(l2) != null));
+      Func<LineSegment, bool> collision = l1 => tanks.Any(tank => tank.lines.Any(l2 => l1.Intersection(l2) != null));
 
       var lineSegments = lastShot.Zip(lastShot.Skip(1), LineSegment.FromVectors);
 
@@ -80,17 +83,8 @@ namespace ScorchedServer.Models
 
       var arc = limitedShots.Take(1000).ToArray();
 
-      // In case you shout yourself.
-      if (arc.Length == 0)
-        return null;
-
       var o = new { type = "fire", playerId = id, arc = arc.Select(v => new { x = v.X, y = v.Y }) };
       return o;
-    }
-
-    private Vector intersect(LineSegment s, IEnumerable<Vector> tank)
-    {
-      throw new NotImplementedException();
     }
 
     internal IEnumerable<object> getPlayersHitPlusWin(IEnumerable<Player> players)
