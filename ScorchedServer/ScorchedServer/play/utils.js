@@ -5,7 +5,7 @@ function rgba(r,g,b,a)
 
 function assert(expr, msg)
 {
-	if (expr) {
-		throw msg;
-	}
+  if (expr) {
+    throw msg;
+  }
 }

@@ -25,7 +25,7 @@ function Vector(x, y)
   
   this.scale = function(factor)
   {
- 	  return Vector.fromCart(x * factor, y * factor);
+     return Vector.fromCart(x * factor, y * factor);
   }
   
   this.rotate = function(angle, origin)
@@ -48,12 +48,12 @@ function Vector(x, y)
 
 Vector.fromPolar = function(th, r)
 {
-	return new Vector(Math.cos(th) * r, Math.sin(th) * r);
+  return new Vector(Math.cos(th) * r, Math.sin(th) * r);
 }
 
 Vector.fromCart = function(x, y)
 {
-	return new Vector(x, y);
+  return new Vector(x, y);
 }
 
 Vector.origin = Vector.fromCart(0, 0);

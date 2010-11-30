@@ -1,67 +1,67 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>The Mother of All Games</title>
-		<link rel="stylesheet" type="text/css" href="style.css"/>
-		<link rel="stylesheet" type="text/css" href="http://q42.nl/w00tcamp/w00tcamp-footer.css"/>
-		<meta name="viewport" content="user-scalable=no, width=device-width" />
-   	<meta name="apple-mobile-web-app-capable" content="yes" /> 
-		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-	</head>
-	<body>
+  <head>
+    <title>The Mother of All Games</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://q42.nl/w00tcamp/w00tcamp-footer.css"/>
+    <meta name="viewport" content="user-scalable=no, width=device-width" />
+     <meta name="apple-mobile-web-app-capable" content="yes" /> 
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  </head>
+  <body>
 
-		<div id="log">log</div>
-		<canvas id="canvas"></canvas>
-		<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
-		<script type="text/javascript">
-		  if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function () { } };
+    <div id="log">log</div>
+    <canvas id="canvas"></canvas>
+    <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+    <script type="text/javascript">
+      if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function () { } };
 
-			var config = {
-				socketUrl: 'http://themotherofallgames.com/gameupdates',
-				screenSize: {
-					width: 800,
-					height: 600
-				},
-				debug: false,
-				tankWidth: 40,
-				tankHeight: 8,
-				tankGapWidth: 4,
-				healthIndicatorBottomMargin: 5,
-				barrelLength: 30,
-				barrelThickness: 3,
-				roundTime: 10000
-			};
-		</script>
-		<script type="text/javascript" src="utils.js"></script>
-		<script type="text/javascript" src="vector.js"></script>
-		<script type="text/javascript" src="player.js"></script>
-		<script type="text/javascript" src="world.js"></script>
-		<script type="text/javascript" src="nepsocket.js"></script>		
-		<script type="text/javascript" src="render.js"></script>
-		<script type="text/javascript" src="userinput.js"></script>
-		<script type="text/javascript" src="socketimpl.js"></script>
-		<script type="text/javascript">
-			var c = $("#canvas")[0];
-			UI.init(c, socket);
-			renderer.init(c);
+      var config = {
+        socketUrl: 'http://themotherofallgames.com/gameupdates',
+        screenSize: {
+          width: 800,
+          height: 600
+        },
+        debug: false,
+        tankWidth: 40,
+        tankHeight: 8,
+        tankGapWidth: 4,
+        healthIndicatorBottomMargin: 5,
+        barrelLength: 30,
+        barrelThickness: 3,
+        roundTime: 10000
+      };
+    </script>
+    <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="vector.js"></script>
+    <script type="text/javascript" src="player.js"></script>
+    <script type="text/javascript" src="world.js"></script>
+    <script type="text/javascript" src="nepsocket.js"></script>    
+    <script type="text/javascript" src="render.js"></script>
+    <script type="text/javascript" src="userinput.js"></script>
+    <script type="text/javascript" src="socketimpl.js"></script>
+    <script type="text/javascript">
+      var c = $("#canvas")[0];
+      UI.init(c, socket);
+      renderer.init(c);
       renderer.render();
-			$("#log").html("hoi");
-		</script>
-		<script type="text/javascript">
-			var _gaq = _gaq || [];
-			_gaq.push([ '_setAccount', 'UA-2714808-12' ]);
-			_gaq.push([ '_trackPageview' ]);
-		
-			(function() {
-				var ga = document.createElement('script');
-				ga.type = 'text/javascript';
-				ga.async = true;
-				ga.src = ('https:' == document.location.protocol ? 'https://ssl'
-						: 'http://www')
-						+ '.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0];
-				s.parentNode.insertBefore(ga, s);
-			})();
-		</script>
-	</body>
+      $("#log").html("hoi");
+    </script>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push([ '_setAccount', 'UA-2714808-12' ]);
+      _gaq.push([ '_trackPageview' ]);
+    
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl'
+            : 'http://www')
+            + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
 </html>

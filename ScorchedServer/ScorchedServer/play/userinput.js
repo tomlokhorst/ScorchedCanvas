@@ -80,11 +80,11 @@ var UI = {
     world.guiAim = false;
     //console.log("fire");
     UI.socket.send({
-  		type : 'fireRequest',
-  		angle : world.guiAngle,
-  		barrelAngle : world.guiAngle,
-  		power : world.guiPower,
-  		weaponType : 'cannon'
-  	});
+      type : 'fireRequest',
+      angle : world.guiAngle,
+      barrelAngle : world.guiAngle,
+      power : world.guiPower,
+      weaponType : 'cannon'
+    });
   },
 };
