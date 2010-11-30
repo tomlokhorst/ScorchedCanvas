@@ -35,6 +35,21 @@ namespace ScorchedServer.Models
       return Rectangle.FromCenter(posBellow, Settings.Default.tankWidth, Settings.Default.tankHeight);
     }
 
+    public IEnumerable<Vector> Shape()
+    {
+      return basicShape().Select(v => v.Rotate(this.angle, this.position));
+    }
+
+    private IEnumerable<Vector> basicShape()
+    {
+      double dx = Settings.Default.tankWidth / 2;
+      double dy = Settings.Default.tankHeight / 2;
+
+      yield return Vector.FromCart(this.position.X + dx, this.position.Y + dy);
+      yield return Vector.FromCart(this.position.X - dx, this.position.Y + dy);
+      yield return Vector.FromCart(this.position.X - dx, this.position.Y - dy);
+      yield return Vector.FromCart(this.position.X + dx, this.position.Y - dy);
+    }
 
     public void shoot(FireRequest fr)
     {

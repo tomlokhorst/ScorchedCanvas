@@ -5,18 +5,15 @@ using System.Web;
 
 namespace ScorchedServer.Models
 {
-  public class Vector
+  public struct Vector
   {
-    private readonly double x;
-    private readonly double y;
-
-    public double X { get { return x; } }
-    public double Y { get { return y; } }
+    public double X { get; private set; }
+    public double Y { get; private set; }
 
     private Vector(double x, double y)
     {
-      this.x = x;
-      this.y = y;
+      this.X = x;
+      this.Y = y;
     }
 
     public double Theta()
@@ -85,3 +82,4 @@ namespace ScorchedServer.Models
     }
   }
 }
+
