@@ -259,20 +259,23 @@ var renderer = {
 		world.explosions = $.grep(world.explosions, function(exp) { return exp.duration < 500; });
 	},
 
-	drawUI : function(tick) {
+	drawUI : function(tick)
+	{
+		// position, velocity, acceleration, mass
+		var pos = new Vector(world.me.pos, world.me.posy);
+		var vel = Vector.fromPolar(world.guiAngle, world.guiPower);
+		var acc = new Vector(0,-1);
 		if (world.guiAim) {
 			//renderer._drawAimArc(1);
 			renderer._lastAim = +new Date;
 
-			// position, velocity, acceleration, mass
-			var pos = new Vector(world.me.pos, world.me.posy);
-			var vel = Vector.fromPolar(world.guiAngle, world.guiPower);
-			var acc = new Vector(0,-1);
-			renderer.drawTrace(pos, vel, acc, 100);
+			renderer.drawTrace(pos, vel, acc, 100, undefined, 1);
 		} else {
 			var fade = new Date - renderer._lastAim;
-			if (fade < 200) {
+			if (fade < 200)
+			{
 				//renderer._drawAimArc((200 - fade) / 200);
+				renderer.drawTrace(pos, vel, acc, 100, undefined, (200 - fade) / 200);
 			}
 		}
 	},
@@ -349,7 +352,7 @@ var renderer = {
 		ctx.fillRect(x,y,width,height*count);
 	},
 
-	drawTrace : function(p, v, a, m, time) { // position, velocity, accelleration, mass
+	drawTrace : function(p, v, a, m, time, alpha) { // position, velocity, accelleration, mass
 		time = time || 16;
 		var path = new Array();
 
@@ -379,7 +382,7 @@ var renderer = {
 
 		var gradientEnd = maxX - world.me.pos > world.me.pos - minX ? maxX : minX;
 		var gradient = ctx.createLinearGradient(world.me.pos, world.me.posy, gradientEnd, world.me.posy+400);
-		gradient.addColorStop(0, rgba(255, 255, 255));
+		gradient.addColorStop(0, rgba(255, 255, 255, alpha));
 		gradient.addColorStop(.4, rgba(255, 255, 255, 0));
 		ctx.strokeStyle = gradient;
 		ctx.lineWidth = 2;
