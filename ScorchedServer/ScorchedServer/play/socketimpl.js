@@ -4,12 +4,8 @@ var socket;
   socket = new NepSocket(config.socketUrl);
   socket.onopen = function(e) { /* Not implemented */ };
   socket.onclose = function(e) { /* Not implemented */ };
-  socket.onmessage = function(msg) {
-
-  
-    console.log('onmessage:' + msg.type);
-    console.log(msg);
-    
+  socket.onmessage = function(msg)
+  {
     if (msg.type == 'gameInit') {      
       world.landscape = msg.landscape;
       world.playerId = msg.playerId;
@@ -19,9 +15,10 @@ var socket;
           id: player.id,
           health: player.health,
           score: player.score,
-          angle: player.barrelAngle ? player.angle : 0,
-          barrelAngle: player.barrelAngle ? player.barrelAngle : player.angle,
-          color: player.color, 
+          angle: player.angle,
+          barrelAngle: player.barrelAngle,
+          color: player.color,
+          shape: player.Shape,
           pos: player.pos,
           posy: world.landscape[player.pos]
         });

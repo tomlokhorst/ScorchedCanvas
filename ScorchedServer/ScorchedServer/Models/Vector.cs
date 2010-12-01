@@ -42,7 +42,7 @@ namespace ScorchedServer.Models
       var delta = this - origin;
 
       var dx = Math.Cos(angle) * delta.X - Math.Sin(angle) * delta.Y;
-      var dy = Math.Cos(angle) * delta.X + Math.Sin(angle) * delta.Y;
+      var dy = Math.Sin(angle) * delta.X + Math.Cos(angle) * delta.Y;
 
       return new Vector(origin.X + dx, origin.Y + dy);
     }

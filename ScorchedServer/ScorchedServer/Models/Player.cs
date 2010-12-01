@@ -48,8 +48,8 @@ namespace ScorchedServer.Models
       double dx = Settings.Default.tankWidth / 2;
       double dy = Settings.Default.tankHeight / 2;
 
-      yield return Vector.FromCart(this.position.X + dx + Settings.Default.tankGapWidth, this.position.Y + dy);
-      yield return Vector.FromCart(this.position.X - dx - Settings.Default.tankGapWidth, this.position.Y + dy);
+      yield return Vector.FromCart(this.position.X + dx - Settings.Default.tankGapWidth, this.position.Y + dy);
+      yield return Vector.FromCart(this.position.X - dx + Settings.Default.tankGapWidth, this.position.Y + dy);
       yield return Vector.FromCart(this.position.X - dx, this.position.Y - dy);
       yield return Vector.FromCart(this.position.X + dx, this.position.Y - dy);
     }
