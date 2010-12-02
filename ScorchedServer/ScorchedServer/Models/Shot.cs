@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Drawing;
 
 namespace ScorchedServer.Models
 {
   public class Shot
   {
-    public Weapon Weapon { get; set; }
-    public Point Origin { get; set; }
+    public string Weapon { get; set; }
+    public Vector Origin { get; set; }
     public double Angle { get; set; }
     public double Power { get; set; }
 
     // p = start position
-    // v = star velocity
+    // v = start velocity
     // a = acceleration
     public static IEnumerable<Vector> Trace(Vector p, Vector v, Vector a, float mass = 1)
     {
