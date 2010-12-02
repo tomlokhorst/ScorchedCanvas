@@ -45,14 +45,16 @@ namespace ScorchedServer.Models
 
     private double computeOptimalAngle(Vector v)
     {
-      var rect = Rectangle.FromCenter(v, Settings.Default.tankWidth, Settings.Default.tankHeight);
+      var hw = Settings.Default.tankWidth / 2;
+      var vl = v - Vector.FromCart(hw, 0);
+      var vr = v + Vector.FromCart(hw, 0);
 
-      var dx = rect.CenterRight.X - rect.Center.X;
-      var dy = Landscape.fakeLandscape[Convert.ToInt32(rect.CenterRight.X)] - rect.Center.Y;
+      var dx = vr.X - v.X;
+      var dy = Landscape.fakeLandscape[Convert.ToInt32(vr.X)] - v.Y;
       var alpha = Math.Atan2(dy, dx);
 
-      dx = rect.Center.X - rect.CenterLeft.X;
-      dy = rect.Center.Y - Landscape.fakeLandscape[Convert.ToInt32(rect.CenterLeft.X)];
+      dx = v.X - vl.X;
+      dy = v.Y - Landscape.fakeLandscape[Convert.ToInt32(vl.X)];
       var beta = Math.Atan2(dy, dx);
 
       return (alpha + beta) / 2;

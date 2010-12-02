@@ -25,14 +25,6 @@ namespace ScorchedServer.Models
     {
       angle = Convert.ToInt32(Math.PI / 2);
     }
-    
-    public Rectangle GetRectangle()
-    {
-      // TODO : Rectangle should be rotated to match player angle.
-      // Collission detection should be changed to line intersection.
-      var posBellow = Vector.FromCart(this.position.X, this.position.Y - Settings.Default.tankHeight / 2);
-      return Rectangle.FromCenter(posBellow, Settings.Default.tankWidth, Settings.Default.tankHeight);
-    }
 
     public IEnumerable<Vector> Shape
     {
@@ -95,9 +87,10 @@ namespace ScorchedServer.Models
         }
       }
 
+      yield return new { type = "fire", playerId = id, arc = arc.Select(v => new { x = v.X, y = v.Y }) };
+
       if (other != null)
       {
-        yield return new { type = "fire", playerId = id, arc = arc.Select(v => new { x = v.X, y = v.Y }) };
 
         other.health -= 0.1;
         yield return new { type = "updatePlayer", player = other };
@@ -112,84 +105,6 @@ namespace ScorchedServer.Models
                where intersection != null
                select new Tuple<Player, Vector>(tank.Item1, (Vector)intersection)
               ).FirstOrDefault();
-    }
-
-    //internal object getLastShot(IEnumerable<Player> players)
-    //{
-    //  if (lastShot == null)
-    //    return null;
-
-    //  var tanks = from p in players
-    //              where p != this
-    //              select new { player = p, lines = LineSegment.ClosedPath(p.Shape) };
-
-    //  Func<LineSegment, bool> collision = l1 => tanks.Any(tank => tank.lines.Any(l2 => l1.Intersection(l2) != null));
-
-    //  var lineSegments = lastShot.Zip(lastShot.Skip(1), LineSegment.FromVectors);
-
-    //  var limitedShots = lineSegments.TakeWhile(r => !collision(r)).Select(l => l.V1);
-
-    //  var arc = limitedShots.Take(1000).ToArray();
-
-    //  var o = new { type = "fire", playerId = id, arc = arc.Select(v => new { x = v.X, y = v.Y }) };
-    //  return o;
-    //}
-
-    //internal IEnumerable<object> getPlayersHitPlusWin(IEnumerable<Player> players)
-    //{
-    //  if (lastShot == null)
-    //    yield break;
-
-    //  var playersPlusTanks = players.Select(p => Tuple.Create(p, p.GetRectangle()));
-
-    //  Func<Rectangle, IEnumerable<Player>> collide = r =>
-    //    playersPlusTanks.SelectMany(pt => overlap(r, pt.Item2) ? new[] { pt.Item1 } : Enumerable.Empty<Player>());
-
-    //  var rectangles = lastShot.Zip(lastShot.Skip(1), Rectangle.FromVectors);
-
-    //  var playersHit = rectangles.Take(1000).SelectMany(collide);
-
-    //  foreach (var p in playersHit)
-    //  {
-    //    p.health -= 0.1;
-
-    //    yield return new { type = "updatePlayer", player = p };
-    //  }
-    //}
-
-    //internal bool overlap(Rectangle r1, Rectangle r2)
-    //{
-    //  return (r1.LeftTop.X < r2.RightBottom.X && r1.RightBottom.X > r2.LeftTop.X &&
-    //        r1.LeftTop.Y > r2.RightBottom.Y && r1.RightBottom.Y < r2.LeftTop.Y);
-    //}
-  }
-
-  public static class Linq
-  {
-    public static IEnumerable<C> Zip<A, B, C>(this IEnumerable<A> xs, IEnumerable<B> ys, Func<A, B, C> f)
-    {
-      var exs = xs.GetEnumerator();
-      var eys = ys.GetEnumerator();
-
-      while (exs.MoveNext() && eys.MoveNext())
-        yield return f(exs.Current, eys.Current);
-    }
-  }
-
-  public class Tuple<A, B>
-  {
-    public A Item1;
-    public B Item2;
-
-    public Tuple(A a, B b)
-    {
-      Item1 = a;
-      Item2 = b;
-    }
-
-    public static Tuple<C, D> Create<C, D>(C x, D y)
-    {
-      return new Tuple<C, D>(x, y);
     }
   }
 }

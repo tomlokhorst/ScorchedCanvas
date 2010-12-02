@@ -104,11 +104,7 @@ namespace ScorchedServer.Models
 
         foreach (var p in players)
         {
-          var o = p.getLastShot(players);
-          if (o != null)
-            state.Add(o);
-
-          state.AddRange(p.getPlayersHitPlusWin(players));
+          state.AddRange(p.getLastShotAndPlayerHit(players));
 
           p.clearLastShot();
         }
