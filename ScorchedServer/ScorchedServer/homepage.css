@@ -1,47 +1,84 @@
-body {
-	width: 1000px;
+body
+{
+  background: #141428;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: sans-serif, Helvetica;
+	width: 960px;
 	margin: 0 auto;
-	padding: 20px;
+  padding-bottom: 60px;
+}
+
+#content
+{
+  padding: 0 20px;
+}
+
+#w00tcamp-footer
+{
 	-moz-box-shadow: 0 0 8px #888;
 	-webkit-box-shadow: 0 0 8px #888;
 	box-shadow: 0 0 8px #888;
-	font-family: Verdana;
+  margin-top: 0px;
 }
 
-h1 {
-	text-shadow: -1px -1px 2px #00F;
+h1
+{
+  font-weight: normal;
+	text-shadow: -1px -1px 8px #888;
 	text-align: center;
 }
 
-a {
-	color: darkblue;
+h2
+{
+  clear: both;
+  font-weight: normal;
+	text-shadow: -1px -1px 4px #888;
+  padding: 20px 0 0 16px;
 }
 
-.screenshot {
+a
+{
+	font-family: Verdana;
+	color: #000;
+}
+
+.screenshot
+{
 	float: left;
 }
-.screenshot img {
+
+.screenshot img
+{
 	width: 400px;
 	height: 300px;
-	-moz-box-shadow: 5px 5px 5px #888;
-	-webkit-box-shadow: 5px 5px 5px #888;
-	box-shadow: 5px 5px 5px #888;
+	-moz-box-shadow: 0px 0px 25px #888;
+	-webkit-box-shadow: 0px 0px 25px #888;
+	box-shadow: 0px 0px 25px #888;
 	border: none;
 }
 
-.description {
-	color: #fff;
+.box
+{
 	padding: 10px 20px;
-	margin-left: 420px;
-	background-color: #3F9F9F;
+	background-color: #248C24;
 	-moz-border-radius: 16px;
 	-webkit-border-radius: 16px;
 	border-radius: 16px;
-	-moz-box-shadow: 5px 5px 5px #888;
-	-webkit-box-shadow: 5px 5px 5px #888;
-	box-shadow: 5px 5px 5px #888;
+	-moz-box-shadow: 0px 0px 25px #888;
+	-webkit-box-shadow: 0px 0px 25px #888;
+	box-shadow: 0px 0px 25px #888;
 }
 
-.clear {
-	clear: both;
+.description
+{
+	margin-left: 420px;
+  min-height: 280px;
 }
+
+img.history
+{
+  border: 2px solid #141428;
+  width: 285px;
+  height: 214;
+}
+
