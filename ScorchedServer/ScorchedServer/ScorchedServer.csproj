@@ -115,6 +115,13 @@
     <Content Include="Content\Site.css" />
     <Content Include="homepage.css" />
     <Content Include="index.html" />
+    <Content Include="media\2010-11-24_1630.jpg" />
+    <Content Include="media\2010-11-26_1233.jpg" />
+    <Content Include="media\2010-11-26_1440.jpg" />
+    <Content Include="media\2010-11-26_1647.jpg" />
+    <Content Include="media\2010-11-27_0320.jpg" />
+    <Content Include="media\2010-11-27_1700.png" />
+    <Content Include="media\2010-12-04-1700.png" />
     <Content Include="play\index.html" />
     <Content Include="play\jquery-1.4.4.min.js" />
     <Content Include="play\nepsocket.js" />
@@ -126,7 +133,6 @@
     <Content Include="play\utils.js" />
     <Content Include="play\vector.js" />
     <Content Include="play\world.js" />
-    <Content Include="screenshot.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
