@@ -36,7 +36,7 @@ var socket;
         name: msg.player.name,
         health: msg.player.health,
         score: msg.player.score,
-        angle: msg.player.barrelAngle,
+        angle: msg.player.angle,
         barrelAngle: msg.player.barrelAngle,
         color: msg.player.color,
         pos: msg.player.pos,
