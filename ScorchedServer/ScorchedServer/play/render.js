@@ -1,6 +1,8 @@
 var renderer = {
   canvas: null,
   ctx: null,
+  backgroundCanvas: null,
+  backgroundCtx: null,
   tick: 0,
   lastTimeDrawn: new Date().valueOf(),
 
@@ -12,6 +14,13 @@ var renderer = {
     renderer.ctx = renderer.canvas.getContext("2d");
     renderer.ctx.scale(1, -1);
     renderer.ctx.translate(0, -config.screenSize.height);
+
+    renderer.backgroundCanvas = document.createElement("canvas");
+    renderer.backgroundCanvas.width = renderer.canvas.width;
+    renderer.backgroundCanvas.height = renderer.canvas.height;
+    renderer.backgroundCtx = renderer.backgroundCanvas.getContext("2d");
+
+    renderer.drawBackground();
   },
 
   render: function ()
@@ -19,11 +28,17 @@ var renderer = {
     var now = new Date().valueOf();
     var updateDelta = now - renderer.lastTimeDrawn;
 
-    renderer.drawBackground(updateDelta);
+    document.title = "FPS: " + Math.floor(1000 / updateDelta);
+
+    if (!renderer.firstLanscape && world.landscape.length)
+    {
+      renderer.firstLanscape = true;
+      renderer.drawLandscape();
+    }
+
+    renderer.ctx.drawImage(renderer.backgroundCanvas, 0, 0);
 
     renderer.drawBullets(updateDelta);
-
-    renderer.drawLandscape(updateDelta);
 
     renderer._flip(renderer.drawTitle)(updateDelta);
     if (!world.gameover)
@@ -40,16 +55,7 @@ var renderer = {
 
   drawBackground: function (tick)
   {
-    var ctx = renderer.ctx;
-    // 256 color background
-    //var steps = 32;
-    //var stepSize = config.screenSize.height/steps;
-    //
-    //for( var step=steps ; step>=0 ; step--) {
-    //	var color = step/steps * 255;
-    //	ctx.fillStyle = rgba(color, 128 + color/2, 128 + color/2);
-    //	ctx.fillRect(0, step * stepSize, config.screenSize.width, (step+1) * stepSize);
-    //}
+    var ctx = renderer.backgroundCtx;
     ctx.fillStyle = '#141428';
     ctx.fillRect(0, 0, config.screenSize.width, config.screenSize.height);
 
@@ -65,6 +71,21 @@ var renderer = {
         }
       }
     }
+  },
+
+  drawLandscape: function ()
+  {
+    var ctx = renderer.backgroundCtx;
+    ctx.fillStyle = '#248C24';
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    for (var x = 0; x < world.landscape.length; x++)
+    {
+      var y = world.landscape[x];
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(x, 0);
+    ctx.fill();
   },
 
   drawTitle: function (updateDelta)
@@ -100,21 +121,6 @@ var renderer = {
       ctx.fillText(subText, centerx - ctx.measureText(subText).width / 2, 100);
     }
 
-  },
-
-  drawLandscape: function (tick)
-  {
-    var ctx = renderer.ctx;
-    ctx.fillStyle = '#248C24'; // rgba(64,255,64);
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    for (var x = 0; x < world.landscape.length; x++)
-    {
-      var y = world.landscape[x];
-      ctx.lineTo(x, y);
-    }
-    ctx.lineTo(x, 0);
-    ctx.fill();
   },
 
   drawPlayers: function (updateDelta)
