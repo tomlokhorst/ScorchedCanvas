@@ -22,6 +22,7 @@ var socket;
           pos: player.pos,
           posy: world.landscape[player.pos]
         });
+        p.computeVectors();
         world.players.push(p);
           
         if (player.id == world.playerId)
@@ -35,12 +36,13 @@ var socket;
         name: msg.player.name,
         health: msg.player.health,
         score: msg.player.score,
-        angle: msg.player.barrelAngle ? msg.player.angle : 0,
-        barrelAngle: msg.player.barrelAngle ? msg.player.barrelAngle : msg.player.angle,
+        angle: msg.player.barrelAngle,
+        barrelAngle: msg.player.barrelAngle,
         color: msg.player.color,
         pos: msg.player.pos,
         posy: world.landscape[msg.player.pos]
       });
+      p.computeVectors();
       world.players.push(p);
     }
     else if (msg.type == 'quitPlayer') {
@@ -62,12 +64,12 @@ var socket;
           var player = filtered[0];
           player.name = update.player.name || player.name;
           player.health = update.player.health || player.health;
-          console.log("socket health" + player.health);
           player.score = update.player.score || player.score;
           player.angle = update.player.angle || player.angle;
-          player.barrelAngle = update.player.barrelAngle || update.player.angle;
+          player.barrelAngle = update.player.barrelAngle || player.barrelAngle;
           player.color = update.player.color || player.color;
           player.pos = update.player.pos || player.pos;
+          player.computeVectors();
         }
         else if (update.type == 'fire') {
           world.bullets.push({ id: update.playerId, arc: update.arc, step: 0, collision: true });
@@ -78,11 +80,14 @@ var socket;
       });
     }
     else if(msg.type == 'aim') {
-      for(var i=0; i<world.players.length; i++) {
-        if(world.players[i].id == msg.playerId) {
-          world.players[i].barrelAngle = msg.barrelAngle || msg.angle;
+      $(world.players).each(function (_, player)
+      {
+        if (player.id == msg.playerId)
+        {
+          player.barrelAngle = msg.angle;
+          player.computeVectors();
         }
-      }
+      });
     }
     else {
       console.log('UNIMPLEMENTED: ' + msg.type);

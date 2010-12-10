@@ -129,40 +129,7 @@ var renderer = {
     for (var i = 0; i < world.players.length; i++)
     {
       var player = world.players[i];
-
-      var tank = {};
-      tank.center = Vector.fromCart(player.pos, player.posy)
-      tank.rect = Rectangle.fromCenter(tank.center, config.tankWidth, config.tankHeight);
-      tank.body = {};
-      tank.body.leftTop = tank.rect.leftTop.add(config.tankGapWidth, 0);
-      tank.body.rightTop = tank.rect.rightTop.add(-config.tankGapWidth, 0);
-      tank.body.leftBottom = tank.rect.leftBottom;
-      tank.body.rightBottom = tank.rect.rightBottom;
-      tank.barrel = {};
-      tank.barrel.start = tank.center;
-      tank.barrel.end = tank.center.add(config.barrelLength, 0).rotate(player.barrelAngle - player.angle, tank.barrel.start);
-      tank.turret = {};
-      tank.turret.center = Vector.fromCart(tank.center.x, tank.rect.bottom - tank.rect.height + 1);
-      tank.turret.radius = 2 * config.tankWidth / 4;
-      tank.turret.startAngle = Math.PI - (Math.PI / 3.5);
-      tank.turret.endAngle = 2 * Math.PI + (Math.PI / 3.5);
-      tank.turret.anticlockwise = true;
-      tank.health = {};
-      tank.health.y = tank.rect.bottom - config.healthIndicatorBottomMargin
-      tank.health.start = Vector.fromCart(tank.rect.left, tank.health.y);
-      tank.health.middle = Vector.fromCart(tank.rect.left + config.tankWidth * player.health, tank.health.y);
-      tank.health.end = Vector.fromCart(tank.rect.left + config.tankWidth, tank.health.y)
-      if (player.id == world.me.id)
-        world.me.tank = tank;
-
-      // Rotate tank
-      tank.body = vectorSpaceRotate(tank.body, player.angle, tank.center);
-      tank.barrel = vectorSpaceRotate(tank.barrel, player.angle, tank.center);
-      tank.turret = vectorSpaceRotate(tank.turret, player.angle, tank.center);
-      tank.turret.startAngle += player.angle;
-      tank.turret.endAngle += player.angle;
-      tank.health = vectorSpaceRotate(tank.health, player.angle, tank.center);
-
+      var tank = player.tank;
 
       // tank body
       ctx.fillStyle = player.color;
@@ -201,19 +168,6 @@ var renderer = {
       ctx.moveTo(tank.health.middle.x, tank.health.middle.y);
       ctx.lineTo(tank.health.end.x, tank.health.end.y);
       ctx.stroke();
-
-      // player shape
-      //if (player.shape)
-      //{
-      //  ctx.strokeStyle = '#fff';
-      //  ctx.beginPath();
-      //  ctx.moveTo(player.shape[0].X, player.shape[0].Y);
-      //  ctx.lineTo(player.shape[1].X, player.shape[1].Y);
-      //  ctx.lineTo(player.shape[2].X, player.shape[2].Y);
-      //  ctx.lineTo(player.shape[3].X, player.shape[3].Y);
-      //  ctx.lineTo(player.shape[0].X, player.shape[0].Y);
-      //  ctx.stroke();
-      //}
 
       // me circle
       if (player == world.me)
