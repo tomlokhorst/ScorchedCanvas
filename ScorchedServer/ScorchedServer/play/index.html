@@ -32,8 +32,9 @@
         roundTime: 10000
       };
     </script>
-    <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="coffee-script.js"></script>
     <script type="text/javascript" src="vector.js"></script>
+    <script type="text/javascript" src="rectangle.js"></script>
     <script type="text/javascript" src="player.js"></script>
     <script type="text/javascript" src="world.js"></script>
     <script type="text/javascript" src="nepsocket.js"></script>    
@@ -41,11 +42,14 @@
     <script type="text/javascript" src="userinput.js"></script>
     <script type="text/javascript" src="socketimpl.js"></script>
     <script type="text/javascript">
-      var c = $("#canvas")[0];
-      UI.init(c, socket);
-      renderer.init(c);
-      renderer.render();
-      $("#log").html("hoi");
+      $(document).ready(function ()
+      {
+        var c = $("#canvas")[0];
+        UI.init(c, socket);
+        renderer.init(c);
+        renderer.render();
+        $("#log").html("hoi");
+      });
     </script>
     <script type="text/javascript">
       var _gaq = _gaq || [];
