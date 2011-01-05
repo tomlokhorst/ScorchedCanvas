@@ -37,5 +37,13 @@ Vector.fromPolar = (th, r) ->
 Vector.fromCart = (x, y) ->
   new Vector x, y
 
+
 Vector.origin = Vector.fromCart 0, 0
+
+
+vectorSpaceRotate = (obj, angle, origin) ->
+  result = {}
+  for nm, v of obj
+    result[nm] = if v instanceof Vector then v.rotate angle, origin else v
+  result
 
