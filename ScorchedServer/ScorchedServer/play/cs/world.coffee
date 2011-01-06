@@ -16,12 +16,7 @@ world =
   starfield:  []
 
 
-for y in [0..config.screenSize.height]
-  world.starfield[y] = []
-  for y in [0..config.screenSize.width]
-    world.starfield[y][x] = (Math.random * 200) < 1;
-
-world.starfield = (Math.random() * 200 < 1 for x in [0..config.screenSize.width] for y in [0..config.screenSize.height])
+world.starfield = (Math.random() * 200 < 1 for x in [1..config.screenSize.width] for y in [1..config.screenSize.height])
 
 # # Landscape generator
-# world.landscape = (Math.sin((i + 20) / 50) * 50 + 150 + Math.sin((i + 80) / 100) * 100 for [0..880]) 
+# world.landscape = (Math.sin((i + 20) / 50) * 50 + 150 + Math.sin((i + 80) / 100) * 100 for [1..880]) 
