@@ -42,3 +42,6 @@ Rectangle.fromVector = (v1, v2) ->
 
   new Rectangle top, left, right, bottom
 
+# attach to window object, for JIT CoffeeScript compiler.
+window.Rectangle = Rectangle
+

@@ -33,8 +33,8 @@
       };
     </script>
     <script type="text/javascript" src="coffee-script.js"></script>
-    <script type="text/javascript" src="vector.js"></script>
-    <script type="text/javascript" src="rectangle.js"></script>
+    <script type="text/coffeescript" src="cs/vector.coffee"></script>
+    <script type="text/coffeescript" src="cs/rectangle.coffee"></script>
     <script type="text/javascript" src="player.js"></script>
     <script type="text/javascript" src="world.js"></script>
     <script type="text/javascript" src="nepsocket.js"></script>    
@@ -44,11 +44,15 @@
     <script type="text/javascript">
       $(document).ready(function ()
       {
-        var c = $("#canvas")[0];
-        UI.init(c, socket);
-        renderer.init(c);
-        renderer.render();
-        $("#log").html("hoi");
+        // Ugly hack to wait for CoffeeScript
+        setTimeout(function ()
+        {
+          var c = $("#canvas")[0];
+          UI.init(c, socket);
+          renderer.init(c);
+          renderer.render();
+          $("#log").html("hoi");
+        }, 1000);
       });
     </script>
     <script type="text/javascript">

@@ -18,11 +18,11 @@ class Vector
   scale: (factor) ->
     Vector.fromCart @x * factor, @y * factor
 
-  rotate: (angle, orgin = Vector.origin) ->
+  rotate: (angle, origin = Vector.origin) ->
     delta = @subtract origin
 
-    dx = Math.cos angle * delta.x - Math.sin angle * delta.y
-    dy = Math.sin angle * delta.x + Math.cos angle * delta.y
+    dx = Math.cos(angle) * delta.x - Math.sin(angle) * delta.y
+    dy = Math.sin(angle) * delta.x + Math.cos(angle) * delta.y
 
     new Vector origin.x + dx, origin.y + dy
 
@@ -31,7 +31,7 @@ class Vector
 
 
 Vector.fromPolar = (th, r) ->
-  new Vector (Math.cos th * r), (Math.sin th * r)
+  new Vector Math.cos(th) * r, Math.sin(th) * r
 
 
 Vector.fromCart = (x, y) ->
@@ -46,4 +46,8 @@ vectorSpaceRotate = (obj, angle, origin) ->
   for nm, v of obj
     result[nm] = if v instanceof Vector then v.rotate angle, origin else v
   result
+
+# attach to window object, for JIT CoffeeScript compiler.
+window.Vector = Vector
+window.vectorSpaceRotate = vectorSpaceRotate
 
