@@ -23,6 +23,7 @@ class FakeSocket
       dataType:  "jsonp"
       success:   (datas) ->
         $.each datas, (i, data) =>
+          console.log data
           @onmessage data
       error:     (_, text, err) =>
         console.error text
@@ -31,4 +32,7 @@ class FakeSocket
     setTimeout (=> @_ping()), @_pollingDelay
 
     @_queue = []
+
+# attach to window object, for JIT CoffeeScript compiler.
+window.FakeSocket = FakeSocket
 
