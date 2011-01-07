@@ -33,26 +33,25 @@
       };
     </script>
     <script type="text/javascript" src="coffee-script.js"></script>
+
     <script type="text/coffeescript" src="cs/vector.coffee"></script>
     <script type="text/coffeescript" src="cs/rectangle.coffee"></script>
     <script type="text/coffeescript" src="cs/player.coffee"></script>
-    <script type="text/javascript" src="world.js"></script>
+    <script type="text/coffeescript" src="cs/world.coffee"></script>
     <script type="text/coffeescript" src="cs/fakesocket.coffee"></script>
     <script type="text/javascript" src="render.js"></script>
-    <script type="text/javascript" src="userinput.js"></script>
+    <script type="text/coffeescript" src="cs/userinput.coffee"></script>
     <script type="text/coffeescript" src="cs/socketimpl.coffee"></script>
+
+    <script type="text/coffeescript" src="cs/coffee-done.coffee"></script>
     <script type="text/javascript">
-      $(document).ready(function ()
+      $(document).bind("coffeeDone", function ()
       {
-        // Ugly hack to wait for CoffeeScript
-        setTimeout(function ()
-        {
-          var c = $("#canvas")[0];
-          UI.init(c, socket);
-          renderer.init(c);
-          renderer.render();
-          $("#log").html("hoi");
-        }, 1000);
+        var c = $("#canvas")[0];
+        UI.init(c, socket);
+        renderer.init(c);
+        renderer.render();
+        $("#log").html("hoi");
       });
     </script>
     <script type="text/javascript">
@@ -73,3 +72,4 @@
     </script>
   </body>
 </html>
+
