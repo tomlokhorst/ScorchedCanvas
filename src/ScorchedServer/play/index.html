@@ -34,25 +34,33 @@
     </script>
     <script type="text/javascript" src="coffee-script.js"></script>
 
+    <script type="text/coffeescript" src="cs/fakesocket.coffee"></script>
     <script type="text/coffeescript" src="cs/vector.coffee"></script>
     <script type="text/coffeescript" src="cs/rectangle.coffee"></script>
     <script type="text/coffeescript" src="cs/player.coffee"></script>
     <script type="text/coffeescript" src="cs/world.coffee"></script>
-    <script type="text/coffeescript" src="cs/fakesocket.coffee"></script>
     <script type="text/javascript" src="render.js"></script>
     <script type="text/coffeescript" src="cs/userinput.coffee"></script>
     <script type="text/coffeescript" src="cs/socketimpl.coffee"></script>
 
-    <script type="text/coffeescript" src="cs/coffee-done.coffee"></script>
     <script type="text/javascript">
-      $(document).bind("coffeeDone", function ()
+      function init ()
       {
+        // Wait for CoffeScript JIT compiler to complete
+        if (!window.Vector || !window.Rectangle || !window.Player || !window.world || !window.FakeSocket || !window.UI || !window.socket)
+        {
+          setTimeout(init, 100);
+          return;
+        }
+
         var c = $("#canvas")[0];
         UI.init(c, socket);
         renderer.init(c);
         renderer.render();
         $("#log").html("hoi");
-      });
+      }
+
+      init();
     </script>
     <script type="text/javascript">
       var _gaq = _gaq || [];

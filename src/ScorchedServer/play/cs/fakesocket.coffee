@@ -5,8 +5,8 @@ class FakeSocket
     @_url = url + "/" + session
     @_ping()
 
-  _queue:       []
-  _pollingDelay: 500
+  _queue        : []
+  _pollingDelay : 500
 
   send: (msg) ->
     @_queue.push msg
@@ -17,15 +17,14 @@ class FakeSocket
 
   _ping: ->
     $.ajax
-      type:      "POST"
-      url:       @_url + "?callback=?"
-      data:      { queue: JSON.stringify this.queue }
-      dataType:  "jsonp"
-      success:   (datas) ->
-        $.each datas, (i, data) =>
-          console.log data
+      type      : "POST"
+      url       : @_url + "?callback=?"
+      data      : { queue: JSON.stringify @_queue }
+      dataType  : "jsonp"
+      success: (datas) =>
+        for data in datas
           @onmessage data
-      error:     (_, text, err) =>
+      error: (_, text, err) =>
         console.error text
         @onerror err
      

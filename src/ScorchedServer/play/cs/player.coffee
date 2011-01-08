@@ -11,7 +11,7 @@ class Player
     @pos          = options.pos
     @posy         = options.posy
 
-  computeVectors: ->
+  updateVectors: ->
     position  = Vector.fromCart @pos, @posy
     rect      = Rectangle.fromCenter position, config.tankWidth, config.tankHeight
     healthY   = rect.bottom - config.healthIndicatorBottomMargin
@@ -26,7 +26,7 @@ class Player
         rightBottom : rect.rightBottom
       barrel:
         start : position
-        end   : position.add(config.barrelLength, 0).rotate @barrelAngle - @angle, @position
+        end   : position.add(config.barrelLength, 0).rotate @barrelAngle - @angle, position
       turret:
         center        : Vector.fromCart position.x, rect.bottom - rect.height + 1
         radius        : 2 * config.tankWidth / 4
@@ -38,8 +38,6 @@ class Player
         start  : Vector.fromCart rect.left                              , healthY
         middle : Vector.fromCart rect.left + config.tankWidth * @health , healthY
         end    : Vector.fromCart rect.left + config.tankWidth           , healthY
-
-    world.me.tank = @tank if @id is world.me.id
 
     # Rotate tank for @angle
     @tank.body               = vectorSpaceRotate @tank.body,   this.angle, position
