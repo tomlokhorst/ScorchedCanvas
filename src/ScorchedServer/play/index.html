@@ -47,7 +47,7 @@
       function init ()
       {
         // Wait for CoffeScript JIT compiler to complete
-        if (!window.Vector || !window.Rectangle || !window.Player || !window.world || !window.FakeSocket || !window.UI || !window.socket)
+        if (!window.Vector || !window.Rectangle || !window.Player || !window.world || !window.FakeSocket || !window.UI || !window.socket || !window.renderer)
         {
           setTimeout(init, 100);
           return;
