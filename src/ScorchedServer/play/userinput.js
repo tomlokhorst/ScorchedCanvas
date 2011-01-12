@@ -15,12 +15,14 @@ var UI = {
     UI.canvas = canvas;
     UI.socket = socket;
 
-    $(document).bind("mousemove", UI.aim);
-    $(document).bind("touchmove", UI.aim);
-    $(document).bind("mouseup", UI.fire);
-    $(document).bind("touchend", UI.fire);
-    $(document).bind("mousedown", UI.startAim);
-    $(document).bind("touchstart", UI.startAim);
+    // registering events on canvas to prevent stealing events on the name input box
+    $(canvas).bind("mousemove", UI.aim);
+    $(canvas).bind("touchmove", UI.aim);
+    $(canvas).bind("mouseup", UI.fire);
+    $(canvas).bind("touchend", UI.fire);
+    $(canvas).bind("mousedown", UI.startAim);
+    $(canvas).bind("touchstart", UI.startAim);
+
   },
   
   // get the x,y coords relative to the canvas, in canvas pixels, corrected for css scaling

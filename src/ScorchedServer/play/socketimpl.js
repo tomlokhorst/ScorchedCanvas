@@ -1,9 +1,18 @@
 var socket;
 
 (function() {
+    
   socket = new NepSocket(config.socketUrl);
-  socket.onopen = function(e) { /* Not implemented */ };
-  socket.onclose = function(e) { /* Not implemented */ };
+  socket.onopen = function() {
+    updatePlayer({
+      name: localStorage["player_name"],
+      coor: localStorage["player_color"]
+    })
+  } ;
+  socket.onclose = function(e) { 
+    console.log("connection closed");
+    console.log(e);
+   }
   socket.onmessage = function(msg)
   {
     if (msg.type == 'gameInit') {      
@@ -11,8 +20,10 @@ var socket;
       world.playerId = msg.playerId;
       world.nextRound = +new Date + msg.nextRound;
       $.each(msg.players, function(i, player) {
+        console.log("player # " + player.id + ": " + player.name);
         var p = new Player( {
           id: player.id,
+          name: player.name,
           health: player.health,
           score: player.score,
           angle: player.angle,
@@ -55,20 +66,14 @@ var socket;
       
       $.each(msg.state,  function(i, update) {
         if (update.type == 'updatePlayer') {
-          
+          console.log("updateplayer");
           var filtered = $.grep(world.players, function(player) { return player.id == update.player.id; });
           
           if (filtered.length == 0) return;
           
           var player = filtered[0];
-          player.name = update.player.name || player.name;
-          player.health = update.player.health || player.health;
-          player.score = update.player.score || player.score;
-          player.angle = update.player.angle || player.angle;
-          player.barrelAngle = update.player.barrelAngle || player.barrelAngle;
-          player.color = update.player.color || player.color;
-          player.pos = update.player.pos || player.pos;
-          player.computeVectors();
+          
+          world.updatePlayer(player, update.player);
         }
         else if (update.type == 'fire') {
           world.bullets.push({ id: update.playerId, arc: update.arc, step: 0, collision: true });

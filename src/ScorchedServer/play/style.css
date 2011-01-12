@@ -1,7 +1,7 @@
 body
 {
 	margin: 0 auto;
-	overflow: hidden;
+	xoverflow: hidden;
 	width: 100%;
 	text-align: center;
   /* background-color: rgb(200,255,200); */

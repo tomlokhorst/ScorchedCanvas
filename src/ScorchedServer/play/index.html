@@ -12,7 +12,10 @@
 
     <div id="log">log</div>
     <canvas id="canvas"></canvas>
-    <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+    <form id="update_player">
+      <input id="player_name" type="text" />
+    </form>
+    <script type="text/javascript" src="jquery-1.4.4.min.js"></script>    
     <script type="text/javascript">
       if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function () { } };
 
@@ -32,33 +35,54 @@
         roundTime: 10000
       };
     </script>
-    <script type="text/javascript" src="coffee-script.js"></script>
+    <!-- <script type="text/javascript" src="coffee-script.js"></script> -->
 
-    <script type="text/coffeescript" src="cs/fakesocket.coffee"></script>
-    <script type="text/coffeescript" src="cs/vector.coffee"></script>
-    <script type="text/coffeescript" src="cs/rectangle.coffee"></script>
-    <script type="text/coffeescript" src="cs/player.coffee"></script>
-    <script type="text/coffeescript" src="cs/world.coffee"></script>
-    <script type="text/coffeescript" src="cs/render.coffee"></script>
-    <script type="text/coffeescript" src="cs/userinput.coffee"></script>
-    <script type="text/coffeescript" src="cs/socketimpl.coffee"></script>
+    <script src="nepsocket.js"></script>
+    <script src="vector.js"></script>
+    <script src="rectangle.js"></script>
+    <script src="player.js"></script>
+    <script src="world.js"></script>
+    <script src="render.js"></script>
+    <script src="userinput.js"></script>
+    <script src="socketimpl.js"></script>
 
     <script type="text/javascript">
       function init ()
       {
         // Wait for CoffeScript JIT compiler to complete
+        /*
         if (!window.Vector || !window.Rectangle || !window.Player || !window.world || !window.FakeSocket || !window.UI || !window.socket || !window.renderer)
         {
           setTimeout(init, 100);
           return;
         }
-
+*/
         var c = $("#canvas")[0];
         UI.init(c, socket);
         renderer.init(c);
         renderer.render();
         $("#log").html("hoi");
       }
+      
+      function updatePlayer(update)
+      {
+        console.log("sending update",  update);
+        // store name in cookie
+
+        // send update to server
+        $.extend(update, { type: "updatePlayer" });
+        socket.send(update);
+      }
+      
+      $("#player_name").blur(function(evt) {
+        updatePlayer({ name: $(this).val() });
+      });
+      
+      $("#update_player").submit(function(evt) {
+        evt.preventDefault();
+        updatePlayer({ name: $("#player_name").val() });
+      });
+      
 
       init();
     </script>

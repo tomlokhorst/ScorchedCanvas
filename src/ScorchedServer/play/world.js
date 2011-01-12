@@ -13,7 +13,29 @@ var world = {
   guiPoint: { x:0, y:0 },
   nextRound: null,
   gameover: false,
-  starfield: []
+  starfield: [],
+  
+  updatePlayer: function(player, update) {
+    console.log(update);
+    // confirmed by server but determined by user
+    player.name = update.name || player.name;
+    player.color = update.color || player.color;
+    
+    // remember for when we're starting a new game later
+    localStorage["player_name"] = player.name;
+    localStorage["player_color"] = player.color;
+    
+    
+    // determined by server
+    player.health = update.health || player.health;
+    player.score = update.score || player.score;
+    player.angle = update.angle || player.angle;
+    player.barrelAngle = update.barrelAngle || player.barrelAngle;
+    player.pos = update.pos || player.pos;
+    
+    player.computeVectors();
+  }
+  
 };
 
 
