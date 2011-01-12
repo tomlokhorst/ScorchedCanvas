@@ -11,11 +11,15 @@ namespace ScorchedServer.Models
     public double angle;
     public double power;
     public string weapon;
+    public string name;
+    public string color;
 
     public Message ToMessage()
     {
       if (type == "fireRequest")
         return new FireRequest { angle = angle, power = power };
+      else if (type == "updatePlayer")
+        return new UpdatePlayer { name = name, color = color };
       else
         return new UnknownMessage();
     }
