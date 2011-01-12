@@ -36,6 +36,22 @@ namespace ScorchedServer.Models
         cfr.c.Player.shoot(cfr.fr);
         SendMessageToAll(new { type = "aim", playerId = cfr.c.Player.id, angle = cfr.fr.angle });
       });
+
+      var ups = from c in connectionJoins
+                from m in c.Messages
+                where m is UpdatePlayer
+                select new { c = c, up = m as UpdatePlayer };
+
+      ups.Subscribe(cup => 
+      {
+        if (cup.up.name != null)
+          cup.c.Player.name = cup.up.name;
+
+        if (cup.up.color != null)
+          cup.c.Player.color = cup.up.color;
+
+        SendMessageToAll(new { type = "gameUpdate", state = new [] { new { type = "updatePlayer", player = cup.c.Player } } });
+      });
     }
 
     private void SendMessageToAll(object msg)

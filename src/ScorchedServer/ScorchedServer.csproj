@@ -94,6 +94,7 @@
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\Landscape.cs" />
     <Compile Include="Models\LineSegment.cs" />
+    <Compile Include="Models\Messages\UpdatePlayer.cs" />
     <Compile Include="Models\Messages\Message.cs" />
     <Compile Include="Models\Messages\FireRequest.cs" />
     <Compile Include="Models\Messages\GenericMessage.cs" />
@@ -121,15 +122,16 @@
     <Content Include="media\2010-11-27_0320.jpg" />
     <Content Include="media\2010-11-27_1700.png" />
     <Content Include="media\2010-12-04-1700.png" />
+    <Content Include="play\coffee-script.js" />
     <Content Include="play\index.html" />
     <Content Include="play\jquery-1.4.4.min.js" />
     <Content Include="play\nepsocket.js" />
     <Content Include="play\player.js" />
+    <Content Include="play\rectangle.js" />
     <Content Include="play\render.js" />
     <Content Include="play\socketimpl.js" />
     <Content Include="play\style.css" />
     <Content Include="play\userinput.js" />
-    <Content Include="play\utils.js" />
     <Content Include="play\vector.js" />
     <Content Include="play\world.js" />
     <Content Include="Web.config" />
@@ -142,6 +144,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="play\cs\fakesocket.coffee" />
+    <None Include="play\cs\player.coffee" />
+    <None Include="play\cs\rectangle.coffee" />
+    <None Include="play\cs\render.coffee" />
+    <None Include="play\cs\socketimpl.coffee" />
+    <None Include="play\cs\userinput.coffee" />
+    <None Include="play\cs\vector.coffee" />
+    <None Include="play\cs\world.coffee" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
