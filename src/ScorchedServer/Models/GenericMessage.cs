@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+using Tmoag;
+
 namespace ScorchedServer.Models
 {
   public class GenericMessage : Message
@@ -17,11 +19,11 @@ namespace ScorchedServer.Models
     public Message ToMessage()
     {
       if (type == "fireRequest")
-        return new FireRequest { angle = angle, power = power };
+        return new FireRequest { Angle = angle, Power = power };
       else if (type == "updatePlayer")
-        return new UpdatePlayer { name = name, color = color };
+        return new UpdatePlayer { Name = name, Color = color };
       else
-        return new UnknownMessage();
+        return new UnknownMessage { Type = type };
     }
   }
 }

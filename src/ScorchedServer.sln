@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Web Developer Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScorchedServer", "ScorchedServer\ScorchedServer.csproj", "{EE589CDE-AB3D-48F2-B252-2E6DE5706C69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tmoag", "Tmoag\Tmoag.csproj", "{67C7D887-148E-43AC-B7AA-7C219F49177F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{EE589CDE-AB3D-48F2-B252-2E6DE5706C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE589CDE-AB3D-48F2-B252-2E6DE5706C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE589CDE-AB3D-48F2-B252-2E6DE5706C69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C7D887-148E-43AC-B7AA-7C219F49177F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C7D887-148E-43AC-B7AA-7C219F49177F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C7D887-148E-43AC-B7AA-7C219F49177F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C7D887-148E-43AC-B7AA-7C219F49177F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
