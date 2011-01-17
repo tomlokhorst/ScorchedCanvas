@@ -15,14 +15,36 @@ namespace Tmoag
     private int lastId = 0;
     private Dictionary<string, Connection> allConnections = new Dictionary<string, Connection>();
     private Subject<Connection> connectionJoins = new Subject<Connection>(Scheduler.CurrentThread);
+    public Subject<Connection> Connections { get; private set; }
 
     private DateTime nextRoundBegin;
 
     public Game()
     {
+      this.Connections = new Subject<Connection>();
+      this.connectionJoins = this.Connections;
+
       ConnectionJoins();
-      QuitPlayers();
+      //QuitPlayers();
       GameUpdates();
+
+      var qcs = from c in Connections
+                from d in c.Disconnect
+                select c;
+
+      qcs.Subscribe(c =>
+      {
+        SendMessageToAll(new { type = "quitPlayer", playerId = c.Player.id });
+
+        string key = null;
+
+        foreach (var kv in allConnections)
+          if (kv.Value == c)
+            key = kv.Key;
+
+        if (key != null)
+          allConnections.Remove(key);
+      });
 
       var frs = from c in connectionJoins
                 from m in c.Messages
@@ -65,6 +87,7 @@ namespace Tmoag
       connectionJoins.Subscribe(conn =>
       {
         var players = allConnections.Values.Select(co => co.Player);
+        allConnections.Add(conn.Player.id.ToString(), conn);
 
         var gameInitObj = new
         {
@@ -123,6 +146,7 @@ namespace Tmoag
 
           p.clearLastShot();
         }
+
 
         SendMessageToAll(new { type = "gameUpdate", state = state });
 

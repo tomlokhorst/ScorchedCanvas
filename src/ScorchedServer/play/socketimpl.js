@@ -59,7 +59,7 @@ var socket;
           var filtered = $.grep(world.players, function(player) { return player.id == update.player.id; });
           
           if (filtered.length == 0) return;
-          
+
           var player = filtered[0];
           player.name = update.player.name || player.name;
           player.health = update.player.health || player.health;

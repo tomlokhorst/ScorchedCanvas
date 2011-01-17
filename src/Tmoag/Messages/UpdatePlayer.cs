@@ -7,7 +7,7 @@ namespace Tmoag
 {
   public class UpdatePlayer : Message
   {
-    public string Name;
-    public string Color;
+    public string Name { get; set; }
+    public string Color { get; set; }
   }
 }
