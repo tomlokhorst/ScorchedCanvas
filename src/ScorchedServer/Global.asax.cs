@@ -28,7 +28,7 @@ namespace ScorchedServer
 
       RegisterRoutes(RouteTable.Routes);
 
-      Application["game"] = new Game();
+      Application["game"] = new ScorchedServer.Models.Tmoag();
     }
   }
 }

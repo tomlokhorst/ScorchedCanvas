@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Concurrency;
-using ScorchedServer.Properties;
+using Tmoag.Properties;
 
-namespace ScorchedServer.Models
+namespace Tmoag
 {
-  class Connection
+  public class Connection
   {
     public Subject<Message> Messages { get; private set; }
+    public Subject<object> Disconnect { get; private set; }
     public Player Player { get; private set; }
     public DateTime LastCheckin { get; set; }
 
@@ -20,6 +21,7 @@ namespace ScorchedServer.Models
     public Connection(int id)
     {
       Messages = new Subject<Message>();
+      Disconnect = new Subject<object>();
 
       var r = new Random();
 

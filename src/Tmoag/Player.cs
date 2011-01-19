@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using ScorchedServer.Properties;
+using Tmoag.Properties;
 
-namespace ScorchedServer.Models
+namespace Tmoag
 {
   public class Player
   {
@@ -49,7 +49,7 @@ namespace ScorchedServer.Models
     {
       lastFireRequest = fr;
 
-      lastShot = Shot.Trace(position, Vector.FromPolar(fr.angle, fr.power), Vector.FromCart(0, -0.01));
+      lastShot = Shot.Trace(position, Vector.FromPolar(fr.Angle, fr.Power), Vector.FromCart(0, -0.01));
     }
 
     internal void clearLastShot()

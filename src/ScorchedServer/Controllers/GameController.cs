@@ -22,7 +22,7 @@ namespace ScorchedServer.Controllers
 
         var msgs = queue.Select(m => m.ToMessage());
 
-        var game = HttpContext.Application["game"] as Game;
+        var game = HttpContext.Application["game"] as ScorchedServer.Models.Tmoag;
         var objs = game.HandleMessages(session, msgs);
 
         if (!objs.Any())
