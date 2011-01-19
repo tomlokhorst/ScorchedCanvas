@@ -93,6 +93,9 @@ var socket;
         }
       });
     }
+    else if (msg.type == 'flashMessage') {
+      console.log(msg.message);
+    }
     else {
       console.log('UNIMPLEMENTED: ' + msg.type);
     }
